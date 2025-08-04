@@ -127,39 +127,40 @@
     const canvas = document.getElementById('warp-canvas');
     const app = new PIXI.Application({ view: canvas, resizeTo: window });
 
-    // Load textures
-    const galaxy = PIXI.Sprite.from('images/galaxy.png');  // 변경: .png 확장자 사용
+    // Load galaxy background
+    const galaxy = PIXI.Sprite.from('images/galaxy.png');
     galaxy.width = app.screen.width;
     galaxy.height = app.screen.height;
 
+    // Load displacement map
     const displacementTexture = PIXI.Sprite.from('images/displacement.png');
     displacementTexture.texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
     displacementTexture.width = app.screen.width;
     displacementTexture.height = app.screen.height;
+    displacementTexture.visible = false;
 
     // Create displacement filter
     const displacementFilter = new PIXI.DisplacementFilter(displacementTexture);
-    displacementFilter.scale.set(30);
+    displacementFilter.scale.set(50);
 
-    // Container
+    // Container for galaxy with filter
     const container = new PIXI.Container();
+    container.addChild(galaxy);
     container.filters = [displacementFilter];
 
-    // Add sprites
-    app.stage.addChild(galaxy);
+    // Add elements to stage
+    app.stage.addChild(displacementTexture);
     app.stage.addChild(container);
-    container.addChild(displacementTexture);
 
     // Mouse move listener
     window.addEventListener('mousemove', (e) => {
       const mx = e.clientX;
       const my = e.clientY;
-      // Move displacement sprite opposite to mouse for warp
       displacementTexture.x = mx - app.screen.width / 2;
       displacementTexture.y = my - app.screen.height / 2;
     });
 
-    // Animate
+    // Animate displacement map movement
     app.ticker.add(() => {
       displacementTexture.x += 1;
       displacementTexture.y += 1;
