@@ -6,7 +6,9 @@
   <title>GistKjoon 포트폴리오</title>
 
   <!-- Tailwind CSS with dark-mode enabled -->
-  <script>tailwind.config = { darkMode: 'class' };</script>
+  <script>
+    tailwind.config = { darkMode: 'class' };
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Pixi.js for custom GLSL filter -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js"></script>
@@ -59,8 +61,8 @@
           </nav>
           <button id="theme-toggle" aria-label="Toggle Theme" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 focus:outline-none">🌙</button>
         </div>
-        </div>
-        </header>
+      </div>
+    </header>
 
     <section class="flex flex-col items-center justify-center text-center py-40" data-aos="fade-up">
       <h1 class="text-5xl md:text-7xl font-extrabold drop-shadow-xl mb-6">안녕하세요,<br/>GistKjoon입니다!</h1>
@@ -77,33 +79,33 @@
 
     <section id="projects" class="py-24 bg-white/50 dark:bg-black/50 backdrop-blur-md" data-aos="fade-left">
       <div class="max-w-6xl mx-auto px-6">
-      <h2 class="text-4xl font-semibold mb-12 text-center">Projects</h2>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
-        <article class="group rounded-xl overflow-hidden shadow-lg bg-white/10 dark:bg-gray-800 backdrop-blur transition-transform hover:scale-105">
-        <img src="images/project1.png" alt="롤체PIP" class="h-48 w-full object-cover" />
-        <div class="p-6 space-y-3">
-          <h3 class="text-2xl font-bold">롤체 PIP 뷰어</h3>
-          <p class="text-sm text-indigo-500">TFT 플레이 중 유튜브 PiP 재생 macOS 유틸리티</p>
-          <a href="projects/roll-pip.html" class="inline-block text-indigo-500 hover:underline">자세히 보기 →</a>
+        <h2 class="text-4xl font-semibold mb-12 text-center">Projects</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
+          <article class="group rounded-xl overflow-hidden shadow-lg bg-white/10 dark:bg-gray-800 backdrop-blur transition-transform hover:scale-105">
+            <img src="images/project1.png" alt="롤체PIP" class="h-48 w-full object-cover" />
+            <div class="p-6 space-y-3">
+              <h3 class="text-2xl font-bold">롤체 PIP 뷰어</h3>
+              <p class="text-sm text-indigo-500">TFT 플레이 중 유튜브 PiP 재생 macOS 유틸리티</p>
+              <a href="projects/roll-pip.html" class="inline-block text-indigo-500 hover:underline">자세히 보기 →</a>
+            </div>
+          </article>
+          <article class="group rounded-xl overflow-hidden shadow-lg bg-white/10 dark:bg-gray-800 backdrop-blur transition-transform hover:scale-105">
+            <img src="images/project2.png" alt="SNS 플랫폼" class="h-48 w-full object-cover" />
+            <div class="p-6 space-y-3">
+              <h3 class="text-2xl font-bold">SNS 플랫폼</h3>
+              <p class="text-sm text-indigo-500">React+Node+GraphQL 기반 실시간 피드 서비스</p>
+              <a href="projects/sns.html" class="inline-block text-indigo-500 hover:underline">자세히 보기 →</a>
+            </div>
+          </article>
+          <article class="group rounded-xl overflow-hidden shadow-lg bg-white/10 dark:bg-gray-800 backdrop-blur transition-transform hover:scale-105">
+            <img src="images/project3.png" alt="채팅 앱" class="h-48 w-full object-cover" />
+            <div class="p-6 space-y-3">
+              <h3 class="text-2xl font-bold">Realtime Chat App</h3>
+              <p class="text-sm text-indigo-500">Vue3 + Firebase 서버리스 채팅 애플리케이션</p>
+              <a href="projects/chat-app.html" class="inline-block text-indigo-500 hover:underline">자세히 보기 →</a>
+            </div>
+          </article>
         </div>
-        </article>
-        <article class="group rounded-xl overflow-hidden shadow-lg bg-white/10 dark:bg-gray-800 backdrop-blur transition-transform hover:scale-105">
-        <img src="images/project2.png" alt="SNS 플랫폼" class="h-48 w-full object-cover" />
-        <div class="p-6 space-y-3">
-          <h3 class="text-2xl font-bold">SNS 플랫폼</h3>
-          <p class="text-sm text-indigo-500">React+Node+GraphQL 기반 실시간 피드 서비스</p>
-          <a href="projects/sns.html" class="inline-block text-indigo-500 hover:underline">자세히 보기 →</a>
-        </div>
-        </article>
-        <article class="group rounded-xl overflow-hidden shadow-lg bg-white/10 dark:bg-gray-800 backdrop-blur transition-transform hover:scale-105">
-        <img src="images/project3.png" alt="채팅 앱" class="h-48 w-full object-cover" />
-        <div class="p-6 space-y-3">
-          <h3 class="text-2xl font-bold">Realtime Chat App</h3>
-          <p class="text-sm text-indigo-500">Vue3 + Firebase 서버리스 채팅 애플리케이션</p>
-          <a href="projects/chat-app.html" class="inline-block text-indigo-500 hover:underline">자세히 보기 →</a>
-        </div>
-        </article>
-      </div>
       </div>
     </section>
 
@@ -160,31 +162,33 @@
     });
   </script>
 
+  <!-- Project Menu -->
   <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const wrapper   = document.getElementById('proj-wrapper');
-    const button    = document.getElementById('proj-button');
-    const menu      = document.getElementById('proj-menu');
-    const arrowIcon = document.getElementById('proj-arrow');
+    document.addEventListener('DOMContentLoaded', () => {
+      const wrapper   = document.getElementById('proj-wrapper');
+      const button    = document.getElementById('proj-button');
+      const menu      = document.getElementById('proj-menu');
+      const arrowIcon = document.getElementById('proj-arrow');
 
-    // 버튼 클릭 시 열림/닫힘 토글
-    button.addEventListener('click', e => {
-      e.stopPropagation();
-      menu.classList.toggle('hidden');
-      arrowIcon.classList.toggle('rotate-180');
-    });
+      // 버튼 클릭 시 열림/닫힘 토글
+      button.addEventListener('click', e => {
+        e.stopPropagation();
+        menu.classList.toggle('hidden');
+        arrowIcon.classList.toggle('rotate-180');
+      });
 
-    // 메뉴 외부 클릭 시 닫기
-    document.addEventListener('click', e => {
-      if (!wrapper.contains(e.target)) {
-        menu.classList.add('hidden');
-        arrowIcon.classList.remove('rotate-180');
-      }
+      // 메뉴 외부 클릭 시 닫기
+      document.addEventListener('click', e => {
+        if (!wrapper.contains(e.target)) {
+          menu.classList.add('hidden');
+          arrowIcon.classList.remove('rotate-180');
+        }
+      });
     });
-  });
-</script>
+  </script>
+
+  <!-- Tailwind CSS 추가 설정 (theme 확장) -->
   <script>
-    // Tailwind CSS configuration for dark mode
     tailwind.config = {
       darkMode: 'class',
       theme: {
@@ -196,7 +200,7 @@
         },
       },
     };
-
+  </script>
 
   <!-- Theme toggle & Scroll-to-top scripts -->
   <script>
@@ -204,7 +208,7 @@
       const themeToggle = document.getElementById('theme-toggle');
       const scrollBtn   = document.getElementById('scroll-top');
 
-      // Theme
+      // 테마 적용
       function applyTheme() {
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
           document.documentElement.classList.add('dark');
@@ -235,7 +239,8 @@
     AOS.init({ duration: 900, once: true });
     window.addEventListener('load', () => {
       const p = document.getElementById('preloader');
-      p.style.opacity = '0'; setTimeout(() => p.remove(), 800);
+      p.style.opacity = '0'; 
+      setTimeout(() => p.remove(), 800);
     });
   </script>
 </body>
