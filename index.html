@@ -13,66 +13,30 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
 
   <style>
-    /* ----------  Global styles  ---------- */
     html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background: #000;          /* fallback before galaxy loads */
-      overflow-x: hidden;
-    }
-
-    /* ----------  Canvas (background)  ---------- */
-    #warp-canvas {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;               /* behind main content */
-    }
-
-    /* ----------  Pre‑loader  ---------- */
-    #preloader {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background:#000;
-      z-index: 1000;
-      transition: opacity .8s ease;
-    }
-
-    /* ----------  Content overlay  ---------- */
+    body { margin: 0; background: #000; overflow-x: hidden; }
+    #warp-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; }
+    #preloader { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #000; z-index: 1000; transition: opacity .8s ease; }
     .content { position: relative; z-index: 10; }
   </style>
 </head>
 <body>
-  <!-- **********  PRELOADER  ********** -->
   <div id="preloader">
     <div class="w-14 h-14 border-4 border-gray-600 border-t-indigo-500 rounded-full animate-spin"></div>
   </div>
-
-  <!-- **********  BACKGROUND CANVAS  ********** -->
   <canvas id="warp-canvas"></canvas>
-
-  <!-- **********  MAIN CONTENT  ********** -->
   <div class="content font-sans text-white">
-
-    <!-- HEADER / NAV -->
     <header class="backdrop-blur-md bg-white/10 sticky top-0" data-aos="fade-down">
       <div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
         <a href="#" class="text-2xl font-bold">GistKjoon</a>
         <nav class="relative hidden md:flex items-center space-x-8">
           <a href="#about" class="hover:text-indigo-300">About</a>
-          <!-- PROJECTS (hover + menu stay open when inside) -->
           <div id="proj-wrapper" class="relative inline-block">
-            <!-- trigger -->
-            <button class="peer hover:text-indigo-300 flex items-center space-x-1 focus:outline-none">
+            <button id="proj-btn" class="hover:text-indigo-300 flex items-center space-x-1 focus:outline-none">
               <span>Projects</span>
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>
-            <!-- menu: stays open while hovering button OR menu -->
-            <ul class="absolute right-0 top-full mt-0 w-56 bg-white/10 backdrop-blur rounded-lg shadow-lg opacity-0 scale-95 pointer-events-none transition-all duration-150 peer-hover:opacity-100 peer-hover:scale-100 peer-hover:pointer-events-auto hover:opacity-100 hover:scale-100 hover:pointer-events-auto">
+            <ul id="proj-menu" class="absolute right-0 top-full mt-0 w-56 bg-white/10 backdrop-blur rounded-lg shadow-lg opacity-0 scale-95 pointer-events-none transition-all duration-150 z-50">
               <li><a href="/#projects"              class="block px-4 py-2 hover:bg-white/20">모든 프로젝트</a></li>
               <li><a href="projects/roll-pip.html" class="block px-4 py-2 hover:bg-white/20">롤체 PIP 뷰어</a></li>
               <li><a href="projects/sns.html"      class="block px-4 py-2 hover:bg-white/20">SNS 플랫폼</a></li>
@@ -83,30 +47,23 @@
         </nav>
       </div>
     </header>
-
-    <!-- HERO -->
     <section class="flex flex-col items-center justify-center text-center py-40" data-aos="fade-up">
       <h1 class="text-5xl md:text-7xl font-extrabold drop-shadow-xl mb-6 leading-tight">안녕하세요,<br/>GistKjoon입니다!</h1>
-      <p class="text-xl md:text-2xl text-indigo-200 max-w-2xl">광활한 우주 같은 가능성을 탐험하며 만드는<br class="hidden md:block">개발자&nbsp;포트폴리오에 오신 것을 환영합니다.</p>
+      <p class="text-xl md:text-2xl text-indigo-200 max-w-2xl">광활한 우주 같은 가능성을 탐험하며 만드는<br class="hidden md:block">개발자 포트폴리오에 오신 것을 환영합니다.</p>
     </section>
-
-    <!-- ABOUT -->
     <section id="about" class="py-24" data-aos="fade-right">
       <div class="max-w-5xl mx-auto text-center px-6">
-        <h2 class="text-4xl font-semibold mb-8 drop-shadow">About&nbsp;Me</h2>
+        <h2 class="text-4xl font-semibold mb-8 drop-shadow">About Me</h2>
         <img src="images/profile.jpg" alt="Profile" class="w-40 h-40 mx-auto rounded-full border-4 border-indigo-400 shadow-lg mb-6 object-cover" />
         <p class="text-lg text-indigo-200 max-w-3xl mx-auto leading-relaxed">
           React · Node.js를 주력으로 하는 풀스택 개발자입니다.<br class="hidden md:block">사용자 경험과 성능 최적화를 동시에 추구하며,<br class="hidden md:block">새로운 기술을 탐구하는 것을 좋아합니다.
         </p>
       </div>
     </section>
-
-    <!-- PROJECTS -->
     <section id="projects" class="py-24 bg-white/5 backdrop-blur-sm" data-aos="fade-left">
       <div class="max-w-6xl mx-auto px-6">
         <h2 class="text-4xl font-semibold mb-12 text-center drop-shadow">Projects</h2>
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
-          <!-- CARD -->
           <article class="group rounded-xl overflow-hidden shadow-lg bg-white/10 backdrop-blur transition-transform hover:scale-105">
             <img src="images/project1.png" alt="Project 1" class="h-48 w-full object-cover" />
             <div class="p-6 space-y-3">
@@ -115,20 +72,18 @@
               <a href="https://github.com/GistKjoon/The-program-I-made-to-watch-YouTube-while-doing-Riot-TFT" target="_blank" class="inline-block text-indigo-300 hover:underline">GitHub ↗</a>
             </div>
           </article>
-          <!-- CARD -->
           <article class="group rounded-xl overflow-hidden shadow-lg bg-white/10 backdrop-blur transition-transform hover:scale-105">
             <img src="images/project2.png" alt="Project 2" class="h-48 w-full object-cover" />
             <div class="p-6 space-y-3">
-              <h3 class="text-2xl font-bold">Social&nbsp;Networking&nbsp;Service</h3>
+              <h3 class="text-2xl font-bold">Social Networking Service</h3>
               <p class="text-sm text-indigo-200">React + Node + GraphQL로 구현한 실시간 피드 SNS</p>
               <a href="#" class="inline-block text-indigo-300 hover:underline">GitHub ↗</a>
             </div>
           </article>
-          <!-- CARD -->
           <article class="group rounded-xl overflow-hidden shadow-lg bg-white/10 backdrop-blur transition-transform hover:scale-105">
             <img src="images/project3.png" alt="Project 3" class="h-48 w-full object-cover" />
             <div class="p-6 space-y-3">
-              <h3 class="text-2xl font-bold">Realtime&nbsp;Chat&nbsp;App</h3>
+              <h3 class="text-2xl font-bold">Realtime Chat App</h3>
               <p class="text-sm text-indigo-200">Vue 3 + Firebase로 빠르게 만든 서버리스 채팅</p>
               <a href="#" class="inline-block text-indigo-300 hover:underline">GitHub ↗</a>
             </div>
@@ -136,47 +91,35 @@
         </div>
       </div>
     </section>
-
-    <!-- CONTACT -->
     <section id="contact" class="py-24" data-aos="fade-up">
       <div class="max-w-3xl mx-auto px-6 text-center">
         <h2 class="text-4xl font-semibold mb-8 drop-shadow">Contact</h2>
         <form action="https://formspree.io/f/your-form-id" method="POST" class="space-y-6">
           <div class="grid md:grid-cols-2 gap-6">
-            <input type="text" name="name"  placeholder="Name"  class="px-5 py-3 bg-gray-800/80 w-full rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required>
-            <input type="email" name="_replyto" placeholder="Email" class="px-5 py-3 bg-gray-800/80 w-full rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required>
+            <input type="text" name="name" placeholder="Name" class="px-5 py-3 bg-gray-800/80 w-full rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required />
+            <input type="email" name="_replyto" placeholder="Email" class="px-5 py-3 bg-gray-800/80 w-full rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required />
           </div>
           <textarea name="message" rows="5" placeholder="Message" class="w-full px-5 py-3 bg-gray-800/80 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required></textarea>
           <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 transition-colors px-10 py-3 rounded-full font-medium">Send Message</button>
-        </form>
-      </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="py-10 text-center text-sm text-indigo-300 bg-black/10 backdrop-blur" data-aos="fade-up">
-      &copy; 2025 GistKjoon. All&nbsp;rights&nbsp;reserved.
-    </footer>
+        </div>
+      </section>
+    <footer class="py-10 text-center text-sm text-indigo-300 bg-black/10 backdrop-blur" data-aos="fade-up">&copy; 2025 GistKjoon. All rights reserved.</footer>
   </div>
 
-  <!-- **********  PIXI FISHEYE FILTER  ********** -->
+  <!-- PIXI FISHEYE FILTER -->
   <script>
-    const canvas   = document.getElementById('warp-canvas');
-    const app      = new PIXI.Application({ view: canvas, resizeTo: window, backgroundAlpha: 0 });
-
-    // 1) Galaxy background
-    const galaxy   = PIXI.Sprite.from('images/galaxy.png');
-    galaxy.width   = app.screen.width;
-    galaxy.height  = app.screen.height;
+    const canvas = document.getElementById('warp-canvas');
+    const app = new PIXI.Application({ view: canvas, resizeTo: window, backgroundAlpha: 0 });
+    const galaxy = PIXI.Sprite.from('images/galaxy.png');
+    galaxy.width = app.screen.width;
+    galaxy.height = app.screen.height;
     app.stage.addChild(galaxy);
-
-    // 2) Custom fisheye fragment shader
     const fisheyeFrag = `
       varying vec2 vTextureCoord;
       uniform sampler2D uSampler;
       uniform vec2   center;
       uniform float  radius;
       uniform float  strength;
-
       void main() {
         vec2 uv   = vTextureCoord;
         vec2 diff = uv - center;
@@ -190,49 +133,33 @@
         }
         gl_FragColor = texture2D(uSampler, uv);
       }`;
-
-    const fisheyeFilter = new PIXI.Filter(undefined, fisheyeFrag, {
-      center:   [0.5, 0.5],  // normalized coords
-      radius:   0.18,        // 18% of min(screenW, screenH)
-      strength: 0.22         // distortion intensity
-    });
-
+    const fisheyeFilter = new PIXI.Filter(undefined, fisheyeFrag, { center: [0.5, 0.5], radius: 0.18, strength: 0.22 });
     galaxy.filters = [fisheyeFilter];
+    window.addEventListener('mousemove', e => { fisheyeFilter.uniforms.center = [ e.clientX / app.screen.width, e.clientY / app.screen.height ]; });
+  </script>
 
-    // 3) Mouse move updates center
-    window.addEventListener('mousemove', e => {
-      fisheyeFilter.uniforms.center = [ e.clientX / app.screen.width, e.clientY / app.screen.height ];
+  <!-- DROPDOWN HOVER SCRIPT -->
+  <script>
+    const projWrapper = document.getElementById('proj-wrapper');
+    const projMenu    = document.getElementById('proj-menu');
+    projWrapper.addEventListener('mouseenter', ()=>{
+      projMenu.classList.remove('opacity-0','scale-95','pointer-events-none');
+      projMenu.classList.add('opacity-100','scale-100','pointer-events-auto');
+    });
+    projWrapper.addEventListener('mouseleave', ()=>{
+      projMenu.classList.add('opacity-0','scale-95','pointer-events-none');
+      projMenu.classList.remove('opacity-100','scale-100','pointer-events-auto');
     });
   </script>
 
-  <!-- **********  AOS & PRELOADER  ********** -->
+  <!-- AOS & PRELOADER -->
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
   <script>
     AOS.init({ duration: 900, once: true });
     window.addEventListener('load', () => {
       const p = document.getElementById('preloader');
-      p.style.opacity = '0';
-      setTimeout(() => p.style.display = 'none', 800);
+      p.style.opacity = '0'; setTimeout(() => p.style.display = 'none', 800);
     });
-  </script>
-
-  <!-- **********  DROPDOWN HOVER SCRIPT ********** -->
-  <script>
-    const projWrapper = document.getElementById('proj-wrapper');
-    const projMenu    = document.getElementById('proj-menu');
-
-    if (projWrapper && projMenu) {
-      // Show menu when mouse enters trigger or menu area
-      projWrapper.addEventListener('mouseenter', () => {
-        projMenu.classList.remove('opacity-0','scale-95','pointer-events-none');
-        projMenu.classList.add   ('opacity-100','scale-100','pointer-events-auto');
-      });
-      // Hide when cursor fully leaves wrapper (button + menu)
-      projWrapper.addEventListener('mouseleave', () => {
-        projMenu.classList.add   ('opacity-0','scale-95','pointer-events-none');
-        projMenu.classList.remove('opacity-100','scale-100','pointer-events-auto');
-      });
-    }
   </script>
 </body>
 </html>
