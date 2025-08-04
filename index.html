@@ -9,7 +9,7 @@
   <script>tailwind.config = { darkMode: 'class' };</script>
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- AOS (Scroll Animations) -->
+  <!-- AOS (Animate On Scroll) -->
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 
@@ -17,18 +17,28 @@
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 
-  <!-- Babel (JSX) -->
+  <!-- Babel for JSX -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  <!-- GSAP & Three.js for Galaxy -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-
-  <!-- ReactBits Animated Background -->
+  <!-- ReactBits Components -->
   <script src="https://unpkg.com/react-bits@1.0.5/dist/react-bits.umd.production.min.js"></script>
 
   <style>
-    body { margin: 0; background: #000; color: #fff; overflow-x: hidden; }
+    /* Gradient background animation */
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background: linear-gradient(45deg, #0f172a, #1e293b, #334155);
+      background-size: 200% 200%;
+      animation: bgAnimate 15s ease infinite;
+      color: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+    }
+    @keyframes bgAnimate {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
     #root.app { position: relative; z-index: 10; }
   </style>
 </head>
@@ -37,100 +47,85 @@
 
   <script type="text/babel" data-presets="env,react">
     const { useState, useEffect } = React;
-    const { Backgrounds, NeonButton, Typewriter, Card } = window.ReactBits || {};
-    const GalaxyBG = (Backgrounds && Backgrounds.Galaxy) || window.ReactBits?.Galaxy;
+    const { NeonButton, Typewriter, Card } = window.ReactBits || {};
 
-    // Header
+    // Global Scroll to Section
+    const scrollToId = id => window.scrollTo({ top: document.getElementById(id).offsetTop - 60, behavior: 'smooth' });
+
+    // Header Component
     function Header() {
       const [open, setOpen] = useState(false);
       useEffect(() => {
-        const handler = e => {
-          if (!e.target.closest('#proj-menu')) setOpen(false);
-        };
-        document.addEventListener('click', handler);
-        return () => document.removeEventListener('click', handler);
+        const close = e => { if (!e.target.closest('#nav')) setOpen(false); };
+        document.addEventListener('click', close);
+        return () => document.removeEventListener('click', close);
       }, []);
       return (
-        <header className="fixed w-full backdrop-blur-md bg-black/50 p-4 z-20" data-aos="fade-down">
-          <nav className="max-w-6xl mx-auto flex items-center justify-between">
-            <h1 className="text-2xl font-bold cursor-pointer" onClick={() => window.scrollTo({ top:0, behavior:'smooth'})}>
-              GistKjoon
-            </h1>
-            <ul className="flex items-center space-x-6">
-              <li><a href="#about" className="hover:text-indigo-400">About</a></li>
-              <li className="relative" id="proj-menu">
-                <button onClick={() => setOpen(!open)} className="flex items-center space-x-1 hover:text-indigo-400">
-                  <span>Projects</span>
-                  <svg className={`w-5 h-5 transition-transform ${open?'rotate-180':''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/>
-                  </svg>
-                </button>
-                {open && (
-                  <ul className="absolute right-0 mt-2 bg-black/70 backdrop-blur rounded-lg shadow-lg">
-                    {[
-                      {label:'All', href:'#projects'},
-                      {label:'PIP Viewer', href:'projects/roll-pip.html'},
-                      {label:'SNS', href:'projects/sns.html'},
-                      {label:'Chat App', href:'projects/chat-app.html'},
-                    ].map((link,i) => (
-                      <li key={i} className="px-4 py-2 hover:bg-indigo-500/30">
-                        <a href={link.href}>{link.label}</a>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
-              <li><a href="#contact" className="hover:text-indigo-400">Contact</a></li>
-              <li>
-                <button onClick={() => document.documentElement.classList.toggle('dark')} className="p-2 rounded-full bg-gray-800 hover:bg-gray-700">
-                  🌗
-                </button>
-              </li>
-            </ul>
-          </nav>
+        <header className="fixed w-full bg-black/40 backdrop-blur-md z-20" data-aos="fade-down">
+          <div className="max-w-6xl mx-auto flex justify-between items-center p-4">
+            <h1 className="text-2xl font-bold cursor-pointer" onClick={() => scrollToId('hero')}>GistKjoon</h1>
+            <nav id="nav">
+              <button className="md:hidden" onClick={() => setOpen(!open)}>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+              <ul className={`md:flex md:space-x-8 absolute md:static top-full left-0 w-full md:w-auto bg-black/80 md:bg-transparent transition-transform ${open ? 'translate-y-0' : '-translate-y-96'}`}>
+                {['about','projects','contact'].map((sec,i) => (
+                  <li key={i} className="px-4 py-2 md:py-0">
+                    <button className="hover:text-indigo-300" onClick={() => {scrollToId(sec); setOpen(false);}}>
+                      {sec.charAt(0).toUpperCase() + sec.slice(1)}
+                    </button>
+                  </li>
+                ))}
+                <li className="px-4 py-2 md:py-0">
+                  <button onClick={() => document.documentElement.classList.toggle('dark')} className="p-2 rounded bg-gray-700 hover:bg-gray-600">
+                    🌙/☀️
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
         </header>
       );
     }
 
-    // Hero
+    // Hero Component
     function Hero() {
       return (
-        <section id="hero" className="flex flex-col items-center justify-center text-center h-screen px-6" data-aos="fade-up" data-aos-duration="1000">
-          {GalaxyBG && <GalaxyBG className="fixed inset-0 z-0 pointer-events-none" />}
-          <Typewriter strings={["안녕하세요, GistKjoon입니다!","Explore the Future"]} cursorColor="#6366f1" typeSpeed={80} backSpeed={40} loop className="text-5xl md:text-7xl font-extrabold text-indigo-400 drop-shadow-lg" />
-          <p className="mt-4 text-lg text-gray-300 max-w-prose">우주의 무한한 가능성을 코드로 그립니다. 최첨단 기술로 혁신을 창조합니다.</p>
-          <NeonButton onClick={() => window.scrollTo({ top: document.getElementById('projects').offsetTop, behavior:'smooth'})} className="mt-8" color="#6366f1">
-            View Projects
-          </NeonButton>
+        <section id="hero" className="flex flex-col items-center justify-center h-screen text-center px-6" data-aos="fade-up" data-aos-duration="1000">
+          <Typewriter strings={["Hello, I'm GistKjoon","I Design & Develop"]} cursorColor="#6366f1" typeSpeed={80} backSpeed={40} loop className="text-4xl md:text-6xl font-extrabold text-indigo-400" />
+          <p className="mt-4 text-lg md:text-xl max-w-lg text-gray-300">Turning creative ideas into digital realities with modern web technologies.</p>
+          <NeonButton onClick={() => scrollToId('projects')} className="mt-8 px-8 py-3" color="#6366f1">See My Work</NeonButton>
         </section>
       );
     }
 
-    // Section Template
-    const Section = ({ id, title, children, aos, duration }) => (
-      <section id={id} data-aos={aos} data-aos-duration={duration} className="py-20 px-6 bg-black/60">
+    // Section Wrapper
+    const Section = ({ id, title, children }) => (
+      <section id={id} className="py-20 px-6" data-aos="fade-up" data-aos-duration="800">
         <h2 className="text-3xl md:text-4xl font-semibold text-indigo-300 text-center mb-8">{title}</h2>
         <div className="max-w-6xl mx-auto">{children}</div>
       </section>
     );
 
-    // Projects Grid
+    // Projects Component
     function Projects() {
-      const items = [
-        {title:'PIP Viewer',desc:'TFT PiP 영상 macOS 유틸리티',img:'images/project1.png',href:'projects/roll-pip.html'},
-        {title:'SNS Platform',desc:'React·Node·GraphQL 실시간 피드',img:'images/project2.png',href:'projects/sns.html'},
-        {title:'Chat App',desc:'Vue3 + Firebase 채팅',img:'images/project3.png',href:'projects/chat-app.html'},
+      const projects = [
+        {title:'PIP Viewer',desc:'Picture-in-Picture tool for TFT streams',img:'images/project1.png',href:'projects/roll-pip.html'},
+        {title:'SNS Platform',desc:'Real-time feed app with React & GraphQL',img:'images/project2.png',href:'projects/sns.html'},
+        {title:'Chat App',desc:'Serverless chat powered by Firebase',img:'images/project3.png',href:'projects/chat-app.html'},
       ];
       return (
-        <Section id="projects" title="Projects" aos="zoom-in" duration="800">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {items.map((p,i) => (
-              <Card key={i} className="bg-black/50 backdrop-blur-lg rounded-lg overflow-hidden transform hover:scale-105 transition" onClick={() => window.location.href=p.href}>
+        <Section id="projects" title="Projects">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {projects.map((p,i)=>(
+              <Card key={i} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg transform hover:-translate-y-2 hover:shadow-2xl transition" onClick={()=>window.location.href=p.href}>
                 <img src={p.img} alt={p.title} className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-white mb-2">{p.title}</h3>
                   <p className="text-gray-300 mb-4">{p.desc}</p>
-                  <NeonButton size="small" color="#4f46e5" onClick={() => window.location.href=p.href}>Explore →</NeonButton>
+                  <NeonButton size="small" color="#4f46e5" onClick={()=>window.location.href=p.href}>View →</NeonButton>
                 </div>
               </Card>
             ))}
@@ -139,26 +134,26 @@
       );
     }
 
-    // About
+    // About Component
     function About() {
       return (
-        <Section id="about" title="About Me" aos="fade-right" duration="800">
+        <Section id="about" title="About Me">
           <div className="flex flex-col md:flex-row items-center md:space-x-8 text-center md:text-left">
-            <img src="images/profile.jpg" alt="Profile" className="w-40 h-40 rounded-full border-4 border-indigo-500 mb-6 md:mb-0" />
-            <p className="text-gray-200 leading-relaxed">풀스택 개발자 GistKjoon입니다. 사용자 경험과 성능 최적화를 중시하며, 우주처럼 무한한 가능성을 믿고 혁신을 추구합니다.</p>
+            <img src="images/profile.jpg" alt="Profile" className="w-36 h-36 rounded-full mb-6 md:mb-0" />
+            <p className="text-gray-200 leading-relaxed">I’m a full-stack developer with a passion for crafting engaging user experiences and optimizing performance. Let's create innovative solutions together.</p>
           </div>
         </Section>
       );
     }
 
-    // Contact
+    // Contact Component
     function Contact() {
       return (
-        <Section id="contact" title="Contact" aos="fade-left" duration="800">
-          <form action="https://formspree.io/f/your-form-id" method="POST" className="max-w-lg mx-auto space-y-4">
-            <input type="text" name="name" placeholder="Name" className="w-full p-3 bg-white/10 rounded focus:ring-2 focus:ring-indigo-400" />
-            <input type="email" name="_replyto" placeholder="Email" className="w-full p-3 bg-white/10 rounded focus:ring-2 focus:ring-indigo-400" />
-            <textarea name="message" rows="5" placeholder="Message" className="w-full p-3 bg-white/10 rounded focus:ring-2 focus:ring-indigo-400"></textarea>
+        <Section id="contact" title="Contact">
+          <form action="https://formspree.io/f/your-form-id" method="POST" className="max-w-md mx-auto space-y-4">
+            <input type="text" name="name" placeholder="Name" className="w-full p-3 rounded bg-gray-800 focus:ring-2 focus:ring-indigo-400" />
+            <input type="email" name="_replyto" placeholder="Email" className="w-full p-3 rounded bg-gray-800 focus:ring-2 focus:ring-indigo-400" />
+            <textarea name="message" rows="5" placeholder="Message" className="w-full p-3 rounded bg-gray-800 focus:ring-2 focus:ring-indigo-400"></textarea>
             <NeonButton type="submit" color="#6366f1">Send Message</NeonButton>
           </form>
         </Section>
@@ -167,7 +162,7 @@
 
     // Main App
     function App() {
-      useEffect(() => { AOS.init({ duration:900, once:true }); }, []);
+      useEffect(() => { AOS.init({ duration:800, once:true }); }, []);
       return (
         <>
           <Header />
@@ -175,7 +170,7 @@
           <Projects />
           <About />
           <Contact />
-          <footer className="py-6 text-center text-gray-500 bg-black/80">© 2025 GistKjoon. All rights reserved.</footer>
+          <footer className="py-6 text-center text-gray-400">© 2025 GistKjoon</footer>
         </>
       );
     }
@@ -183,11 +178,7 @@
     ReactDOM.createRoot(document.getElementById('root')).render(<App />);
   </script>
 
-  <!-- Init AOS fallback -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (window.AOS) AOS.init({ duration:900, once:true });
-    });
-  </script>
+  <!-- AOS fallback init -->
+  <script>document.addEventListener('DOMContentLoaded',()=>{ if(window.AOS) AOS.init({ duration:800, once:true }); });</script>
 </body>
 </html>
