@@ -142,13 +142,30 @@
   <script>
     const projWrapper = document.getElementById('proj-wrapper');
     const projMenu    = document.getElementById('proj-menu');
-    projWrapper.addEventListener('mouseenter', ()=>{
+
+    function showMenu() {
       projMenu.classList.remove('opacity-0','scale-95','pointer-events-none');
-      projMenu.classList.add('opacity-100','scale-100','pointer-events-auto');
-    });
-    projWrapper.addEventListener('mouseleave', ()=>{
-      projMenu.classList.add('opacity-0','scale-95','pointer-events-none');
+      projMenu.classList.add   ('opacity-100','scale-100','pointer-events-auto');
+    }
+    function hideMenu() {
+      projMenu.classList.add   ('opacity-0','scale-95','pointer-events-none');
       projMenu.classList.remove('opacity-100','scale-100','pointer-events-auto');
+    }
+
+    // Keep menu open when hovering wrapper or menu
+    projWrapper.addEventListener('mouseenter', showMenu);
+    projMenu.addEventListener('mouseenter', showMenu);
+
+    // Close only when cursor leaves both wrapper and menu
+    projWrapper.addEventListener('mouseleave', () => {
+      setTimeout(() => {
+        if (!projWrapper.matches(':hover') && !projMenu.matches(':hover')) hideMenu();
+      }, 50);
+    });
+    projMenu.addEventListener('mouseleave', () => {
+      setTimeout(() => {
+        if (!projWrapper.matches(':hover') && !projMenu.matches(':hover')) hideMenu();
+      }, 50);
     });
   </script>
 
