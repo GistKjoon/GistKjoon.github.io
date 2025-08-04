@@ -18,11 +18,16 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
 
   <!-- Babel (JSX Transpiler) -->
+  <!-- GSAP (GreenSock animation library) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <!-- Three.js (3D rendering library) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <!-- react-bits UMD for animated backgrounds -->
   <!-- Load production UMD bundle from unpkg -->
   <script src="https://unpkg.com/react-bits@1.0.5/dist/react-bits.umd.production.min.js"></script>
+  <!-- ReactBits Galaxy background should now have GSAP & Three.js available -->
 
   <style>
     body { margin: 0; overflow-x: hidden; background: #000; color: #fff; }
@@ -38,7 +43,7 @@
     const { useState, useEffect } = React;
     const RB = window.ReactBits || {};
     // Ensure Galaxy background component is loaded
-    const GalaxyBG = RB.Backgrounds?.Galaxy || RB.Galaxy || null;
+    const GalaxyBG = (RB && RB.Backgrounds && RB.Backgrounds.Galaxy) || RB.Galaxy || null;
 
     // Fallback for NeonButton, Typewriter, Card if ReactBits not loaded
     const NeonButton = RB.NeonButton || (({ children, onClick, className }) => (
@@ -168,7 +173,7 @@
       }, []);
       return (
         <>
-          {GalaxyBG && <GalaxyBG className="fixed inset-0 z-0" />} 
+          {GalaxyBG && <GalaxyBG className="fixed inset-0 z-0 pointer-events-none" />} 
           <Header />
           <Hero />
           <About />
