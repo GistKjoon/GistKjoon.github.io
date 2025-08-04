@@ -2,7 +2,7 @@
 const { useEffect, useMemo } = React;
 
 function GalaxyBackground() {
-  // 1) 파티클 옵션 정의 (Galaxy 배경)
+  // 1) 옵션 정의 (Galaxy 배경)
   const options = useMemo(() => ({
     background: { color: "#0f172a" },
     fpsLimit: 60,
@@ -22,15 +22,14 @@ function GalaxyBackground() {
     detectRetina: true,
   }), []);
 
-  // 2) 컴포넌트가 마운트된 후 tsParticles 로 불러오기
+  // 2) 마운트 직후 tsParticles.load 호출
   useEffect(() => {
     if (window.tsParticles) {
-      // id="tsparticles" 요소에 캔버스를 그려줍니다
       window.tsParticles.load("tsparticles", options);
     }
   }, [options]);
 
-  // 3) 실제로는 빈 div 하나만 두면, tsParticles가 내부에서 <canvas>를 생성합니다
+  // 3) 빈 div 한 개만 두면 tsParticles가 내부에서 <canvas>를 생성합니다
   return (
     <div
       id="tsparticles"
@@ -40,5 +39,5 @@ function GalaxyBackground() {
   );
 }
 
-// 전역에 노출
+// 전역에 노출해야 index.html의 JSX에서 쓸 수 있습니다
 window.GalaxyBackground = GalaxyBackground;
