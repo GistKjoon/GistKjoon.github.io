@@ -47,7 +47,21 @@
 
   <script type="text/babel" data-presets="env,react">
     const { useState, useEffect } = React;
-    const { NeonButton, Typewriter, Card } = window.ReactBits || {};
+    // ReactBits components with fallbacks
+    const RB = window.ReactBits || {};
+    const NeonButton = RB.NeonButton || (({ children, onClick, className = '', ...props }) => (
+      <button onClick={onClick} className={`px-6 py-2 rounded bg-indigo-600 hover:bg-indigo-700 transition ${className}`} {...props}>
+        {children}
+      </button>
+    ));
+    const Typewriter = RB.Typewriter || (({ strings = [], className = '' }) => (
+      <h1 className={className}>{strings[0] || ''}</h1>
+    ));
+    const Card = RB.Card || (({ children, className = '', onClick, ...props }) => (
+      <div onClick={onClick} className={`bg-gray-800 rounded-lg overflow-hidden shadow-lg transform hover:-translate-y-2 hover:shadow-2xl transition ${className}`} {...props}>
+        {children}
+      </div>
+    ));
 
     // Global Scroll to Section
     const scrollToId = id => window.scrollTo({ top: document.getElementById(id).offsetTop - 60, behavior: 'smooth' });
