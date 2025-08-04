@@ -5,27 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GistKjoon Portfolio</title>
 
-  <!-- Tailwind CDN + defer -->
-  <script src="https://cdn.tailwindcss.com" defer></script>
-  <script defer>
+  <!-- 1) Tailwind 설정 스크립트: CDN 스크립트보다 먼저 실행되도록 -->
+  <script>
+    tailwind = window.tailwind || {};            /* 만약 전역이 없다면 빈 객체라도 만들어 놓고 */
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
           colors: { 'slate': { 850: '#172033' } },
-          boxShadow: { 'neon-indigo': '0 0 10px #6366f1, 0 0 20px #6366f1, 0 0 30px #a5b4fc' }
+          boxShadow: {
+            'neon-indigo': '0 0 10px #6366f1, 0 0 20px #6366f1, 0 0 30px #a5b4fc'
+          }
         }
       }
     };
   </script>
 
+  <!-- 2) Tailwind CDN 로드 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- AOS -->
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
 
+  <!-- React & Babel -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin defer></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin defer></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js" defer></script>
 
+  <!-- tsparticles -->
   <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.2/tsparticles.bundle.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/react-tsparticles@2.12.2/umd/react-tsparticles.min.js" defer></script>
 
@@ -37,16 +45,11 @@
       overflow-x: hidden;
     }
     #particles-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%; z-index: 0;
     }
     .app-content {
-      position: relative;
-      z-index: 10;
+      position: relative; z-index: 10;
     }
   </style>
 </head>
@@ -56,11 +59,10 @@
   <script type="text/babel" data-presets="env,react">
     const { useState, useEffect, useCallback, useMemo } = React;
 
-    // --- Helper Components ---
+    /* --- Reusable Components --- */
     const NeonButton = ({ children, onClick, className = '', type = 'button' }) => (
       <button
-        onClick={onClick}
-        type={type}
+        onClick={onClick} type={type}
         className={`px-6 py-2 rounded-md font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-indigo-500 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-neon-indigo ${className}`}
       >
         {children}
@@ -75,33 +77,35 @@
       </div>
     );
 
-    // --- Header ---
+    /* --- Header --- */
     function Header() {
-      const [isMenuOpen, setIsMenuOpen] = useState(false);
+      const [menuOpen, setMenuOpen] = useState(false);
       const scrollTo = (id) => {
         const el = document.getElementById(id);
-        if (el) {
-          window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' });
-          setIsMenuOpen(false);
-        }
+        if (el) window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' });
+        setMenuOpen(false);
       };
       return (
-        <header className="fixed top-0 w-full bg-slate-900/60 backdrop-blur-lg z-50 transition-colors duration-300" data-aos="fade-down">
+        <header className="fixed top-0 w-full bg-slate-900/60 backdrop-blur-lg z-50" data-aos="fade-down">
           <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
-            <h1 className="text-3xl font-bold tracking-tighter cursor-pointer text-indigo-400" onClick={() => scrollTo('hero')}>GistKjoon</h1>
+            <h1 className="text-3xl font-bold tracking-tighter cursor-pointer text-indigo-400" onClick={() => scrollTo('hero')}>
+              GistKjoon
+            </h1>
             <nav>
-              <button className="md:hidden p-2 text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              <button className="md:hidden p-2 text-white" onClick={() => setMenuOpen(!menuOpen)}>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                    d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-7 6h7"} />
+                    d={menuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-7 6h7"} />
                 </svg>
               </button>
-              <ul className={`absolute md:relative top-16 left-0 w-full bg-slate-900/90 md:bg-transparent md:flex md:items-center md:space-x-6 transition-transform duration-300 ease-in-out ${isMenuOpen ? 'block' : 'hidden'}`}>
-                {['about', 'projects', 'contact'].map(sec => (
-                  <li key={sec} className="border-b border-slate-800 md:border-none">
-                    <button className="block w-full text-left md:text-center px-5 py-3 md:py-2 text-white hover:text-indigo-300 transition-colors"
-                      onClick={() => scrollTo(sec)}>
-                      {sec.charAt(0).toUpperCase() + sec.slice(1)}
+              <ul className={`absolute md:relative top-16 left-0 w-full bg-slate-900/90 md:bg-transparent md:flex md:space-x-6 transition-transform ${menuOpen ? 'block' : 'hidden'}`}>
+                {['about','projects','contact'].map(sec => (
+                  <li key={sec} className="border-b md:border-none">
+                    <button
+                      onClick={() => scrollTo(sec)}
+                      className="block w-full px-5 py-3 text-white hover:text-indigo-300 transition"
+                    >
+                      {sec.charAt(0).toUpperCase()+sec.slice(1)}
                     </button>
                   </li>
                 ))}
@@ -112,50 +116,43 @@
       );
     }
 
-    // --- Particle Background ---
+    /* --- Particle Background --- */
     function ParticleBackground() {
-      const particlesInit = useCallback(async (engine) => {
-        if (window.tsParticles) {
-          await window.tsParticles.loadFull(engine);
-        }
+      const initParticles = useCallback(async engine => {
+        if (window.tsParticles) await window.tsParticles.loadFull(engine);
       }, []);
-
-      const particlesOptions = useMemo(() => ({
-        background: { color: { value: '#0f172a' } },
+      const opts = useMemo(() => ({
+        background: { color: '#0f172a' },
         fpsLimit: 60,
         interactivity: {
           events: { onHover: { enable: true, mode: 'repulse' }, resize: true },
-          modes: { repulse: { distance: 100, duration: 0.4 } },
+          modes: { repulse: { distance: 100, duration: 0.4 } }
         },
         particles: {
           color: { value: '#ffffff' },
           links: { color: '#ffffff', distance: 150, enable: true, opacity: 0.1, width: 1 },
           collisions: { enable: true },
-          move: { direction: 'none', enable: true, outModes: { default: 'bounce' }, speed: 1 },
+          move: { outModes: 'bounce', speed: 1, enable: true },
           number: { density: { enable: true, area: 800 }, value: 80 },
-          opacity: { value: 0.1 },
-          shape: { type: 'circle' },
-          size: { value: { min: 1, max: 5 } },
+          opacity: 0.1,
+          shape: 'circle',
+          size: { min: 1, max: 5 }
         },
-        detectRetina: true,
+        detectRetina: true
       }), []);
-
       if (!window.ReactParticles) return null;
       return React.createElement(window.ReactParticles.default, {
-        id: "particles-bg",
-        init: particlesInit,
-        options: particlesOptions
+        id: 'particles-bg', init: initParticles, options: opts
       });
     }
 
-    // --- Hero Section ---
+    /* --- Hero Section --- */
     function Hero() {
       return (
         <section id="hero" className="min-h-screen flex flex-col items-center justify-center text-center px-4">
           <div data-aos="fade-up" data-aos-duration="1000">
-            <h1 className="text-4xl md:text-7xl font-extrabold tracking-tight">
-              <span className="block">Hello, I'm</span>
-              <span className="block text-indigo-400 mt-2">GistKjoon</span>
+            <h1 className="text-4xl md:text-7xl font-extrabold">
+              Hello, I'm <span className="text-indigo-400">GistKjoon</span>
             </h1>
             <p className="mt-6 text-lg md:text-xl max-w-2xl text-slate-300">
               I build high-performance, beautiful, and immersive web experiences.
@@ -168,7 +165,7 @@
       );
     }
 
-    // --- Section Wrapper ---
+    /* --- Section Wrapper --- */
     const Section = ({ id, title, children }) => (
       <section id={id} className="py-24 px-4">
         <div className="max-w-7xl mx-auto">
@@ -180,25 +177,25 @@
       </section>
     );
 
-    // --- Projects ---
+    /* --- Projects --- */
     function Projects() {
-      const items = [
-        { title: 'PIP Viewer', desc: 'A Picture-in-Picture utility for macOS video streams.', href: 'projects/roll-pip.html' },
-        { title: 'SNS Platform', desc: 'Real-time social feed with React & GraphQL.', href: 'projects/sns.html' },
-        { title: 'Chat App', desc: 'A real-time messaging app using Vue 3 and Firebase.', href: 'projects/chat-app.html' },
+      const data = [
+        { title: 'PIP Viewer', desc: 'macOS PIP utility.', href: 'projects/roll-pip.html' },
+        { title: 'SNS Platform', desc: 'Real-time social feed.', href: 'projects/sns.html' },
+        { title: 'Chat App', desc: 'Messaging with Vue 3 & Firebase.', href: 'projects/chat-app.html' }
       ];
       return (
         <Section id="projects" title="Featured Projects">
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((p, i) => (
+            {data.map((p,i) => (
               <Card key={i} onClick={() => window.location.href = p.href}>
-                <div className="h-56 bg-slate-700 flex items-center justify-center text-slate-400 group-hover:bg-slate-600 transition-colors">
-                  <span className="text-lg">Image</span>
+                <div className="h-56 bg-slate-700 flex items-center justify-center text-slate-400">
+                  <span>Image</span>
                 </div>
                 <div className="p-6">
                   <h3 className="text-2xl font-bold text-white mb-2">{p.title}</h3>
                   <p className="text-slate-300 mb-6">{p.desc}</p>
-                  <a href={p.href} className="font-semibold text-indigo-400 hover:text-indigo-300 transition-colors">
+                  <a href={p.href} className="text-indigo-400 hover:text-indigo-300 font-semibold">
                     View Project →
                   </a>
                 </div>
@@ -209,34 +206,34 @@
       );
     }
 
-    // --- About ---
+    /* --- About --- */
     function About() {
       return (
         <Section id="about" title="About Me">
-          <div className="flex flex-col md:flex-row items-center justify-center gap-10">
-            <div className="w-48 h-48 rounded-full bg-slate-700 flex-shrink-0 flex items-center justify-center text-slate-400">
-              <span className="text-lg">Photo</span>
+          <div className="flex flex-col md:flex-row items-center gap-10">
+            <div className="w-48 h-48 rounded-full bg-slate-700 flex items-center justify-center text-slate-400">
+              Photo
             </div>
-            <p className="max-w-2xl text-slate-200 text-center md:text-left text-lg leading-relaxed">
-              As a dedicated full-stack developer, I specialize in building intuitive user interfaces and robust, high-performance web applications.
+            <p className="max-w-2xl text-slate-200 text-lg leading-relaxed">
+              Dedicated full-stack developer specializing in intuitive UIs and high-performance web apps.
             </p>
           </div>
         </Section>
       );
     }
 
-    // --- Contact ---
+    /* --- Contact --- */
     function Contact() {
       return (
         <Section id="contact" title="Get In Touch">
           <div className="max-w-lg mx-auto text-center">
             <p className="text-lg text-slate-300 mb-8">
-              Have a project in mind or want to connect? Feel free to send me a message.
+              Have a project in mind? Send me a message!
             </p>
-            <form action="#" method="POST" className="space-y-6">
-              <input type="text" name="name" placeholder="Your Name" required className="w-full p-4 rounded-md bg-slate-800 focus:ring-2 focus:ring-indigo-500 border border-slate-700 focus:border-indigo-500 transition" />
-              <input type="email" name="email" placeholder="Your Email" required className="w-full p-4 rounded-md bg-slate-800 focus:ring-2 focus:ring-indigo-500 border border-slate-700 focus:border-indigo-500 transition" />
-              <textarea name="message" rows="5" placeholder="Your Message" required className="w-full p-4 rounded-md bg-slate-800 focus:ring-2 focus:ring-indigo-500 border border-slate-700 focus:border-indigo-500 transition"></textarea>
+            <form className="space-y-6">
+              <input type="text" placeholder="Your Name" required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500" />
+              <input type="email" placeholder="Your Email" required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500" />
+              <textarea rows="5" placeholder="Your Message" required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"></textarea>
               <NeonButton type="submit">Send Message</NeonButton>
             </form>
           </div>
@@ -244,7 +241,7 @@
       );
     }
 
-    // --- Main App & Render ---
+    /* --- App & Render --- */
     function App() {
       useEffect(() => { AOS.init({ duration: 800, once: true, offset: 50 }); }, []);
       return (
@@ -258,7 +255,9 @@
               <Projects />
               <Contact />
             </main>
-            <footer className="py-8 text-center text-slate-400">© {new Date().getFullYear()} GistKjoon. All Rights Reserved.</footer>
+            <footer className="py-8 text-center text-slate-400">
+              © {new Date().getFullYear()} GistKjoon. All Rights Reserved.
+            </footer>
           </div>
         </>
       );
