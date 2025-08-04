@@ -34,11 +34,15 @@
           <nav class="relative hidden md:flex items-center space-x-8">
             <a href="#about" class="hover:text-indigo-500">About</a>
             <div id="proj-wrapper" class="relative inline-block">
-              <button class="hover:text-indigo-500 flex items-center space-x-1 focus:outline-none">
+              <button id="proj-button" class="hover:text-indigo-500 flex items-center space-x-1 focus:outline-none">
                 <span>Projects</span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                <svg id="proj-arrow" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
               </button>
-              <ul id="proj-menu" class="absolute right-0 top-full mt-1 w-56 bg-white/10 dark:bg-black/20 backdrop-blur rounded-lg shadow-lg opacity-0 scale-95 pointer-events-none transition-all duration-150 z-50">
+              <ul id="proj-menu"
+                  class="absolute right-0 top-full mt-1 w-56 bg-white/10 dark:bg-black/20 backdrop-blur rounded-lg shadow-lg
+                         opacity-0 scale-95 pointer-events-none transition-all duration-150 z-50">
                 <li><a href="/#projects"              class="block px-4 py-2 hover:bg-white/20 dark:hover:bg-gray-700">모든 프로젝트</a></li>
                 <li><a href="projects/roll-pip.html" class="block px-4 py-2 hover:bg-white/20 dark:hover:bg-gray-700">롤체 PIP 뷰어</a></li>
                 <li><a href="projects/sns.html"      class="block px-4 py-2 hover:bg-white/20 dark:hover:bg-gray-700">SNS 플랫폼</a></li>
@@ -66,50 +70,36 @@
     </section>
 
     <section id="projects" class="py-24 bg-white/5 dark:bg-gray-900 backdrop-blur-sm" data-aos="fade-left">
-  <div class="max-w-6xl mx-auto px-6">
-    <h2 class="text-4xl font-semibold mb-12 text-center">Projects</h2>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
-
-      <!-- 롤체 PIP 뷰어 -->
-      <article class="group rounded-xl overflow-hidden shadow-lg bg-white/10 dark:bg-gray-800 backdrop-blur transition-transform hover:scale-105">
-        <a href="projects/roll-pip.html">
-          <img src="images/project1.png" alt="롤체PIP" class="h-48 w-full object-cover" />
-        </a>
-        <div class="p-6 space-y-3">
-          <h3 class="text-2xl font-bold">롤체 PIP 뷰어</h3>
-          <p class="text-sm text-indigo-500">TFT 플레이 중 유튜브 PiP 재생 macOS 유틸리티</p>
-          <a href="projects/roll-pip.html" class="inline-block text-indigo-500 hover:underline">자세히 보기 →</a>
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-4xl font-semibold mb-12 text-center">Projects</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
+          <article class="group rounded-xl overflow-hidden shadow-lg bg-white/10 dark:bg-gray-800 backdrop-blur transition-transform hover:scale-105">
+            <img src="images/project1.png" alt="롤체PIP" class="h-48 w-full object-cover" />
+            <div class="p-6 space-y-3">
+              <h3 class="text-2xl font-bold">롤체 PIP 뷰어</h3>
+              <p class="text-sm text-indigo-500">TFT 플레이 중 유튜브 PiP 재생 macOS 유틸리티</p>
+              <a href="projects/roll-pip.html" class="inline-block text-indigo-500 hover:underline">자세히 보기 →</a>
+            </div>
+          </article>
+          <article class="group rounded-xl overflow-hidden shadow-lg bg-white/10 dark:bg-gray-800 backdrop-blur transition-transform hover:scale-105">
+            <img src="images/project2.png" alt="SNS 플랫폼" class="h-48 w-full object-cover" />
+            <div class="p-6 space-y-3">
+              <h3 class="text-2xl font-bold">SNS 플랫폼</h3>
+              <p class="text-sm text-indigo-500">React+Node+GraphQL 기반 실시간 피드 서비스</p>
+              <a href="projects/sns.html" class="inline-block text-indigo-500 hover:underline">자세히 보기 →</a>
+            </div>
+          </article>
+          <article class="group rounded-xl overflow-hidden shadow-lg bg-white/10 dark:bg-gray-800 backdrop-blur transition-transform hover:scale-105">
+            <img src="images/project3.png" alt="채팅 앱" class="h-48 w-full object-cover" />
+            <div class="p-6 space-y-3">
+              <h3 class="text-2xl font-bold">Realtime Chat App</h3>
+              <p class="text-sm text-indigo-500">Vue3 + Firebase 서버리스 채팅 애플리케이션</p>
+              <a href="projects/chat-app.html" class="inline-block text-indigo-500 hover:underline">자세히 보기 →</a>
+            </div>
+          </article>
         </div>
-      </article>
-
-      <!-- SNS 플랫폼 -->
-      <article class="group rounded-xl overflow-hidden shadow-lg bg-white/10 dark:bg-gray-800 backdrop-blur transition-transform hover:scale-105">
-        <a href="projects/sns.html">
-          <img src="images/project2.png" alt="SNS 플랫폼" class="h-48 w-full object-cover" />
-        </a>
-        <div class="p-6 space-y-3">
-          <h3 class="text-2xl font-bold">SNS 플랫폼</h3>
-          <p class="text-sm text-indigo-500">React+Node+GraphQL 기반 실시간 피드 서비스</p>
-          <a href="projects/sns.html" class="inline-block text-indigo-500 hover:underline">자세히 보기 →</a>
-        </div>
-      </article>
-
-      <!-- Realtime Chat App -->
-      <article class="group rounded-xl overflow-hidden shadow-lg bg-white/10 dark:bg-gray-800 backdrop-blur transition-transform hover:scale-105">
-        <a href="projects/chat-app.html">
-          <img src="images/project3.png" alt="채팅 앱" class="h-48 w-full object-cover" />
-        </a>
-        <div class="p-6 space-y-3">
-          <h3 class="text-2xl font-bold">Realtime Chat App</h3>
-          <p class="text-sm text-indigo-500">Vue3 + Firebase 서버리스 채팅 애플리케이션</p>
-          <a href="projects/chat-app.html" class="inline-block text-indigo-500 hover:underline">자세히 보기 →</a>
-        </div>
-      </article>
-
-    </div>
-  </div>
-</section>
-
+      </div>
+    </section>
 
     <section id="contact" class="py-24" data-aos="fade-up">
       <div class="max-w-3xl mx-auto px-6 text-center">
@@ -121,9 +111,13 @@
           </div>
           <textarea name="message" rows="5" placeholder="Message" class="w-full px-5 py-3 bg-gray-200 dark:bg-gray-800 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required></textarea>
           <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white px-10 py-3 rounded-full font-medium transition-colors">Send Message</button>
-        </div>
-      </section>
-    <footer class="py-10 text-center text-sm text-indigo-500 bg-white/10 dark:bg-black/30 backdrop-blur" data-aos="fade-up">&copy; 2025 GistKjoon. All rights reserved.</footer>
+        </form>
+      </div>
+    </section>
+
+    <footer class="py-10 text-center text-sm text-indigo-500 bg-white/10 dark:bg-black/30 backdrop-blur" data-aos="fade-up">
+      &copy; 2025 GistKjoon. All rights reserved.
+    </footer>
   </div>
 
   <!-- PIXI FISHEYE FILTER -->
@@ -155,39 +149,44 @@
       }`;
     const fisheyeFilter = new PIXI.Filter(undefined, fisheyeFrag, { center: [0.5, 0.5], radius: 0.18, strength: 0.22 });
     galaxy.filters = [fisheyeFilter];
-    window.addEventListener('mousemove', e => { fisheyeFilter.uniforms.center = [ e.clientX / app.screen.width, e.clientY / app.screen.height ]; });
+    window.addEventListener('mousemove', e => {
+      fisheyeFilter.uniforms.center = [ e.clientX / app.screen.width, e.clientY / app.screen.height ];
+    });
   </script>
 
-  <!-- Dropdown hover via JS -->
+  <!-- Dropdown click-toggle & outside-click close -->
   <script>
-    const wrapper = document.getElementById('proj-wrapper');
-    const menu    = document.getElementById('proj-menu');
-    let timeout;
-    function show() {
-      clearTimeout(timeout);
-      menu.classList.remove('opacity-0','scale-95','pointer-events-none');
-      menu.classList.add   ('opacity-100','scale-100','pointer-events-auto');
-    }
-    function hide() {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        if (!wrapper.matches(':hover') && !menu.matches(':hover')) {
-          menu.classList.add   ('opacity-0','scale-95','pointer-events-none');
+    document.addEventListener('DOMContentLoaded', () => {
+      const wrapper    = document.getElementById('proj-wrapper');
+      const button     = document.getElementById('proj-button');
+      const menu       = document.getElementById('proj-menu');
+      const arrowIcon  = document.getElementById('proj-arrow');
+
+      button.addEventListener('click', e => {
+        e.stopPropagation();
+        const isOpen = menu.classList.toggle('opacity-100');
+        menu.classList.toggle('scale-100', isOpen);
+        menu.classList.toggle('pointer-events-auto', isOpen);
+        menu.classList.toggle('opacity-0', !isOpen);
+        menu.classList.toggle('scale-95', !isOpen);
+        arrowIcon.classList.toggle('rotate-180', isOpen);
+      });
+
+      document.addEventListener('click', e => {
+        if (!wrapper.contains(e.target)) {
+          menu.classList.add('opacity-0','scale-95','pointer-events-none');
           menu.classList.remove('opacity-100','scale-100','pointer-events-auto');
+          arrowIcon.classList.remove('rotate-180');
         }
-      }, 200);
-    }
-    wrapper.addEventListener('mouseenter', show);
-    wrapper.addEventListener('mouseleave', hide);
-    menu.addEventListener('mouseenter', show);
-    menu.addEventListener('mouseleave', hide);
+      });
+    });
   </script>
 
   <!-- Theme toggle & Scroll-to-top scripts -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const themeToggle = document.getElementById('theme-toggle');
-      const scrollBtn = document.getElementById('scroll-top');
+      const scrollBtn   = document.getElementById('scroll-top');
 
       // Theme
       function applyTheme() {
