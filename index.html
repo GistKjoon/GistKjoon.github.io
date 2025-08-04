@@ -1,247 +1,246 @@
 <!DOCTYPE html>
-<html lang="ko" class="scroll-smooth">
+<html lang="ko" class="dark scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GistKjoon 포트폴리오</title>
 
-  <!-- Tailwind CSS with dark-mode enabled -->
-  <script>
-    tailwind.config = { darkMode: 'class' };
-  </script>
+  <!-- Tailwind CSS Dark Mode -->
+  <script>tailwind.config = { darkMode: 'class' };</script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Pixi.js for custom GLSL filter -->
+
+  <!-- Pixi.js (배경효과) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js"></script>
-  <!-- AOS (scroll animations) -->
+  <!-- AOS (스크롤 애니메이션) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
 
+  <!-- React & ReactDOM -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel (JSX 변환) -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- react-bits (가상 예시) -->
+  <script src="https://unpkg.com/react-bits/dist/react-bits.umd.js"></script>
+
   <style>
-    body { margin: 0; }
-    #preloader { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #000; z-index: 1000; transition: opacity .8s ease; }
-    #warp-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; }
-    .content { position: relative; z-index: 10; }
-    #scroll-top { position: fixed; bottom: 2rem; right: 2rem; background: rgba(59, 130, 246, 0.8); color: #fff; padding: 0.75rem; border-radius: 9999px; z-index: 50; }
+    body { margin:0; overflow-x:hidden; }
+    #warp-canvas { position: fixed; inset:0; z-index:0; }
+    .app { position: relative; z-index:10; font-family: 'Inter', sans-serif; }
   </style>
 </head>
-<body class="bg-white text-gray-800 dark:bg-black dark:text-white">
-  <div id="preloader"><div class="w-14 h-14 border-4 border-gray-600 border-t-indigo-500 rounded-full animate-spin"></div></div>
+<body class="bg-black text-white">
   <canvas id="warp-canvas"></canvas>
-  <button id="scroll-top" class="hidden" aria-label="Top">↑</button>
+  <div id="root" class="app"></div>
 
-  <div class="content font-sans">
-    <header class="backdrop-blur-md bg-white/10 dark:bg-black/50 sticky top-0" data-aos="fade-down">
-      <div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
-        <a href="#" class="text-2xl font-bold">GistKjoon</a>
-        <div class="flex items-center space-x-6">
-          <nav class="relative hidden md:flex items-center space-x-8">
-            <a href="#about" class="hover:text-indigo-500">About</a>
-            <div id="proj-wrapper" class="relative inline-block">
-              <button id="proj-button" class="hover:text-indigo-500 flex items-center space-x-1 focus:outline-none">
-                <span>Projects</span>
-                <svg id="proj-arrow" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                </svg>
-              </button>
-              <ul id="proj-menu" class="hidden absolute right-0 top-full mt-1 w-56 bg-white/10 dark:bg-black/20 backdrop-blur rounded-lg shadow-lg z-50">
-                <li>
-                  <a href="/#projects" class="block px-4 py-2 hover:bg-white/20 dark:hover:bg-gray-700">모든 프로젝트</a>
-                </li>
-                <li>
-                  <a href="projects/roll-pip.html" class="block px-4 py-2 hover:bg-white/20 dark:hover:bg-gray-700">롤체 PIP 뷰어</a>
-                </li>
-                <li>
-                  <a href="projects/sns.html" class="block px-4 py-2 hover:bg-white/20 dark:hover:bg-gray-700">SNS 플랫폼</a>
-                </li>
-                <li>
-                  <a href="projects/chat-app.html" class="block px-4 py-2 hover:bg-white/20 dark:hover:bg-gray-700">채팅 앱</a>
-                </li>
-              </ul>
-            </div>
-            <a href="#contact" class="hover:text-indigo-500">Contact</a>
-          </nav>
-          <button id="theme-toggle" aria-label="Toggle Theme" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 focus:outline-none">🌙</button>
-        </div>
-      </div>
-    </header>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    const { NeonButton, Typewriter, Card, Menu } = ReactBits; // react-bits 에서 제공한다고 가정
 
-    <section class="flex flex-col items-center justify-center text-center py-40" data-aos="fade-up">
-      <h1 class="text-5xl md:text-7xl font-extrabold drop-shadow-xl mb-6">안녕하세요,<br/>GistKjoon입니다!</h1>
-      <p class="text-xl md:text-2xl text-indigo-500 max-w-2xl">광활한 우주 같은 가능성을 탐험하며 만드는 개발자 포트폴리오에 오신 것을 환영합니다.</p>
-    </section>
+    // 배경 Pixi.js fisheye 효과
+    function initBackground() {
+      const canvas = document.getElementById('warp-canvas');
+      const app    = new PIXI.Application({ view: canvas, resizeTo: window, backgroundAlpha:0 });
+      const galaxy = PIXI.Sprite.from('images/galaxy.png');
+      galaxy.width = app.screen.width;
+      galaxy.height= app.screen.height;
+      app.stage.addChild(galaxy);
 
-    <section id="about" class="py-24" data-aos="fade-right">
-      <div class="max-w-5xl mx-auto text-center px-6">
-        <h2 class="text-4xl font-semibold mb-8">About Me</h2>
-        <img src="images/profile.jpg" alt="Profile" class="w-40 h-40 mx-auto rounded-full border-4 border-indigo-500 shadow-lg mb-6" />
-        <p class="text-lg text-indigo-500 max-w-3xl mx-auto leading-relaxed">React · Node.js 풀스택 개발자로, 사용자 경험과 성능 최적화를 동시에 추구합니다.<br/>새로운 기술 탐구를 즐기며, 우주 같은 넓은 가능성을 믿습니다.</p>
-      </div>
-    </section>
+      const frag = `
+        varying vec2 vTextureCoord;
+        uniform sampler2D uSampler;
+        uniform vec2 center; uniform float radius; uniform float strength;
+        void main() {
+          vec2 uv = vTextureCoord;
+          vec2 d  = uv - center;
+          float dist = length(d);
+          if (dist < radius) {
+            float pct = (radius-dist)/radius;
+            float theta = atan(d.y,d.x);
+            uv = center + vec2(cos(theta),sin(theta))*(dist+strength*pct*pct);
+          }
+          gl_FragColor = texture2D(uSampler, uv);
+        }`;
+      const filter = new PIXI.Filter(undefined, frag, {
+        center: [0.5,0.5], radius:0.18, strength:0.22
+      });
+      galaxy.filters = [filter];
+      window.addEventListener('mousemove', e => {
+        filter.uniforms.center = [ e.clientX/app.screen.width, e.clientY/app.screen.height ];
+      });
+    }
 
-    <section id="projects" class="py-24 bg-white/50 dark:bg-black/50 backdrop-blur-md" data-aos="fade-left">
-      <div class="max-w-6xl mx-auto px-6">
-        <h2 class="text-4xl font-semibold mb-12 text-center">Projects</h2>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
-          <article class="group rounded-xl overflow-hidden shadow-lg bg-white/10 dark:bg-gray-800 backdrop-blur transition-transform hover:scale-105">
-            <img src="images/project1.png" alt="롤체PIP" class="h-48 w-full object-cover" />
-            <div class="p-6 space-y-3">
-              <h3 class="text-2xl font-bold">롤체 PIP 뷰어</h3>
-              <p class="text-sm text-indigo-500">TFT 플레이 중 유튜브 PiP 재생 macOS 유틸리티</p>
-              <a href="projects/roll-pip.html" class="inline-block text-indigo-500 hover:underline">자세히 보기 →</a>
-            </div>
-          </article>
-          <article class="group rounded-xl overflow-hidden shadow-lg bg-white/10 dark:bg-gray-800 backdrop-blur transition-transform hover:scale-105">
-            <img src="images/project2.png" alt="SNS 플랫폼" class="h-48 w-full object-cover" />
-            <div class="p-6 space-y-3">
-              <h3 class="text-2xl font-bold">SNS 플랫폼</h3>
-              <p class="text-sm text-indigo-500">React+Node+GraphQL 기반 실시간 피드 서비스</p>
-              <a href="projects/sns.html" class="inline-block text-indigo-500 hover:underline">자세히 보기 →</a>
-            </div>
-          </article>
-          <article class="group rounded-xl overflow-hidden shadow-lg bg-white/10 dark:bg-gray-800 backdrop-blur transition-transform hover:scale-105">
-            <img src="images/project3.png" alt="채팅 앱" class="h-48 w-full object-cover" />
-            <div class="p-6 space-y-3">
-              <h3 class="text-2xl font-bold">Realtime Chat App</h3>
-              <p class="text-sm text-indigo-500">Vue3 + Firebase 서버리스 채팅 애플리케이션</p>
-              <a href="projects/chat-app.html" class="inline-block text-indigo-500 hover:underline">자세히 보기 →</a>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="py-24" data-aos="fade-up">
-      <div class="max-w-3xl mx-auto px-6 text-center">
-        <h2 class="text-4xl font-semibold mb-8">Contact</h2>
-        <form action="https://formspree.io/f/your-form-id" method="POST" class="space-y-6">
-          <div class="grid md:grid-cols-2 gap-6">
-            <input type="text" name="name" placeholder="Name" class="px-5 py-3 bg-gray-200 dark:bg-gray-800 w-full rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required />
-            <input type="email" name="_replyto" placeholder="Email" class="px-5 py-3 bg-gray-200 dark:bg-gray-800 w-full rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required />
+    // 최상단 Nav 컴포넌트
+    function Header() {
+      const [open, setOpen] = useState(false);
+      return (
+        <header className="fixed w-full backdrop-blur-md bg-black/50 p-4 z-20">
+          <div className="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 className="text-2xl font-bold cursor-pointer" onClick={()=>window.scrollTo({top:0,behavior:'smooth'})}>
+              GistKjoon
+            </h1>
+            <nav className="flex items-center space-x-6">
+              <a href="#about" className="hover:text-indigo-400">About</a>
+              <div className="relative">
+                <button
+                  onClick={()=>setOpen(!open)}
+                  className="flex items-center space-x-1 hover:text-indigo-400"
+                >
+                  <span>Projects</span>
+                  <svg className={`w-5 h-5 transition-transform ${open?'rotate-180':''}`}
+                       fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/>
+                  </svg>
+                </button>
+                {open && (
+                  <div className="absolute right-0 mt-2 bg-black/70 backdrop-blur rounded-lg shadow-lg">
+                    <ul>
+                      {[
+                        {label:'All Projects', href:'#projects'},
+                        {label:'롤체 PIP 뷰어', href:'projects/roll-pip.html'},
+                        {label:'SNS 플랫폼', href:'projects/sns.html'},
+                        {label:'채팅 앱', href:'projects/chat-app.html'},
+                      ].map((link,i)=>(
+                        <li key={i}>
+                          <a href={link.href}
+                             className="block px-4 py-2 hover:bg-indigo-500/30">
+                            {link.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+              <a href="#contact" className="hover:text-indigo-400">Contact</a>
+            </nav>
           </div>
-          <textarea name="message" rows="5" placeholder="Message" class="w-full px-5 py-3 bg-gray-200 dark:bg-gray-800 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" required></textarea>
-          <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white px-10 py-3 rounded-full font-medium transition-colors">Send Message</button>
-        </form>
-      </div>
-    </section>
+        </header>
+      );
+    }
 
-    <footer class="py-10 text-center text-sm text-indigo-500 bg-white/10 dark:bg-black/30 backdrop-blur" data-aos="fade-up">
-      &copy; 2025 GistKjoon. All rights reserved.
-    </footer>
-  </div>
+    // Hero 영역
+    function Hero() {
+      return (
+        <section id="hero" className="flex flex-col items-center justify-center text-center h-screen">
+          <Typewriter
+            strings={["안녕하세요, GistKjoon입니다!", "Futuristic Developer Portfolio"]}
+            cursorColor="#6366f1"
+            typeSpeed={80}
+            backSpeed={40}
+            loop
+            className="text-5xl md:text-7xl font-extrabold text-indigo-400 drop-shadow-lg"
+          />
+          <p className="mt-6 text-xl text-gray-300 max-w-2xl">
+            광활한 우주 같은 가능성을 탐험하며, 최첨단 기술로 세상을 만듭니다.
+          </p>
+          <NeonButton
+            onClick={()=>window.scrollTo({top:document.querySelector('#projects').offsetTop,behavior:'smooth'})}
+            className="mt-10"
+            color="#6366f1"
+          >
+            Explore Projects
+          </NeonButton>
+        </section>
+      );
+    }
 
-  <!-- PIXI FISHEYE FILTER -->
-  <script>
-    const canvas = document.getElementById('warp-canvas');
-    const app = new PIXI.Application({ view: canvas, resizeTo: window, backgroundAlpha: 0 });
-    const galaxy = PIXI.Sprite.from('images/galaxy.png');
-    galaxy.width = app.screen.width;
-    galaxy.height = app.screen.height;
-    app.stage.addChild(galaxy);
-    const fisheyeFrag = `
-      varying vec2 vTextureCoord;
-      uniform sampler2D uSampler;
-      uniform vec2   center;
-      uniform float  radius;
-      uniform float  strength;
-      void main() {
-        vec2 uv   = vTextureCoord;
-        vec2 diff = uv - center;
-        float dist = length(diff);
-        if (dist < radius) {
-          float pct    = (radius - dist) / radius;
-          float theta  = atan(diff.y, diff.x);
-          float newR   = dist + strength * pct * pct;
-          vec2 offset  = vec2(cos(theta), sin(theta)) * newR;
-          uv = center + offset;
-        }
-        gl_FragColor = texture2D(uSampler, uv);
-      }`;
-    const fisheyeFilter = new PIXI.Filter(undefined, fisheyeFrag, { center: [0.5, 0.5], radius: 0.18, strength: 0.22 });
-    galaxy.filters = [fisheyeFilter];
-    window.addEventListener('mousemove', e => {
-      fisheyeFilter.uniforms.center = [ e.clientX / app.screen.width, e.clientY / app.screen.height ];
-    });
-  </script>
+    // Project 카드
+    function Projects() {
+      const data = [
+        { title:'롤체 PIP 뷰어',   desc:'TFT 중 PiP 영상 macOS 유틸리티', img:'images/project1.png', href:'projects/roll-pip.html' },
+        { title:'SNS 플랫폼',     desc:'React+Node+GraphQL 피드 서비스', img:'images/project2.png', href:'projects/sns.html' },
+        { title:'Realtime Chat',   desc:'Vue3+Firebase 채팅 앱',       img:'images/project3.png', href:'projects/chat-app.html' },
+      ];
+      return (
+        <section id="projects" className="py-24 bg-black/60">
+          <div className="max-w-6xl mx-auto px-6">
+            <h2 className="text-4xl font-semibold text-center text-indigo-300 mb-12">
+              Projects
+            </h2>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {data.map((p,i)=>(
+                <Card
+                  key={i}
+                  className="bg-black/50 backdrop-blur-lg p-0 overflow-hidden"
+                  hoverEffect="glow"
+                  onClick={()=>window.location.href=p.href}
+                >
+                  <img src={p.img} alt={p.title} className="w-full h-48 object-cover" />
+                  <div className="p-6">
+                    <h3 className="text-2xl font-bold mb-2 text-white">{p.title}</h3>
+                    <p className="text-gray-300">{p.desc}</p>
+                  </div>
+                  <NeonButton
+                    className="mx-6 mb-6"
+                    size="small"
+                    color="#4f46e5"
+                    onClick={()=>window.location.href=p.href}
+                  >
+                    View →
+                  </NeonButton>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
 
-  <!-- Project Menu -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const wrapper   = document.getElementById('proj-wrapper');
-      const button    = document.getElementById('proj-button');
-      const menu      = document.getElementById('proj-menu');
-      const arrowIcon = document.getElementById('proj-arrow');
+    // About 영역
+    function About() {
+      return (
+        <section id="about" className="py-24 text-center">
+          <h2 className="text-4xl font-semibold text-indigo-300 mb-8">About Me</h2>
+          <img src="images/profile.jpg" alt="Profile"
+               className="w-40 h-40 mx-auto rounded-full border-4 border-indigo-500 shadow-lg mb-6" />
+          <p className="max-w-3xl mx-auto text-gray-200 leading-relaxed">
+            React·Node.js 풀스택 개발자이며, 사용자 경험과 성능 최적화를 동시에 추구합니다.
+            <br/>최신 기술 스택을 탐구하며, 우주처럼 무한한 가능성을 믿습니다.
+          </p>
+        </section>
+      );
+    }
 
-      // 버튼 클릭 시 열림/닫힘 토글
-      button.addEventListener('click', e => {
-        e.stopPropagation();
-        menu.classList.toggle('hidden');
-        arrowIcon.classList.toggle('rotate-180');
-      });
+    // Contact 영역
+    function Contact() {
+      return (
+        <section id="contact" className="py-24 text-center">
+          <h2 className="text-4xl font-semibold text-indigo-300 mb-8">Contact</h2>
+          <form action="https://formspree.io/f/your-form-id" method="POST"
+                className="max-w-xl mx-auto space-y-6">
+            <div className="grid md:grid-cols-2 gap-4">
+              <input type="text" name="name" placeholder="Name"
+                     className="p-3 bg-white/10 rounded focus:ring-2 focus:ring-indigo-400 w-full"/>
+              <input type="email" name="_replyto" placeholder="Email"
+                     className="p-3 bg-white/10 rounded focus:ring-2 focus:ring-indigo-400 w-full"/>
+            </div>
+            <textarea name="message" rows="5" placeholder="Message"
+                      className="w-full p-3 bg-white/10 rounded focus:ring-2 focus:ring-indigo-400"/>
+            <NeonButton color="#6366f1" type="submit">Send Message</NeonButton>
+          </form>
+        </section>
+      );
+    }
 
-      // 메뉴 외부 클릭 시 닫기
-      document.addEventListener('click', e => {
-        if (!wrapper.contains(e.target)) {
-          menu.classList.add('hidden');
-          arrowIcon.classList.remove('rotate-180');
-        }
-      });
-    });
-  </script>
+    // 최종 App
+    function App() {
+      useEffect(()=>{
+        initBackground();
+        AOS.init({ duration:900, once:true });
+      },[]);
+      return (
+        <>
+          <Header />
+          <Hero />
+          <About />
+          <Projects />
+          <Contact />
+          <footer className="py-6 text-center text-gray-500">© 2025 GistKjoon. All rights reserved.</footer>
+        </>
+      );
+    }
 
-  <!-- Tailwind CSS 추가 설정 (theme 확장) -->
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            primary: '#3b82f6',
-            secondary: '#6366f1',
-          },
-        },
-      },
-    };
-  </script>
-
-  <!-- Theme toggle & Scroll-to-top scripts -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const themeToggle = document.getElementById('theme-toggle');
-      const scrollBtn   = document.getElementById('scroll-top');
-
-      // 테마 적용
-      function applyTheme() {
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          document.documentElement.classList.add('dark');
-          themeToggle.textContent = '☀️';
-        } else {
-          document.documentElement.classList.remove('dark');
-          themeToggle.textContent = '🌙';
-        }
-      }
-      themeToggle.addEventListener('click', () => {
-        localStorage.theme = document.documentElement.classList.toggle('dark') ? 'dark' : 'light';
-        applyTheme();
-      });
-      applyTheme();
-
-      // Scroll-to-top
-      window.addEventListener('scroll', () => {
-        if (window.scrollY > window.innerHeight) scrollBtn.classList.remove('hidden');
-        else scrollBtn.classList.add('hidden');
-      });
-      scrollBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
-    });
-  </script>
-
-  <!-- AOS & Preloader -->
-  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-  <script>
-    AOS.init({ duration: 900, once: true });
-    window.addEventListener('load', () => {
-      const p = document.getElementById('preloader');
-      p.style.opacity = '0'; 
-      setTimeout(() => p.remove(), 800);
-    });
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
   </script>
 </body>
 </html>
