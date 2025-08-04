@@ -175,4 +175,53 @@
     });
   </script>
 </body>
-</html>
+<!-- Back to Top Button -->
+<button id="back-to-top" class="fixed bottom-5 right-5 p-3 bg-indigo-500 text-white rounded-full shadow-lg hidden">
+  ↑
+</button>
+
+<!-- Theme Toggle Button -->
+<button id="theme-toggle" class="fixed bottom-5 left-5 p-3 bg-gray-800 text-white rounded-full shadow-lg">
+  Toggle Theme
+</button>
+
+<!-- Cookie Consent Banner -->
+<div id="cookie-consent" class="fixed bottom-0 left-0 w-full bg-gray-900 text-gray-100 p-4 flex justify-between items-center z-50">
+  <span>웹사이트 이용 시 쿠키 사용에 동의하는 것으로 간주합니다.</span>
+  <button id="cookie-accept" class="bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded">동의</button>
+</div>
+
+<script>
+  // Back to Top button behavior
+  const backToTopBtn = document.getElementById('back-to-top');
+  window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+      backToTopBtn.classList.remove('hidden');
+    } else {
+      backToTopBtn.classList.add('hidden');
+    }
+  });
+  backToTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Theme Toggle behavior
+  const themeToggle = document.getElementById('theme-toggle');
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('light-theme');
+    if(document.body.classList.contains('light-theme')) {
+      document.body.style.background = '#fff';
+      document.body.style.color = '#000';
+    } else {
+      document.body.style.background = '#000';
+      document.body.style.color = '#fff';
+    }
+  });
+
+  // Cookie Consent behavior
+  const cookieConsent = document.getElementById('cookie-consent');
+  const cookieAccept = document.getElementById('cookie-accept');
+  cookieAccept.addEventListener('click', () => {
+    cookieConsent.style.display = 'none';
+  });
+</script>
