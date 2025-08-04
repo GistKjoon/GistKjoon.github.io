@@ -154,33 +154,40 @@
     });
   </script>
 
-  <!-- Dropdown click-toggle & outside-click close -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const wrapper    = document.getElementById('proj-wrapper');
-      const button     = document.getElementById('proj-button');
-      const menu       = document.getElementById('proj-menu');
-      const arrowIcon  = document.getElementById('proj-arrow');
+  document.addEventListener('DOMContentLoaded', () => {
+    const wrapper    = document.getElementById('proj-wrapper');
+    const button     = document.getElementById('proj-button');
+    const menu       = document.getElementById('proj-menu');
+    const arrowIcon  = document.getElementById('proj-arrow');
 
-      button.addEventListener('click', e => {
-        e.stopPropagation();
-        const isOpen = menu.classList.toggle('opacity-100');
-        menu.classList.toggle('scale-100', isOpen);
-        menu.classList.toggle('pointer-events-auto', isOpen);
-        menu.classList.toggle('opacity-0', !isOpen);
-        menu.classList.toggle('scale-95', !isOpen);
-        arrowIcon.classList.toggle('rotate-180', isOpen);
-      });
+    button.addEventListener('click', e => {
+      e.stopPropagation();
+      const isClosed = menu.classList.contains('pointer-events-none');
 
-      document.addEventListener('click', e => {
-        if (!wrapper.contains(e.target)) {
-          menu.classList.add('opacity-0','scale-95','pointer-events-none');
-          menu.classList.remove('opacity-100','scale-100','pointer-events-auto');
-          arrowIcon.classList.remove('rotate-180');
-        }
-      });
+      if (isClosed) {
+        // 열기
+        menu.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+        menu.classList.add   ('opacity-100', 'scale-100', 'pointer-events-auto');
+        arrowIcon.classList.add('rotate-180');
+      } else {
+        // 닫기
+        menu.classList.add   ('opacity-0', 'scale-95', 'pointer-events-none');
+        menu.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
+        arrowIcon.classList.remove('rotate-180');
+      }
     });
-  </script>
+
+    document.addEventListener('click', e => {
+      if (!wrapper.contains(e.target)) {
+        menu.classList.add   ('opacity-0', 'scale-95', 'pointer-events-none');
+        menu.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
+        arrowIcon.classList.remove('rotate-180');
+      }
+    });
+  });
+</script>
+
 
   <!-- Theme toggle & Scroll-to-top scripts -->
   <script>
