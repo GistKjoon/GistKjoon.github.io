@@ -141,22 +141,28 @@
   <!-- DROPDOWN HOVER SCRIPT -->
   <script>
     const wrapper = document.getElementById('proj-wrapper');
-    const menu = document.getElementById('proj-menu');
-    function show() {
+    const menu    = document.getElementById('proj-menu');
+    let hideTimeout;
+    function showMenu() {
+      clearTimeout(hideTimeout);
       menu.classList.remove('opacity-0','scale-95','pointer-events-none');
       menu.classList.add('opacity-100','scale-100','pointer-events-auto');
     }
-    function hide() {
-      menu.classList.add('opacity-0','scale-95','pointer-events-none');
-      menu.classList.remove('opacity-100','scale-100','pointer-events-auto');
+    function scheduleHide() {
+      clearTimeout(hideTimeout);
+      hideTimeout = setTimeout(() => {
+        if (!wrapper.matches(':hover') && !menu.matches(':hover')) {
+          menu.classList.add('opacity-0','scale-95','pointer-events-none');
+          menu.classList.remove('opacity-100','scale-100','pointer-events-auto');
+        }
+      }, 150);
     }
-    document.addEventListener('mousemove', (e) => {
-      if (wrapper.contains(e.target)) {
-        show();
-      } else {
-        hide();
-      }
-    });
+    // On enter wrapper or menu, show immediately
+    wrapper.addEventListener('mouseenter', showMenu);
+    menu.addEventListener('mouseenter', showMenu);
+    // On leave wrapper or menu, schedule hide
+    wrapper.addEventListener('mouseleave', scheduleHide);
+    menu.addEventListener('mouseleave', scheduleHide);
   </script>
 
   <!-- AOS & PRELOADER -->
