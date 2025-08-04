@@ -213,5 +213,24 @@
       setTimeout(() => p.style.display = 'none', 800);
     });
   </script>
+
+  <!-- **********  DROPDOWN HOVER SCRIPT ********** -->
+  <script>
+    const projWrapper = document.getElementById('proj-wrapper');
+    const projMenu    = document.getElementById('proj-menu');
+
+    if (projWrapper && projMenu) {
+      // Show menu when mouse enters trigger or menu area
+      projWrapper.addEventListener('mouseenter', () => {
+        projMenu.classList.remove('opacity-0','scale-95','pointer-events-none');
+        projMenu.classList.add   ('opacity-100','scale-100','pointer-events-auto');
+      });
+      // Hide when cursor fully leaves wrapper (button + menu)
+      projWrapper.addEventListener('mouseleave', () => {
+        projMenu.classList.add   ('opacity-0','scale-95','pointer-events-none');
+        projMenu.classList.remove('opacity-100','scale-100','pointer-events-auto');
+      });
+    }
+  </script>
 </body>
 </html>
