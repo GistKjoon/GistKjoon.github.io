@@ -20,8 +20,8 @@
   <!-- Babel (JSX Transpiler) -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  <!-- react-bits (Galaxy Background included) -->
-  <script src="https://unpkg.com/react-bits/dist/react-bits.umd.js"></script>
+  <!-- react-bits UMD for animated backgrounds -->
+  <script src="https://cdn.jsdelivr.net/npm/react-bits@1.0.5/lib/ReactBits.js"></script>
 
   <style>
     body { margin: 0; overflow-x: hidden; background: #000; color: #fff; }
@@ -29,15 +29,17 @@
   </style>
 </head>
 <body>
-  <!-- React Root -->
+  <!-- React App Root -->
   <div id="root" class="app"></div>
 
   <!-- React + JSX Code -->
   <script type="text/babel" data-presets="env,react">
     const { useState, useEffect } = React;
     const RB = window.ReactBits || {};
+    // Ensure Galaxy background component is loaded
+    const GalaxyBG = RB.Backgrounds?.Galaxy || RB.Galaxy || null;
 
-    // Fallbacks if ReactBits not loaded
+    // Fallback for NeonButton, Typewriter, Card if ReactBits not loaded
     const NeonButton = RB.NeonButton || (({ children, onClick, className }) => (
       <button onClick={onClick} className={`px-6 py-2 rounded-full bg-indigo-600 hover:bg-indigo-700 transition ${className}`}>{children}</button>
     ));
@@ -47,23 +49,21 @@
     const Card = RB.Card || (({ children, className, onClick }) => (
       <div onClick={onClick} className={className}>{children}</div>
     ));
-    const GalaxyBG = RB.Backgrounds?.Galaxy;
 
+    // Header component with AOS animation
     function Header() {
       const [open, setOpen] = useState(false);
       useEffect(() => {
-        const handleClick = e => {
+        const closeMenu = e => {
           if (!document.getElementById('proj-wrapper').contains(e.target)) setOpen(false);
         };
-        document.addEventListener('click', handleClick);
-        return () => document.removeEventListener('click', handleClick);
+        document.addEventListener('click', closeMenu);
+        return () => document.removeEventListener('click', closeMenu);
       }, []);
       return (
-        <header className="fixed w-full backdrop-blur-md bg-black/50 p-4 z-20">
+        <header data-aos="fade-down" className="fixed w-full backdrop-blur-md bg-black/50 p-4 z-20">
           <div className="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 className="text-2xl font-bold cursor-pointer" onClick={() => window.scrollTo({ top:0, behavior:'smooth' })}>
-              GistKjoon
-            </h1>
+            <h1 className="text-2xl font-bold cursor-pointer" onClick={() => window.scrollTo({ top:0, behavior:'smooth' })}>GistKjoon</h1>
             <nav className="flex items-center space-x-6">
               <a href="#about" className="hover:text-indigo-400">About</a>
               <div id="proj-wrapper" className="relative">
@@ -83,9 +83,7 @@
                         { label: '채팅 앱', href: 'projects/chat-app.html' },
                       ].map((link, i) => (
                         <li key={i}>
-                          <a href={link.href} className="block px-4 py-2 hover:bg-indigo-500/30">
-                            {link.label}
-                          </a>
+                          <a href={link.href} className="block px-4 py-2 hover:bg-indigo-500/30">{link.label}</a>
                         </li>
                       ))}
                     </ul>
@@ -99,29 +97,18 @@
       );
     }
 
+    // Hero section with AOS
     function Hero() {
       return (
-        <section id="hero" className="flex flex-col items-center justify-center text-center h-screen px-6">
-          <Typewriter
-            strings={["안녕하세요, GistKjoon입니다!", "Futuristic Developer Portfolio"]}
-            cursorColor="#6366f1"
-            typeSpeed={80}
-            backSpeed={40}
-            loop
-            className="text-5xl md:text-7xl font-extrabold text-indigo-400 drop-shadow-lg"
-          />
-          <p className="mt-6 text-xl text-gray-300 max-w-2xl">
-            광활한 우주 같은 가능성을 탐험하며, 최첨단 기술로 세상을 만듭니다.
-          </p>
-          <NeonButton
-            onClick={() => window.scrollTo({ top: document.querySelector('#projects').offsetTop, behavior: 'smooth' })}
-            className="mt-10"
-            color="#6366f1"
-          >Explore Projects</NeonButton>
+        <section id="hero" data-aos="fade-up" data-aos-duration="1000" className="flex flex-col items-center justify-center text-center h-screen px-6">
+          <Typewriter strings={["안녕하세요, GistKjoon입니다!", "Futuristic Developer Portfolio"]} cursorColor="#6366f1" typeSpeed={80} backSpeed={40} loop className="text-5xl md:text-7xl font-extrabold text-indigo-400 drop-shadow-lg" />
+          <p className="mt-6 text-xl text-gray-300 max-w-2xl">광활한 우주 같은 가능성을 탐험하며, 최첨단 기술로 세상을 만듭니다.</p>
+          <NeonButton onClick={() => window.scrollTo({ top: document.querySelector('#projects').offsetTop, behavior: 'smooth' })} className="mt-10" color="#6366f1">Explore Projects</NeonButton>
         </section>
       );
     }
 
+    // Projects with AOS
     function Projects() {
       const data = [
         { title: '롤체 PIP 뷰어', desc: 'TFT 중 PiP 영상 macOS 유틸리티', img: 'images/project1.png', href: 'projects/roll-pip.html' },
@@ -129,28 +116,15 @@
         { title: 'Realtime Chat', desc: 'Vue3+Firebase 채팅 앱', img: 'images/project3.png', href: 'projects/chat-app.html' },
       ];
       return (
-        <section id="projects" className="py-24 bg-black/60 px-6">
+        <section id="projects" data-aos="zoom-in" data-aos-duration="800" className="py-24 bg-black/60 px-6">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-4xl font-semibold text-center text-indigo-300 mb-12">Projects</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {data.map((p, i) => (
-                <Card
-                  key={i}
-                  className="bg-black/50 backdrop-blur-lg overflow-hidden cursor-pointer"
-                  hoverEffect="glow"
-                  onClick={() => window.location.href = p.href}
-                >
+                <Card key={i} className="bg-black/50 backdrop-blur-lg overflow-hidden cursor-pointer" hoverEffect="glow" onClick={() => window.location.href = p.href}>
                   <img src={p.img} alt={p.title} className="w-full h-48 object-cover" />
-                  <div className="p-6">
-                    <h3 className="text-2xl font-bold mb-2 text-white">{p.title}</h3>
-                    <p className="text-gray-300">{p.desc}</p>
-                  </div>
-                  <NeonButton
-                    className="mx-6 mb-6"
-                    size="small"
-                    color="#4f46e5"
-                    onClick={() => window.location.href = p.href}
-                  >View →</NeonButton>
+                  <div className="p-6"><h3 className="text-2xl font-bold mb-2 text-white">{p.title}</h3><p className="text-gray-300">{p.desc}</p></div>
+                  <NeonButton className="mx-6 mb-6" size="small" color="#4f46e5" onClick={() => window.location.href = p.href}>View →</NeonButton>
                 </Card>
               ))}
             </div>
@@ -159,9 +133,10 @@
       );
     }
 
+    // About with AOS
     function About() {
       return (
-        <section id="about" className="py-24 text-center px-6">
+        <section id="about" data-aos="fade-right" data-aos-duration="800" className="py-24 text-center px-6">
           <h2 className="text-4xl font-semibold text-indigo-300 mb-8">About Me</h2>
           <img src="images/profile.jpg" alt="Profile" className="w-40 h-40 mx-auto rounded-full border-4 border-indigo-500 shadow-lg mb-6" />
           <p className="max-w-3xl mx-auto text-gray-200 leading-relaxed">React·Node.js 풀스택 개발자이며, 사용자 경험과 성능 최적화를 동시에 추구합니다.<br/>최신 기술 스택을 탐구하며, 우주처럼 무한한 가능성을 믿습니다.</p>
@@ -169,9 +144,10 @@
       );
     }
 
+    // Contact with AOS
     function Contact() {
       return (
-        <section id="contact" className="py-24 text-center px-6">
+        <section id="contact" data-aos="fade-left" data-aos-duration="800" className="py-24 text-center px-6">
           <h2 className="text-4xl font-semibold text-indigo-300 mb-8">Contact</h2>
           <form action="https://formspree.io/f/your-form-id" method="POST" className="max-w-xl mx-auto space-y-6">
             <div className="grid md:grid-cols-2 gap-4">
@@ -187,13 +163,11 @@
 
     function App() {
       useEffect(() => {
-        // Always use ReactBits Galaxy Background
         AOS.init({ duration:900, once:true });
       }, []);
       return (
         <>
-          {/* ReactBits Galaxy Background */}
-          {GalaxyBG && <GalaxyBG className="fixed inset-0 z-0" />}
+          {GalaxyBG && <GalaxyBG className="fixed inset-0 z-0" />} 
           <Header />
           <Hero />
           <About />
@@ -209,7 +183,9 @@
 
   <!-- Fallback AOS Init -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => { if (window.AOS) AOS.init({ duration:900, once:true }); });
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.AOS) AOS.init({ duration:900, once:true });
+    });
   </script>
 </body>
 </html>
