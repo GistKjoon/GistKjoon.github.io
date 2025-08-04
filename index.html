@@ -5,35 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GistKjoon Portfolio</title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com" defer></script>
   <script>
+    // 이 설정 스크립트는 defer 없이 즉시 실행되어야 할 수 있으므로 그대로 둡니다.
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
-          colors: {
-            'slate': {
-              850: '#172033'
-            }
-          },
-          boxShadow: {
-            'neon-indigo': '0 0 10px #6366f1, 0 0 20px #6366f1, 0 0 30px #a5b4fc',
-          }
+          colors: { 'slate': { 850: '#172033' } },
+          boxShadow: { 'neon-indigo': '0 0 10px #6366f1, 0 0 20px #6366f1, 0 0 30px #a5b4fc' }
         }
       }
     };
   </script>
 
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
 
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin defer></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin defer></script>
 
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js" defer></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/react-tsparticles@2.12.2/umd/react-tsparticles.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.2/tsparticles.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.2/tsparticles.bundle.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-tsparticles@2.12.2/umd/react-tsparticles.min.js" defer></script>
 
   <style>
     body {
@@ -63,7 +58,6 @@
     const { useState, useEffect, useCallback, useMemo } = React;
 
     // --- Helper Components ---
-
     const NeonButton = ({ children, onClick, className = '', type = 'button' }) => (
       <button
         onClick={onClick}
@@ -73,7 +67,6 @@
         {children}
       </button>
     );
-
     const Card = ({ children, onClick, className = '' }) => (
       <div
         onClick={onClick}
@@ -84,45 +77,99 @@
     );
 
     // --- Core Application ---
-
     function Header() {
       const [isMenuOpen, setIsMenuOpen] = useState(false);
-
       const scrollTo = (id) => {
         const el = document.getElementById(id);
         if (el) {
-          window.scrollTo({
-            top: el.offsetTop - 70, // Adjusted for fixed header height
-            behavior: 'smooth',
-          });
+          window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' });
           setIsMenuOpen(false);
         }
       };
-
       return (
         <header className="fixed top-0 w-full bg-slate-900/60 backdrop-blur-lg z-50 transition-colors duration-300" data-aos="fade-down">
           <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
-            <h1 className="text-3xl font-bold tracking-tighter cursor-pointer text-indigo-400" onClick={() => scrollTo('hero')}>
-              GistKjoon
-            </h1>
+            <h1 className="text-3xl font-bold tracking-tighter cursor-pointer text-indigo-400" onClick={() => scrollTo('hero')}>GistKjoon</h1>
             <nav>
               <button className="md:hidden p-2 text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-7 6h7"} />
-                </svg>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-7 6h7"} /></svg>
               </button>
               <ul className={`absolute md:relative top-16 left-0 w-full bg-slate-900/90 md:bg-transparent md:flex md:items-center md:space-x-6 transition-transform duration-300 ease-in-out ${isMenuOpen ? 'block' : 'hidden'}`}>
                 {['about', 'projects', 'contact'].map(sec => (
                   <li key={sec} className="border-b border-slate-800 md:border-none">
-                    <button className="block w-full text-left md:text-center px-5 py-3 md:py-2 text-white hover:text-indigo-300 transition-colors" onClick={() => scrollTo(sec)}>
-                      {sec.charAt(0).toUpperCase() + sec.slice(1)}
-                    </button>
+                    <button className="block w-full text-left md:text-center px-5 py-3 md:py-2 text-white hover:text-indigo-300 transition-colors" onClick={() => scrollTo(sec)}>{sec.charAt(0).toUpperCase() + sec.slice(1)}</button>
                   </li>
                 ))}
               </ul>
             </nav>
           </div>
         </header>
+      );
+    }
+
+    function Hero() { /* ... 이전과 동일 ... */ }
+    const Section = ({ id, title, children }) => { /* ... 이전과 동일 ... */ };
+    function Projects() { /* ... 이전과 동일 ... */ }
+    function About() { /* ... 이전과 동일 ... */ }
+    function Contact() { /* ... 이전과 동일 ... */ }
+
+    // --- 이 부분이 중요합니다 ---
+    function ParticleBackground() {
+      // 라이브러리가 로드될 것을 defer가 보장하므로, 간단한 원래 형태로 돌아갑니다.
+      const particlesInit = useCallback(async (engine) => {
+        if (window.tsParticles) {
+          await window.tsParticles.loadFull(engine);
+        }
+      }, []);
+
+      const particlesOptions = useMemo(() => ({
+          background: { color: { value: '#0f172a' } },
+          fpsLimit: 60,
+          interactivity: {
+              events: { onHover: { enable: true, mode: 'repulse' }, resize: true },
+              modes: { repulse: { distance: 100, duration: 0.4 } },
+          },
+          particles: {
+              color: { value: '#ffffff' },
+              links: { color: '#ffffff', distance: 150, enable: true, opacity: 0.1, width: 1 },
+              collisions: { enable: true },
+              move: { direction: 'none', enable: true, outModes: { default: 'bounce' }, random: false, speed: 1, straight: false },
+              number: { density: { enable: true, area: 800 }, value: 80 },
+              opacity: { value: 0.1 },
+              shape: { type: 'circle' },
+              size: { value: { min: 1, max: 5 } },
+          },
+          detectRetina: true,
+      }), []);
+
+      // window.ReactParticles가 로드되었는지 확인 후 렌더링
+      if (!window.ReactParticles) {
+        return null;
+      }
+
+      return React.createElement(window.ReactParticles.default, {
+        id: "particles-bg",
+        init: particlesInit,
+        options: particlesOptions
+      });
+    }
+
+    function App() {
+      useEffect(() => { AOS.init({ duration: 800, once: true, offset: 50 }); }, []);
+      return (
+        <>
+          <ParticleBackground />
+          <div className="app-content">
+            <Header />
+            <main>
+              <Hero />
+              <About />
+              <Projects />
+              <Contact />
+            </main>
+            <footer className="py-8 text-center text-slate-400">© {new Date().getFullYear()} GistKjoon. All Rights Reserved.</footer>
+          </div>
+        </>
       );
     }
 
@@ -330,7 +377,7 @@
     }
 
     ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-
   </script>
+
 </body>
 </html>
