@@ -6,7 +6,7 @@
   <title>GistKjoon 포트폴리오</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Pixi.js for Displacement Warp Effect -->
+  <!-- Pixi.js for Custom Fisheye Effect -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js"></script>
   <style>
     body {
@@ -74,6 +74,7 @@
             <p class="text-indigo-200 mb-4">Next.js와 Tailwind CSS로 구축한 스타트업 블로그 플랫폼입니다.</p>
             <a href="#" class="text-indigo-300 hover:underline">GitHub Repo →</a>
           </div>
+          <!-- 추가 프로젝트 카드 반복 -->
         </div>
       </div>
     </section>
@@ -121,51 +122,50 @@
     </footer>
   </div>
 
-  <!-- Pixi.js Warp Script -->
+  <!-- Custom Fisheye Filter Script -->
   <script>
     const canvas = document.getElementById('warp-canvas');
     const app = new PIXI.Application({ view: canvas, resizeTo: window });
 
     // Galaxy background
     const galaxy = PIXI.Sprite.from('images/galaxy.png');
-    galaxy.anchor.set(0.5);
-    galaxy.x = app.screen.width / 2;
-    galaxy.y = app.screen.height / 2;
     galaxy.width = app.screen.width;
     galaxy.height = app.screen.height;
-
-    // Displacement map
-    const displacementTexture = PIXI.Sprite.from('images/displacement.png');
-    displacementTexture.anchor.set(0.5);
-    displacementTexture.x = app.screen.width / 2;
-    displacementTexture.y = app.screen.height / 2;
-    displacementTexture.texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
-    displacementTexture.width = app.screen.width;
-    displacementTexture.height = app.screen.height;
-    displacementTexture.visible = false;
-
-    // Filter
-    const displacementFilter = new PIXI.DisplacementFilter(displacementTexture);
-    displacementFilter.scale.x = 300;
-    displacementFilter.scale.y = 300;
-
-    galaxy.filters = [displacementFilter];
-
-    // Stage
     app.stage.addChild(galaxy);
-    app.stage.addChild(displacementTexture);
 
-    // Mouse
-    window.addEventListener('mousemove', (e) => {
-      const mx = e.clientX;
-      const my = e.clientY;
-      displacementTexture.x = mx;
-      displacementTexture.y = my;
+    // Fisheye filter: fragment shader
+    const fisheyeFrag = `
+    varying vec2 vTextureCoord;
+    uniform sampler2D uSampler;
+    uniform vec2 center;
+    uniform float radius;
+    uniform float strength;
+
+    void main() {
+      vec2 uv = vTextureCoord;
+      vec2 diff = uv - center;
+      float dist = length(diff);
+      if (dist < radius) {
+        float percent = (radius - dist) / radius;
+        float theta = atan(diff.y, diff.x);
+        float newR = dist + strength * percent * percent;
+        vec2 offset = vec2(cos(theta), sin(theta)) * newR;
+        uv = center + offset;
+      }
+      gl_FragColor = texture2D(uSampler, uv);
+    }`;
+
+    // Create filter
+    const fisheyeFilter = new PIXI.Filter(undefined, fisheyeFrag, {
+      center: [0.5, 0.5],
+      radius: 0.3,
+      strength: 0.2
     });
+    galaxy.filters = [fisheyeFilter];
 
-    app.ticker.add(() => {
-      displacementTexture.x += 1;
-      displacementTexture.y += 1;
+    // Update center on mouse move
+    window.addEventListener('mousemove', (e) => {
+      fisheyeFilter.uniforms.center = [e.clientX / app.screen.width, e.clientY / app.screen.height];
     });
   </script>
 </body>
