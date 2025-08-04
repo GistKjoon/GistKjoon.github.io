@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GistKjoon Portfolio</title>
 
-  <!-- 1) Tailwind 설정 스크립트: CDN 스크립트보다 먼저 실행되도록 -->
+  <!-- 1) Tailwind 설정: config → CDN -->
   <script>
-    tailwind = window.tailwind || {};            /* 만약 전역이 없다면 빈 객체라도 만들어 놓고 */
+    tailwind = window.tailwind || {};
     tailwind.config = {
       darkMode: 'class',
       theme: {
@@ -20,22 +20,28 @@
       }
     };
   </script>
-
-  <!-- 2) Tailwind CDN 로드 -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- AOS -->
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
 
-  <!-- React & Babel -->
+  <!-- React + Babel -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin defer></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin defer></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js" defer></script>
 
-  <!-- tsparticles -->
+  <!-- tsparticles (Galaxy용) -->
   <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.2/tsparticles.bundle.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/react-tsparticles@2.12.2/umd/react-tsparticles.min.js" defer></script>
+
+  <!-- GalaxyBackground 컴포넌트 불러오기 -->
+  <script
+    type="text/babel"
+    data-presets="env,react"
+    src="components/GalaxyBackground.jsx"
+    defer>
+  </script>
 
   <style>
     body {
@@ -43,10 +49,6 @@
       color: #f1f5f9;
       font-family: 'Inter', sans-serif;
       overflow-x: hidden;
-    }
-    #particles-bg {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%; z-index: 0;
     }
     .app-content {
       position: relative; z-index: 10;
@@ -114,36 +116,6 @@
           </div>
         </header>
       );
-    }
-
-    /* --- Particle Background --- */
-    function ParticleBackground() {
-      const initParticles = useCallback(async engine => {
-        if (window.tsParticles) await window.tsParticles.loadFull(engine);
-      }, []);
-      const opts = useMemo(() => ({
-        background: { color: '#0f172a' },
-        fpsLimit: 60,
-        interactivity: {
-          events: { onHover: { enable: true, mode: 'repulse' }, resize: true },
-          modes: { repulse: { distance: 100, duration: 0.4 } }
-        },
-        particles: {
-          color: { value: '#ffffff' },
-          links: { color: '#ffffff', distance: 150, enable: true, opacity: 0.1, width: 1 },
-          collisions: { enable: true },
-          move: { outModes: 'bounce', speed: 1, enable: true },
-          number: { density: { enable: true, area: 800 }, value: 80 },
-          opacity: 0.1,
-          shape: 'circle',
-          size: { min: 1, max: 5 }
-        },
-        detectRetina: true
-      }), []);
-      if (!window.ReactParticles) return null;
-      return React.createElement(window.ReactParticles.default, {
-        id: 'particles-bg', init: initParticles, options: opts
-      });
     }
 
     /* --- Hero Section --- */
@@ -243,10 +215,12 @@
 
     /* --- App & Render --- */
     function App() {
-      useEffect(() => { AOS.init({ duration: 800, once: true, offset: 50 }); }, []);
+      useEffect(() => {
+        AOS.init({ duration: 800, once: true, offset: 50 });
+      }, []);
       return (
         <>
-          <ParticleBackground />
+          <GalaxyBackground />
           <div className="app-content">
             <Header />
             <main>
