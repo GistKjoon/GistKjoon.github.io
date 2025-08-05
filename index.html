@@ -1,101 +1,90 @@
 <!DOCTYPE html>
 <html lang="ko" class="dark scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>GistKjoon Portfolio</title>
 
-  <!-- Tailwind CSS (dev CDN) -->
+  <!-- Tailwind Dev CDN -->
   <script>
-    tailwind = window.tailwind || {};
+    tailwind = window.tailwind||{};
     tailwind.config = { darkMode:'class' };
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Galaxy background CSS -->
-  <link rel="stylesheet" href="./components/Galaxy.css" />
 
   <!-- AOS CSS -->
   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"
   />
-  <script
-    src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"
-    defer
-  ></script>
+
+  <!-- Galaxy container CSS -->
+  <link rel="stylesheet" href="./components/Galaxy.css"/>
 
   <style>
     body {
-      margin: 0;
-      background-color: #0f172a;
-      color: #f1f5f9;
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
+      margin:0;
+      background:#0f172a;
+      color:#f1f5f9;
+      font-family:'Inter',sans-serif;
+      overflow-x:hidden;
     }
-    .app-content {
-      position: relative;
-      z-index: 10;
-    }
+    .app-content { position:relative; z-index:10 }
   </style>
 </head>
-
 <body class="dark">
   <div id="root"></div>
 
-  <script type="module">
-    // 1️⃣ React & ReactDOM
-    import React, {
-      useEffect,
-      useState,
-      useRef,
-      useMemo
-    } from 'https://esm.sh/react@18.2.0';
-    import { createRoot } from 'https://esm.sh/react-dom@18.2.0/client';
+  <!-- AOS JS -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
 
-    // 2️⃣ GalaxyBackground 컴포넌트
-    import GalaxyBackground from './components/GalaxyBackground.js';
+  <!-- Babel standalone (must come before any text/babel scripts) -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    // 3️⃣ 재사용 UI 컴포넌트
-    const NeonButton = ({ children, onClick, className = '', type = 'button' }) => (
+  <!-- 1) Load & expose your GalaxyBackground component -->
+  <script
+    type="text/babel"
+    data-presets="env,react"
+    src="./components/GalaxyBackground.js"
+    data-plugins="proposal-class-properties"
+    defer
+  ></script>
+
+  <!-- 2) Main app code, using global GalaxyBackground -->
+  <script type="text/babel" data-presets="env,react">
+    const { useState, useEffect, useRef } = React;
+    const { createRoot } = ReactDOM;
+
+    // Reusable bits
+    const NeonButton = ({children,onClick,className='',type='button'})=>(
       <button
         type={type}
         onClick={onClick}
         className={
-          `px-6 py-2 rounded-md font-semibold text-white ` +
-          `bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-offset-2 ` +
-          `focus:ring-offset-slate-900 focus:ring-indigo-500 transform hover:scale-105 ` +
-          `transition duration-300 shadow-lg hover:shadow-neon-indigo ` +
+          `px-6 py-2 rounded-md font-semibold text-white `+
+          `bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-offset-2 `+
+          `focus:ring-offset-slate-900 focus:ring-indigo-500 transform `+
+          `hover:scale-105 transition duration-300 shadow-lg hover:shadow-neon-indigo `+
           className
         }
-      >
-        {children}
-      </button>
+      >{children}</button>
     );
-
-    const Card = ({ children, onClick, className = '' }) => (
+    const Card = ({children,onClick,className=''})=>(
       <div
         onClick={onClick}
         className={
-          `bg-slate-800/50 backdrop-blur-sm rounded-xl overflow-hidden ` +
-          `shadow-2xl transform hover:-translate-y-2 transition duration-300 ease-in-out ` +
-          `cursor-pointer group ` +
-          className
+          `bg-slate-800/50 backdrop-blur-sm rounded-xl overflow-hidden `+
+          `shadow-2xl transform hover:-translate-y-2 transition duration-300 `+
+          `ease-in-out cursor-pointer group `+className
         }
-      >
-        {children}
-      </div>
+      >{children}</div>
     );
 
     function Header() {
-      const [open, setOpen] = useState(false);
-      const scrollTo = (id) => {
+      const [open,setOpen] = useState(false);
+      const scrollTo = id => {
         const el = document.getElementById(id);
-        if (el)
-          window.scrollTo({
-            top: el.offsetTop - 70,
-            behavior: 'smooth'
-          });
+        if(el) window.scrollTo({top:el.offsetTop-70,behavior:'smooth'});
         setOpen(false);
       };
       return (
@@ -106,47 +95,33 @@
           <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
             <h1
               className="text-3xl font-bold tracking-tighter cursor-pointer text-indigo-400"
-              onClick={() => scrollTo('hero')}
+              onClick={()=>scrollTo('hero')}
             >
               GistKjoon
             </h1>
             <nav>
               <button
                 className="md:hidden p-2 text-white"
-                onClick={() => setOpen(!open)}
+                onClick={()=>setOpen(!open)}
               >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d={
-                      open
-                        ? 'M6 18L18 6M6 6l12 12'
-                        : 'M4 6h16M4 12h16m-7 6h7'
-                    }
-                  />
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                    d={ open ? "M6 18L18 6M6 6l12 12"
+                         : "M4 6h16M4 12h16m-7 6h7" }/>
                 </svg>
               </button>
-              <ul
-                className={
-                  `absolute md:relative top-16 left-0 w-full bg-slate-900/90 ` +
-                  `md:bg-transparent md:flex md:space-x-6 ` +
-                  (open ? 'block' : 'hidden')
-                }
-              >
-                {['about', 'projects', 'contact'].map((sec) => (
+              <ul className={
+                `absolute md:relative top-16 left-0 w-full bg-slate-900/90 `+
+                `md:bg-transparent md:flex md:space-x-6 `+
+                (open?'block':'hidden')
+              }>
+                {['about','projects','contact'].map(sec=>(
                   <li key={sec} className="border-b md:border-none">
                     <button
                       className="block w-full px-5 py-3 text-white hover:text-indigo-300"
-                      onClick={() => scrollTo(sec)}
+                      onClick={()=>scrollTo(sec)}
                     >
-                      {sec.charAt(0).toUpperCase() + sec.slice(1)}
+                      {sec.charAt(0).toUpperCase()+sec.slice(1)}
                     </button>
                   </li>
                 ))}
@@ -154,7 +129,7 @@
             </nav>
           </div>
         </header>
-      );
+      )
     }
 
     function Hero() {
@@ -168,14 +143,12 @@
               Hello, I'm <span className="text-indigo-400">GistKjoon</span>
             </h1>
             <p className="mt-6 text-lg md:text-xl max-w-2xl text-slate-300">
-              I build high-performance, beautiful, and immersive web
-              experiences.
+              I build high-performance, beautiful, and immersive web experiences.
             </p>
             <NeonButton
-              onClick={() =>
-                document
-                  .getElementById('projects')
-                  ?.scrollIntoView({ behavior: 'smooth' })
+              onClick={()=>
+                document.getElementById('projects')
+                  ?.scrollIntoView({behavior:'smooth'})
               }
               className="mt-10 px-8 py-4 text-lg"
             >
@@ -186,7 +159,7 @@
       );
     }
 
-    const Section = ({ id, title, children }) => (
+    const Section = ({id,title,children})=>(
       <section id={id} className="py-24 px-4">
         <div className="max-w-7xl mx-auto">
           <h2
@@ -202,41 +175,24 @@
       </section>
     );
 
-    function Projects() {
+    function Projects(){
       const items = [
-        {
-          title: 'PIP Viewer',
-          desc: 'macOS PIP utility.',
-          href: 'projects/roll-pip.html'
-        },
-        {
-          title: 'SNS Platform',
-          desc: 'Real-time social feed.',
-          href: 'projects/sns.html'
-        },
-        {
-          title: 'Chat App',
-          desc: 'Messaging with Vue 3 & Firebase.',
-          href: 'projects/chat-app.html'
-        }
+        { title:'PIP Viewer', desc:'macOS PIP utility.', href:'projects/roll-pip.html' },
+        { title:'SNS Platform', desc:'Real-time social feed.', href:'projects/sns.html' },
+        { title:'Chat App', desc:'Messaging with Vue 3 & Firebase.', href:'projects/chat-app.html' },
       ];
       return (
         <Section id="projects" title="Featured Projects">
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((p, i) => (
-              <Card key={i} onClick={() => (window.location.href = p.href)}>
+            {items.map((p,i)=>(
+              <Card key={i} onClick={()=>window.location.href=p.href}>
                 <div className="h-56 bg-slate-700 flex items-center justify-center text-slate-400">
                   <span>Image</span>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-2xl font-bold text-white mb-2">
-                    {p.title}
-                  </h3>
+                  <h3 className="text-2xl font-bold text-white mb-2">{p.title}</h3>
                   <p className="text-slate-300 mb-6">{p.desc}</p>
-                  <a
-                    href={p.href}
-                    className="text-indigo-400 hover:text-indigo-300 font-semibold"
-                  >
+                  <a href={p.href} className="text-indigo-400 hover:text-indigo-300 font-semibold">
                     View Project →
                   </a>
                 </div>
@@ -247,7 +203,7 @@
       );
     }
 
-    function About() {
+    function About(){
       return (
         <Section id="about" title="About Me">
           <div className="flex flex-col md:flex-row items-center gap-10">
@@ -255,42 +211,24 @@
               Photo
             </div>
             <p className="max-w-2xl text-slate-200 text-lg leading-relaxed">
-              As a dedicated full-stack developer, I specialize in building
-              intuitive user interfaces and robust, high-performance web
-              applications.
+              As a dedicated full-stack developer, I specialize in building intuitive user interfaces and robust, high-performance web applications.
             </p>
           </div>
         </Section>
       );
     }
 
-    function Contact() {
+    function Contact(){
       return (
         <Section id="contact" title="Get In Touch">
           <div className="max-w-lg mx-auto text-center">
             <p className="text-lg text-slate-300 mb-8">
-              Have a project in mind or want to connect? Feel free to send me
-              a message.
+              Have a project in mind or want to connect? Feel free to send me a message.
             </p>
             <form className="space-y-6">
-              <input
-                type="text"
-                placeholder="Your Name"
-                required
-                className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"
-              />
-              <input
-                type="email"
-                placeholder="Your Email"
-                required
-                className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"
-              />
-              <textarea
-                rows="5"
-                placeholder="Your Message"
-                required
-                className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"
-              ></textarea>
+              <input type="text" placeholder="Your Name" required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"/>
+              <input type="email" placeholder="Your Email" required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"/>
+              <textarea rows="5" placeholder="Your Message" required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"></textarea>
               <NeonButton type="submit">Send Message</NeonButton>
             </form>
           </div>
@@ -298,21 +236,19 @@
       );
     }
 
-    // 4️⃣ App & render
-    function App() {
-      useEffect(() => {
-        AOS.init({ duration: 800, once: true, offset: 50 });
-      }, []);
+    function App(){
+      useEffect(()=> AOS.init({duration:800,once:true,offset:50}), []);
       return (
         <>
-          <GalaxyBackground />
+          {/* GalaxyBackground is now on window */}
+          <window.GalaxyBackground/>
           <div className="app-content">
-            <Header />
+            <Header/>
             <main>
-              <Hero />
-              <About />
-              <Projects />
-              <Contact />
+              <Hero/>
+              <About/>
+              <Projects/>
+              <Contact/>
             </main>
             <footer className="py-8 text-center text-slate-400">
               © {new Date().getFullYear()} GistKjoon. All Rights Reserved.
@@ -322,7 +258,7 @@
       );
     }
 
-    createRoot(document.getElementById('root')).render(<App />);
+    createRoot(document.getElementById('root')).render(<App/>);
   </script>
 </body>
 </html>
