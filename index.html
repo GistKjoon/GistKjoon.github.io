@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
-  <!-- Tailwind Dev CDN (경고 무시하거나 아래 팁 따라 빌드) -->
+  <!-- Tailwind Dev CDN -->
   <script>
     tailwind = window.tailwind||{};
     tailwind.config = { darkMode:'class' };
@@ -35,21 +35,22 @@
 </head>
 <body class="dark">
   <div id="root"></div>
-  <!-- React와 ReactDOM 추가 (필수: Babel 전에 로드) -->
+  <!-- React와 ReactDOM -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <!-- AOS JS -->
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
-  <!-- Babel standalone (must come after React) -->
+  <!-- Babel standalone -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <!-- Main app code, with GalaxyBackground defined inline -->
+  <!-- Main app code with enhanced GalaxyBackground for stronger distortion -->
   <script type="text/babel" data-presets="env,react">
     const { useState, useEffect, useRef } = React;
     const { createRoot } = ReactDOM;
 
-    // Define GalaxyBackground component here since external file is missing
+    // Enhanced GalaxyBackground with stronger mouse-following distortion effect, inspired by reactbits.dev/galaxy
     const GalaxyBackground = () => {
       const canvasRef = useRef(null);
+      const mouse = useRef({ x: 0, y: 0, prevX: 0, prevY: 0 });
 
       useEffect(() => {
         const canvas = canvasRef.current;
@@ -65,29 +66,64 @@
         resizeCanvas();
 
         const stars = [];
-        for (let i = 0; i < 200; i++) {
+        for (let i = 0; i < 500; i++) {  // More stars for denser galaxy effect
+          const x = Math.random() * canvas.width;
+          const y = Math.random() * canvas.height;
           stars.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            radius: Math.random() * 1.5 + 0.5,
-            speed: Math.random() * 0.5 + 0.1,
+            x,
+            y,
+            radius: Math.random() * 1.8 + 0.3,
+            speed: Math.random() * 0.8 + 0.2,
+            baseX: x,
+            baseY: y,
+            alpha: Math.random() * 0.5 + 0.5,  // Varying opacity for depth
           });
         }
 
+        // Mouse move listener
+        const handleMouseMove = (e) => {
+          mouse.current.prevX = mouse.current.x;
+          mouse.current.prevY = mouse.current.y;
+          mouse.current.x = e.clientX;
+          mouse.current.y = e.clientY;
+        };
+        window.addEventListener('mousemove', handleMouseMove);
+
         const animate = () => {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
+
           stars.forEach(star => {
+            // Stronger distortion: attract towards mouse with velocity consideration
+            const dx = mouse.current.x - star.x;
+            const dy = mouse.current.y - star.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const maxDist = 300;  // Larger radius for noticeable effect
+            if (dist < maxDist) {
+              const force = (1 - dist / maxDist) * 15;  // Stronger force
+              star.x += dx / dist * force;
+              star.y += dy / dist * force;
+            } else {
+              // Smooth return to base with easing
+              star.x += (star.baseX - star.x) * 0.1;
+              star.y += (star.baseY - star.y) * 0.1;
+            }
+
+            // Draw star with varying alpha
             ctx.beginPath();
             ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-            ctx.fillStyle = 'white';
+            ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
             ctx.fill();
 
+            // Falling movement with wrap-around
             star.y += star.speed;
             if (star.y > canvas.height) {
-              star.y = 0;
+              star.y = 0 - star.radius;
               star.x = Math.random() * canvas.width;
+              star.baseX = star.x;
+              star.baseY = star.y;
             }
           });
+
           animationFrameId = requestAnimationFrame(animate);
         };
 
@@ -98,6 +134,7 @@
         return () => {
           cancelAnimationFrame(animationFrameId);
           window.removeEventListener('resize', resizeCanvas);
+          window.removeEventListener('mousemove', handleMouseMove);
         };
       }, []);
 
@@ -115,7 +152,7 @@
       );
     };
 
-    // Reusable bits
+    // Rest of the app code remains the same
     const NeonButton = ({children,onClick,className='',type='button'})=>(
       <button
         type={type}
