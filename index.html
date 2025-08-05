@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>GistKjoon Portfolio</title>
+  <title>GistKjoon: Vast Space Exploration Portfolio</title>
   <!-- Google Fonts for Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,6 +19,8 @@
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"
   />
+  <!-- i18next for multilingual support -->
+  <script src="https://unpkg.com/i18next@23.11.5/i18next.min.js"></script>
   <style>
     body {
       margin:0;
@@ -31,6 +33,35 @@
     .shadow-neon-indigo {
       box-shadow: 0 0 20px rgba(99, 102, 241, 0.8);
     }
+    /* Light mode styles */
+    body.light {
+      background: #f0f4f8;
+      color: #1e293b;
+    }
+    body.light .bg-slate-900\/60 {
+      background: rgba(255,255,255,0.8);
+    }
+    body.light .text-indigo-400 {
+      color: #6366f1;
+    }
+    body.light .text-white {
+      color: #1e293b;
+    }
+    body.light .text-slate-300 {
+      color: #475569;
+    }
+    body.light .bg-slate-800\/50 {
+      background: rgba(255,255,255,0.5);
+    }
+    body.light .bg-slate-700 {
+      background: #e2e8f0;
+    }
+    body.light .text-slate-400 {
+      color: #94a3b8;
+    }
+    body.light .border-slate-700 {
+      border-color: #cbd5e1;
+    }
   </style>
 </head>
 <body class="dark">
@@ -42,12 +73,88 @@
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
   <!-- Babel standalone -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <!-- Main app code with more realistic stars (color variation, twinkling, motion blur) and increased distortion range -->
+  <!-- Main app code with enhanced features: theme toggle, multilingual, search, social links, newsletter, accessibility -->
   <script type="text/babel" data-presets="env,react">
     const { useState, useEffect, useRef } = React;
     const { createRoot } = ReactDOM;
 
-    // GalaxyBackground with realistic stars: color variation, twinkling, motion blur, and larger fisheye distortion range
+    // Initialize i18next for multilingual support (Korean/English)
+    i18next.init({
+      lng: 'en', // Default language
+      resources: {
+        en: {
+          translation: {
+            "title": "GistKjoon: Vast Space Exploration",
+            "hello": "Hello, I'm",
+            "gistkjoon": "GistKjoon",
+            "description": "I build high-performance, beautiful, and immersive web experiences inspired by vast space exploration.",
+            "explore": "Explore My Missions",
+            "mission_control": "Mission Control",
+            "about_desc": "As a dedicated full-stack developer, I specialize in building intuitive user interfaces and robust, high-performance web applications, charting new frontiers in digital space.",
+            "explorations": "Explorations",
+            "pip_viewer": "PIP Viewer",
+            "pip_desc": "macOS PIP utility for seamless video viewing.",
+            "sns_platform": "SNS Platform",
+            "sns_desc": "Real-time social feed with galactic connectivity.",
+            "chat_app": "Chat App",
+            "chat_desc": "Messaging with Vue 3 & Firebase, interstellar communication.",
+            "view_mission": "View Mission →",
+            "contact_base": "Contact Base",
+            "contact_desc": "Have a project in mind or want to connect across the cosmos? Send a signal.",
+            "your_name": "Your Name",
+            "your_email": "Your Email",
+            "your_message": "Your Message",
+            "send_signal": "Send Signal",
+            "newsletter": "Subscribe to Galaxy Updates",
+            "subscribe": "Subscribe",
+            "search_projects": "Search Missions...",
+            "about": "Mission Control",
+            "projects": "Explorations",
+            "contact": "Contact Base",
+            "footer": "© {{year}} GistKjoon. All Rights Reserved. Exploring the Digital Universe.",
+            "theme_toggle": "Toggle Theme",
+            "language": "Language: English"
+          }
+        },
+        ko: {
+          translation: {
+            "title": "GistKjoon: 광활한 우주 탐험",
+            "hello": "안녕하세요, 저는",
+            "gistkjoon": "GistKjoon",
+            "description": "광활한 우주 탐험에서 영감을 받아 고성능, 아름답고 몰입감 있는 웹 경험을 구축합니다.",
+            "explore": "내 미션 탐험하기",
+            "mission_control": "미션 컨트롤",
+            "about_desc": "전담 풀스택 개발자로서, 직관적인 사용자 인터페이스와 견고한 고성능 웹 애플리케이션을 구축하는 데 특화되어 있으며, 디지털 우주의 새로운 개척지를 탐험합니다.",
+            "explorations": "탐험",
+            "pip_viewer": "PIP 뷰어",
+            "pip_desc": "원활한 비디오 시청을 위한 macOS PIP 유틸리티.",
+            "sns_platform": "SNS 플랫폼",
+            "sns_desc": "은하계 연결성을 가진 실시간 소셜 피드.",
+            "chat_app": "채팅 앱",
+            "chat_desc": "Vue 3 & Firebase를 사용한 메시징, 성간 통신.",
+            "view_mission": "미션 보기 →",
+            "contact_base": "연락 기지",
+            "contact_desc": "프로젝트 아이디어가 있거나 우주를 가로질러 연결하고 싶으신가요? 신호를 보내세요.",
+            "your_name": "이름",
+            "your_email": "이메일",
+            "your_message": "메시지",
+            "send_signal": "신호 보내기",
+            "newsletter": "은하 업데이트 구독",
+            "subscribe": "구독",
+            "search_projects": "미션 검색...",
+            "about": "미션 컨트롤",
+            "projects": "탐험",
+            "contact": "연락 기지",
+            "footer": "© {{year}} GistKjoon. 모든 권리 보유. 디지털 우주 탐험 중.",
+            "theme_toggle": "테마 전환",
+            "language": "언어: 한국어"
+          }
+        }
+      },
+      interpolation: { escapeValue: false }
+    });
+
+    // GalaxyBackground with realistic stars
     const GalaxyBackground = () => {
       const canvasRef = useRef(null);
       const mouse = useRef({ x: 0, y: 0 });
@@ -65,24 +172,23 @@
 
         resizeCanvas();
 
-        const focal = 256; // Focal length for perspective
-        const maxZ = 1000; // Max depth
-        const speed = 2; // Travel speed
+        const focal = 256;
+        const maxZ = 1000;
+        const speed = 2;
 
         const stars = [];
-        for (let i = 0; i < 800; i++) { // More stars for realism
+        for (let i = 0; i < 800; i++) {
           stars.push({
             x: Math.random() * 2000 - 1000,
             y: Math.random() * 2000 - 1000,
             z: Math.random() * maxZ + 1,
-            color: `hsl(${Math.random() * 60 + 180}, 50%, ${Math.random() * 40 + 60}%)`, // Subtle blue/white/yellow tints
-            twinklePhase: Math.random() * Math.PI * 2, // For twinkling
-            prevSx: 0, // For motion blur
+            color: `hsl(${Math.random() * 60 + 180}, 50%, ${Math.random() * 40 + 60}%)`,
+            twinklePhase: Math.random() * Math.PI * 2,
+            prevSx: 0,
             prevSy: 0,
           });
         }
 
-        // Mouse move listener
         const handleMouseMove = (e) => {
           mouse.current = { x: e.clientX, y: e.clientY };
         };
@@ -95,7 +201,6 @@
           const currentCenterY = canvas.height / 2;
 
           stars.forEach(star => {
-            // Update depth
             star.z -= speed;
             if (star.z < 1) {
               star.z = maxZ;
@@ -103,31 +208,28 @@
               star.y = Math.random() * 2000 - 1000;
             }
 
-            // Project to 2D
             let sx = currentCenterX + (focal * star.x) / star.z;
             let sy = currentCenterY + (focal * star.y) / star.z;
             const radius = (1 - star.z / maxZ) * 3 + 0.5;
 
-            // Twinkling: vary alpha
             let alpha = (1 - star.z / maxZ) * (Math.sin(star.twinklePhase) * 0.2 + 0.8);
-            star.twinklePhase += 0.05; // Twinkle speed
+            star.twinklePhase += 0.05;
 
-            // Fisheye-like stretching with increased range
             const dx = sx - mouse.current.x;
             const dy = sy - mouse.current.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
-            const maxDist = 500; // Increased distortion range
+            const maxDist = 600; // Further increased distortion range
             if (dist < maxDist && dist > 0) {
-              const force = (1 - dist / maxDist) * 15; // Adjusted force for smoother effect
-              sx += (dx / dist) * force; // Repel to stretch space
+              const force = (1 - dist / maxDist) * 20; // Stronger force for noticeable stretch
+              sx += (dx / dist) * force;
               sy += (dy / dist) * force;
             }
 
-            // Motion blur: draw line from previous to current position
+            // Motion blur
             ctx.beginPath();
             ctx.moveTo(star.prevSx, star.prevSy);
             ctx.lineTo(sx, sy);
-            ctx.strokeStyle = `${star.color}80`; // Semi-transparent for blur
+            ctx.strokeStyle = `${star.color}80`;
             ctx.lineWidth = radius / 2;
             ctx.stroke();
 
@@ -137,7 +239,6 @@
             ctx.fillStyle = `${star.color.replace('hsl', 'hsla').replace('%)', `%, ${alpha})`)}`;
             ctx.fill();
 
-            // Update previous position
             star.prevSx = sx;
             star.prevSy = sy;
           });
@@ -170,7 +271,7 @@
       );
     };
 
-    // Rest of the app code remains the same
+    // Reusable NeonButton
     const NeonButton = ({children,onClick,className='',type='button'})=>(
       <button
         type={type}
@@ -184,6 +285,8 @@
         }
       >{children}</button>
     );
+
+    // Reusable Card
     const Card = ({children,onClick,className=''})=>(
       <div
         onClick={onClick}
@@ -194,7 +297,9 @@
         }
       >{children}</div>
     );
-    function Header() {
+
+    // Header with theme toggle and language switch
+    function Header({ t, toggleTheme, toggleLanguage }) {
       const [open,setOpen] = useState(false);
       const scrollTo = id => {
         const el = document.getElementById(id);
@@ -213,7 +318,7 @@
             >
               GistKjoon
             </h1>
-            <nav>
+            <nav className="flex items-center space-x-4">
               <button
                 className="md:hidden p-2 text-white"
                 onClick={()=>setOpen(!open)}
@@ -227,7 +332,7 @@
               <ul className={
                 `absolute md:relative top-16 left-0 w-full bg-slate-900/90 `+
                 `md:bg-transparent md:flex md:space-x-6 `+
-                (open?'block':'hidden')
+                (open?'block':'hidden md:block')
               }>
                 {['about','projects','contact'].map(sec=>(
                   <li key={sec} className="border-b md:border-none">
@@ -235,17 +340,28 @@
                       className="block w-full px-5 py-3 text-white hover:text-indigo-300"
                       onClick={()=>scrollTo(sec)}
                     >
-                      {sec.charAt(0).toUpperCase()+sec.slice(1)}
+                      {t(sec)}
                     </button>
                   </li>
                 ))}
               </ul>
+              <button onClick={toggleTheme} className="p-2 text-white" aria-label={t('theme_toggle')}>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </button>
+              <select onChange={toggleLanguage} className="bg-transparent text-white border-none">
+                <option value="en">EN</option>
+                <option value="ko">KO</option>
+              </select>
             </nav>
           </div>
         </header>
       )
     }
-    function Hero() {
+
+    // Hero section
+    function Hero({ t }) {
       return (
         <section
           id="hero"
@@ -253,10 +369,10 @@
         >
           <div data-aos="fade-up" data-aos-duration="1000">
             <h1 className="text-4xl md:text-7xl font-extrabold">
-              Hello, I'm <span className="text-indigo-400">GistKjoon</span>
+              {t('hello')} <span className="text-indigo-400">{t('gistkjoon')}</span>
             </h1>
             <p className="mt-6 text-lg md:text-xl max-w-2xl text-slate-300">
-              I build high-performance, beautiful, and immersive web experiences.
+              {t('description')}
             </p>
             <NeonButton
               onClick={()=>
@@ -265,12 +381,14 @@
               }
               className="mt-10 px-8 py-4 text-lg"
             >
-              Explore My Work
+              {t('explore')}
             </NeonButton>
           </div>
         </section>
       );
     }
+
+    // Section wrapper
     const Section = ({id,title,children})=>(
       <section id={id} className="py-24 px-4">
         <div className="max-w-7xl mx-auto">
@@ -286,16 +404,42 @@
         </div>
       </section>
     );
-    function Projects(){
-      const items = [
-        { title:'PIP Viewer', desc:'macOS PIP utility.', href:'projects/roll-pip.html' },
-        { title:'SNS Platform', desc:'Real-time social feed.', href:'projects/sns.html' },
-        { title:'Chat App', desc:'Messaging with Vue 3 & Firebase.', href:'projects/chat-app.html' },
-      ];
+
+    // About section (Mission Control)
+    function About({ t }) {
       return (
-        <Section id="projects" title="Featured Projects">
+        <Section id="about" title={t('mission_control')}>
+          <div className="flex flex-col md:flex-row items-center gap-10">
+            <div className="w-48 h-48 rounded-full bg-slate-700 flex items-center justify-center text-slate-400">
+              Photo
+            </div>
+            <p className="max-w-2xl text-slate-200 text-lg leading-relaxed">
+              {t('about_desc')}
+            </p>
+          </div>
+        </Section>
+      );
+    }
+
+    // Projects section with search functionality
+    function Projects({ t }) {
+      const [search, setSearch] = useState('');
+      const items = [
+        { title: t('pip_viewer'), desc: t('pip_desc'), href:'projects/roll-pip.html' },
+        { title: t('sns_platform'), desc: t('sns_desc'), href:'projects/sns.html' },
+        { title: t('chat_app'), desc: t('chat_desc'), href:'projects/chat-app.html' },
+      ];
+      const filteredItems = items.filter(item => item.title.toLowerCase().includes(search.toLowerCase()) || item.desc.toLowerCase().includes(search.toLowerCase()));
+      return (
+        <Section id="projects" title={t('explorations')}>
+          <input 
+            type="text" 
+            placeholder={t('search_projects')} 
+            className="w-full max-w-md mx-auto mb-8 p-3 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500 text-white"
+            onChange={e => setSearch(e.target.value)}
+          />
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((p,i)=>(
+            {filteredItems.map((p,i)=>(
               <Card key={i} onClick={()=>window.location.href=p.href}>
                 <div className="h-56 bg-slate-700 flex items-center justify-center text-slate-400">
                   <span>Image</span>
@@ -304,7 +448,7 @@
                   <h3 className="text-2xl font-bold text-white mb-2">{p.title}</h3>
                   <p className="text-slate-300 mb-6">{p.desc}</p>
                   <a href={p.href} className="text-indigo-400 hover:text-indigo-300 font-semibold">
-                    View Project →
+                    {t('view_mission')}
                   </a>
                 </div>
               </Card>
@@ -313,57 +457,96 @@
         </Section>
       );
     }
-    function About(){
+
+    // Contact section with newsletter subscription
+    function Contact({ t }) {
+      const [email, setEmail] = useState('');
+      const handleSubscribe = (e) => {
+        e.preventDefault();
+        alert(`Subscribed with ${email}!`); // Placeholder for real subscription (e.g., integrate with Mailchimp API)
+        setEmail('');
+      };
       return (
-        <Section id="about" title="About Me">
-          <div className="flex flex-col md:flex-row items-center gap-10">
-            <div className="w-48 h-48 rounded-full bg-slate-700 flex items-center justify-center text-slate-400">
-              Photo
-            </div>
-            <p className="max-w-2xl text-slate-200 text-lg leading-relaxed">
-              As a dedicated full-stack developer, I specialize in building intuitive user interfaces and robust, high-performance web applications.
-            </p>
-          </div>
-        </Section>
-      );
-    }
-    function Contact(){
-      return (
-        <Section id="contact" title="Get In Touch">
+        <Section id="contact" title={t('contact_base')}>
           <div className="max-w-lg mx-auto text-center">
             <p className="text-lg text-slate-300 mb-8">
-              Have a project in mind or want to connect? Feel free to send me a message.
+              {t('contact_desc')}
             </p>
             <form className="space-y-6">
-              <input type="text" placeholder="Your Name" required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"/>
-              <input type="email" placeholder="Your Email" required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"/>
-              <textarea rows="5" placeholder="Your Message" required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"></textarea>
-              <NeonButton type="submit">Send Message</NeonButton>
+              <input type="text" placeholder={t('your_name')} required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"/>
+              <input type="email" placeholder={t('your_email')} required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"/>
+              <textarea rows="5" placeholder={t('your_message')} required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"></textarea>
+              <NeonButton type="submit">{t('send_signal')}</NeonButton>
             </form>
+            <div className="mt-8">
+              <h3 className="text-xl font-bold mb-4">{t('newsletter')}</h3>
+              <form onSubmit={handleSubscribe} className="flex space-x-2">
+                <input 
+                  type="email" 
+                  placeholder={t('your_email')} 
+                  required 
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  className="flex-1 p-3 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"
+                />
+                <NeonButton type="submit">{t('subscribe')}</NeonButton>
+              </form>
+            </div>
+            <div className="mt-8 flex justify-center space-x-4">
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                <svg className="w-6 h-6 text-white hover:text-indigo-300" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.65A7.88 7.88 0 0023 3z"/></svg>
+              </a>
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                <svg className="w-6 h-6 text-white hover:text-indigo-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .3a12 12 0 00-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2 0 1.9 1.2 1.9 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.6.1-3.3 0 0 1-.3 3.3 1.2a11.5 11.5 0 016 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.7.3 3 .2 3.3.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.1.7.8.6A12 12 0 0012 .3"/></svg>
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                <svg className="w-6 h-6 text-white hover:text-indigo-300" fill="currentColor" viewBox="0 0 24 24"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.2A1.4 1.4 0 115.1 6.8a1.4 1.4 0 011.4 1.4zM19 19h-3v-4a1 1 0 00-1-1s-1 0-1 1v4h-3v-9h3v1.5a3 3 0 015.8-.8V19z"/></svg>
+              </a>
+            </div>
           </div>
         </Section>
       );
     }
+
+    // Main App with theme and language state
     function App(){
+      const [theme, setTheme] = useState('dark');
+      const [lng, setLng] = useState('en');
+      const t = key => i18next.t(key, { year: new Date().getFullYear() });
+
+      useEffect(() => {
+        i18next.changeLanguage(lng);
+      }, [lng]);
+
+      useEffect(() => {
+        document.body.classList.toggle('dark', theme === 'dark');
+        document.body.classList.toggle('light', theme === 'light');
+      }, [theme]);
+
+      const toggleTheme = () => setTheme(theme === 'dark' ? 'light' : 'dark');
+      const toggleLanguage = (e) => setLng(e.target.value);
+
       useEffect(()=> AOS.init({duration:800,once:true,offset:50}), []);
+
       return (
         <>
           <GalaxyBackground />
           <div className="app-content">
-            <Header/>
+            <Header t={t} toggleTheme={toggleTheme} toggleLanguage={toggleLanguage} />
             <main>
-              <Hero/>
-              <About/>
-              <Projects/>
-              <Contact/>
+              <Hero t={t} />
+              <About t={t} />
+              <Projects t={t} />
+              <Contact t={t} />
             </main>
             <footer className="py-8 text-center text-slate-400">
-              © {new Date().getFullYear()} GistKjoon. All Rights Reserved.
+              {t('footer')}
             </footer>
           </div>
         </>
       );
     }
+
     createRoot(document.getElementById('root')).render(<App/>);
   </script>
 </body>
