@@ -24,7 +24,7 @@
   <style>
     body {
       margin:0;
-      background:#0f172a;
+      background:#000000; /* Completely pitch-black space */
       color:#f1f5f9;
       font-family:'Inter',sans-serif;
       overflow-x:hidden;
@@ -62,6 +62,209 @@
     body.light .border-slate-700 {
       border-color: #cbd5e1;
     }
+    /* Back to top button */
+    #back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #6366f1;
+      color: white;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 50;
+    }
+    #back-to-top.visible {
+      opacity: 1;
+    }
+    /* Skills progress bar */
+    .progress-bar {
+      background-color: #475569;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress {
+      height: 100%;
+      background-color: #6366f1;
+      transition: width 1s ease-in-out;
+    }
+    /* Timeline styles */
+    .timeline-item {
+      position: relative;
+      padding-left: 40px;
+    }
+    .timeline-item:before {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #475569;
+    }
+    .timeline-item:last-child:before {
+      bottom: auto;
+      height: 20px;
+    }
+    .timeline-item:after {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #6366f1;
+    }
+    /* Blog card styles */
+    .blog-card {
+      background: #1e293b;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .blog-card:hover {
+      transform: translateY(-5px);
+    }
+    /* Testimonials carousel styles */
+    .testimonial {
+      text-align: center;
+      padding: 20px;
+    }
+    .carousel {
+      display: flex;
+      overflow: hidden;
+    }
+    .carousel-inner {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    /* Cookie banner */
+    #cookie-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(30,41,59,0.9);
+      padding: 20px;
+      text-align: center;
+      z-index: 50;
+    }
+    /* Sitemap in footer */
+    .sitemap ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sitemap li {
+      margin-bottom: 10px;
+    }
+    /* Chat widget placeholder */
+    #chat-widget {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: #6366f1;
+      color: white;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 50;
+    }
+    #chat-window {
+      position: fixed;
+      bottom: 80px;
+      left: 20px;
+      width: 300px;
+      height: 400px;
+      background: #1e293b;
+      border-radius: 8px;
+      display: none;
+      flex-direction: column;
+      z-index: 50;
+    }
+    #chat-window.open {
+      display: flex;
+    }
+    #chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+    }
+    #chat-input {
+      display: flex;
+      border-top: 1px solid #475569;
+    }
+    #chat-input input {
+      flex: 1;
+      padding: 10px;
+      background: transparent;
+      border: none;
+      color: white;
+    }
+    #chat-input button {
+      padding: 10px;
+      background: #6366f1;
+      color: white;
+      border: none;
+    }
+    /* Additional styles for new sections */
+    .skills-grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+    .timeline {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .blog-grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+    .testimonials {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .carousel-controls {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .carousel-button {
+      background: #6366f1;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 0 10px;
+      cursor: pointer;
+    }
+    .partners-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+    }
+    .partner-logo {
+      width: 150px;
+      height: 80px;
+      background: #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body class="dark">
@@ -73,12 +276,12 @@
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
   <!-- Babel standalone -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <!-- Main app code with enhanced features: theme toggle, multilingual, search, social links, newsletter, accessibility -->
+  <!-- Main app code with even more features: added skills, timeline, blog, testimonials, partners, cookie banner, chat widget -->
   <script type="text/babel" data-presets="env,react">
     const { useState, useEffect, useRef } = React;
     const { createRoot } = ReactDOM;
 
-    // Initialize i18next for multilingual support (Korean/English)
+    // Initialize i18next for multilingual support (added more languages: English, Korean, Spanish, French)
     i18next.init({
       lng: 'en', // Default language
       resources: {
@@ -91,6 +294,80 @@
             "explore": "Explore My Missions",
             "mission_control": "Mission Control",
             "about_desc": "As a dedicated full-stack developer, I specialize in building intuitive user interfaces and robust, high-performance web applications, charting new frontiers in digital space.",
+            "skills": "Skills & Technologies",
+            "skill_react": "React",
+            "skill_vue": "Vue.js",
+            "skill_node": "Node.js",
+            "skill_python": "Python",
+            "skill_aws": "AWS",
+            "skill_docker": "Docker",
+            "skill_kubernetes": "Kubernetes",
+            "skill_sql": "SQL",
+            "skill_nosql": "NoSQL",
+            "skill_graphql": "GraphQL",
+            "skill_typescript": "TypeScript",
+            "skill_javascript": "JavaScript",
+            "skill_html": "HTML/CSS",
+            "skill_tailwind": "Tailwind CSS",
+            "skill_bootstrap": "Bootstrap",
+            "timeline": "Career Timeline",
+            "timeline_item1_title": "Started as Junior Developer",
+            "timeline_item1_desc": "Began career in web development at Tech Startup Inc.",
+            "timeline_item1_date": "2018",
+            "timeline_item2_title": "Promoted to Senior Developer",
+            "timeline_item2_desc": "Led multiple projects and mentored juniors.",
+            "timeline_item2_date": "2020",
+            "timeline_item3_title": "Freelance Full-Stack Engineer",
+            "timeline_item3_desc": "Worked on diverse client projects across industries.",
+            "timeline_item3_date": "2022",
+            "timeline_item4_title": "Founded GistKjoon Studios",
+            "timeline_item4_desc": "Launched personal brand for innovative web solutions.",
+            "timeline_item4_date": "2024",
+            "timeline_item5_title": "Expanded to AI Integration",
+            "timeline_item5_desc": "Incorporated AI and machine learning in projects.",
+            "timeline_item5_date": "2025",
+            "blog": "Space Log (Blog)",
+            "blog_post1_title": "Exploring React Hooks in Depth",
+            "blog_post1_desc": "A comprehensive guide to using React Hooks for state management and side effects.",
+            "blog_post1_date": "2025-07-15",
+            "blog_post2_title": "Building Scalable APIs with Node.js",
+            "blog_post2_desc": "Best practices for creating robust and efficient backend services.",
+            "blog_post2_date": "2025-06-20",
+            "blog_post3_title": "The Future of Web Development: AI Integration",
+            "blog_post3_desc": "How AI is revolutionizing the web development landscape.",
+            "blog_post3_date": "2025-05-10",
+            "blog_post4_title": "Optimizing Performance in Vue.js Applications",
+            "blog_post4_desc": "Tips and tricks to make your Vue apps faster and more responsive.",
+            "blog_post4_date": "2025-04-05",
+            "blog_post5_title": "Containerization with Docker: A Beginner's Guide",
+            "blog_post5_desc": "Step-by-step introduction to using Docker for development and deployment.",
+            "blog_post5_date": "2025-03-01",
+            "testimonials": "Crew Testimonials",
+            "testimonial1": "GistKjoon delivered an outstanding project on time and exceeded our expectations. Highly recommended!",
+            "testimonial1_author": "John Doe, CEO of SpaceTech",
+            "testimonial2": "Professional, creative, and efficient. The website transformed our online presence.",
+            "testimonial2_author": "Jane Smith, Marketing Director at Galaxy Inc.",
+            "testimonial3": "Excellent communication and technical skills. Will definitely work together again.",
+            "testimonial3_author": "Mike Johnson, Founder of Nebula Startups",
+            "testimonial4": "Innovative solutions and attention to detail. A true professional in the field.",
+            "testimonial4_author": "Sarah Lee, Product Manager at Cosmic Solutions",
+            "testimonial5": "Fast turnaround and high-quality code. Impressed with the results.",
+            "testimonial5_author": "David Kim, CTO of Starlight Ventures",
+            "partners": "Mission Partners",
+            "partner1": "SpaceTech",
+            "partner2": "Galaxy Inc.",
+            "partner3": "Nebula Startups",
+            "partner4": "Cosmic Solutions",
+            "partner5": "Starlight Ventures",
+            "partner6": "Quantum Labs",
+            "partner7": "Astro Dynamics",
+            "partner8": "Orbital Innovations",
+            "partner9": "Celestial Systems",
+            "partner10": "Interstellar Tech",
+            "cookie_message": "We use cookies to enhance your experience. By continuing, you agree to our cookie policy.",
+            "cookie_accept": "Accept",
+            "chat_welcome": "Welcome to Mission Control Chat. How can I assist you?",
+            "chat_send": "Send",
             "explorations": "Explorations",
             "pip_viewer": "PIP Viewer",
             "pip_desc": "macOS PIP utility for seamless video viewing.",
@@ -113,7 +390,14 @@
             "contact": "Contact Base",
             "footer": "© {{year}} GistKjoon. All Rights Reserved. Exploring the Digital Universe.",
             "theme_toggle": "Toggle Theme",
-            "language": "Language: English"
+            "language": "Language: English",
+            "category_all": "All",
+            "category_utility": "Utility",
+            "category_social": "Social",
+            "category_messaging": "Messaging",
+            "loading": "Launching...",
+            "back_to_top": "Back to Top",
+            "share": "Share Mission"
           }
         },
         ko: {
@@ -125,6 +409,80 @@
             "explore": "내 미션 탐험하기",
             "mission_control": "미션 컨트롤",
             "about_desc": "전담 풀스택 개발자로서, 직관적인 사용자 인터페이스와 견고한 고성능 웹 애플리케이션을 구축하는 데 특화되어 있으며, 디지털 우주의 새로운 개척지를 탐험합니다.",
+            "skills": "스킬 & 기술",
+            "skill_react": "React",
+            "skill_vue": "Vue.js",
+            "skill_node": "Node.js",
+            "skill_python": "Python",
+            "skill_aws": "AWS",
+            "skill_docker": "Docker",
+            "skill_kubernetes": "Kubernetes",
+            "skill_sql": "SQL",
+            "skill_nosql": "NoSQL",
+            "skill_graphql": "GraphQL",
+            "skill_typescript": "TypeScript",
+            "skill_javascript": "JavaScript",
+            "skill_html": "HTML/CSS",
+            "skill_tailwind": "Tailwind CSS",
+            "skill_bootstrap": "Bootstrap",
+            "timeline": "경력 타임라인",
+            "timeline_item1_title": "주니어 개발자로 시작",
+            "timeline_item1_desc": "Tech Startup Inc.에서 웹 개발 경력을 시작했습니다.",
+            "timeline_item1_date": "2018",
+            "timeline_item2_title": "시니어 개발자로 승진",
+            "timeline_item2_desc": "여러 프로젝트를 이끌고 주니어를 멘토링했습니다.",
+            "timeline_item2_date": "2020",
+            "timeline_item3_title": "프리랜스 풀스택 엔지니어",
+            "timeline_item3_desc": "산업 전반에 걸친 다양한 클라이언트 프로젝트 작업.",
+            "timeline_item3_date": "2022",
+            "timeline_item4_title": "GistKjoon Studios 설립",
+            "timeline_item4_desc": "혁신적인 웹 솔루션을 위한 개인 브랜드 론칭.",
+            "timeline_item4_date": "2024",
+            "timeline_item5_title": "AI 통합 확장",
+            "timeline_item5_desc": "프로젝트에 AI와 머신러닝 통합.",
+            "timeline_item5_date": "2025",
+            "blog": "우주 로그 (블로그)",
+            "blog_post1_title": "React Hooks 심층 탐구",
+            "blog_post1_desc": "상태 관리와 부수 효과를 위한 React Hooks의 포괄적 가이드.",
+            "blog_post1_date": "2025-07-15",
+            "blog_post2_title": "Node.js로 확장 가능한 API 구축",
+            "blog_post2_desc": "견고하고 효율적인 백엔드 서비스 생성을 위한 모범 사례.",
+            "blog_post2_date": "2025-06-20",
+            "blog_post3_title": "웹 개발의 미래: AI 통합",
+            "blog_post3_desc": "AI가 웹 개발 환경을 어떻게 혁신하는지.",
+            "blog_post3_date": "2025-05-10",
+            "blog_post4_title": "Vue.js 애플리케이션 성능 최적화",
+            "blog_post4_desc": "Vue 앱을 더 빠르고 반응성 있게 만드는 팁과 트릭.",
+            "blog_post4_date": "2025-04-05",
+            "blog_post5_title": "Docker를 사용한 컨테이너화: 초보자 가이드",
+            "blog_post5_desc": "개발 및 배포를 위한 Docker 사용 단계별 소개.",
+            "blog_post5_date": "2025-03-01",
+            "testimonials": "승무원 증언",
+            "testimonial1": "GistKjoon은 제때에 뛰어난 프로젝트를 전달했으며 우리의 기대를 초과했습니다. 강력 추천!",
+            "testimonial1_author": "John Doe, SpaceTech CEO",
+            "testimonial2": "전문적이고 창의적이며 효율적입니다. 웹사이트가 우리의 온라인 존재를 변화시켰습니다.",
+            "testimonial2_author": "Jane Smith, Galaxy Inc. 마케팅 디렉터",
+            "testimonial3": "우수한 커뮤니케이션과 기술スキル. 반드시 다시 함께 일할 것입니다.",
+            "testimonial3_author": "Mike Johnson, Nebula Startups 창립자",
+            "testimonial4": "혁신적인 솔루션과 세부 사항에 대한 주의. 분야의 진정한 전문가.",
+            "testimonial4_author": "Sarah Lee, Cosmic Solutions 제품 매니저",
+            "testimonial5": "빠른 처리 시간과 고품질 코드. 결과에 감명받았습니다.",
+            "testimonial5_author": "David Kim, Starlight Ventures CTO",
+            "partners": "미션 파트너",
+            "partner1": "SpaceTech",
+            "partner2": "Galaxy Inc.",
+            "partner3": "Nebula Startups",
+            "partner4": "Cosmic Solutions",
+            "partner5": "Starlight Ventures",
+            "partner6": "Quantum Labs",
+            "partner7": "Astro Dynamics",
+            "partner8": "Orbital Innovations",
+            "partner9": "Celestial Systems",
+            "partner10": "Interstellar Tech",
+            "cookie_message": "경험 향상을 위해 쿠키를 사용합니다. 계속함으로써 쿠키 정책에 동의합니다.",
+            "cookie_accept": "수락",
+            "chat_welcome": "미션 컨트롤 채팅에 오신 것을 환영합니다. 어떻게 도와드릴까요?",
+            "chat_send": "보내기",
             "explorations": "탐험",
             "pip_viewer": "PIP 뷰어",
             "pip_desc": "원활한 비디오 시청을 위한 macOS PIP 유틸리티.",
@@ -147,14 +505,250 @@
             "contact": "연락 기지",
             "footer": "© {{year}} GistKjoon. 모든 권리 보유. 디지털 우주 탐험 중.",
             "theme_toggle": "테마 전환",
-            "language": "언어: 한국어"
+            "language": "언어: 한국어",
+            "category_all": "모두",
+            "category_utility": "유틸리티",
+            "category_social": "소셜",
+            "category_messaging": "메시징",
+            "loading": "발사 중...",
+            "back_to_top": "맨 위로",
+            "share": "미션 공유"
+          }
+        },
+        es: {
+          translation: {
+            "title": "GistKjoon: Exploración del Vast Space",
+            "hello": "Hola, soy",
+            "gistkjoon": "GistKjoon",
+            "description": "Construyo experiencias web de alto rendimiento, hermosas e inmersivas inspiradas en la vasta exploración espacial.",
+            "explore": "Explorar Mis Misiones",
+            "mission_control": "Control de Misión",
+            "about_desc": "Como desarrollador full-stack dedicado, me especializo en la construcción de interfaces de usuario intuitivas y aplicaciones web robustas de alto rendimiento, trazando nuevas fronteras en el espacio digital.",
+            "skills": "Habilidades y Tecnologías",
+            "skill_react": "React",
+            "skill_vue": "Vue.js",
+            "skill_node": "Node.js",
+            "skill_python": "Python",
+            "skill_aws": "AWS",
+            "skill_docker": "Docker",
+            "skill_kubernetes": "Kubernetes",
+            "skill_sql": "SQL",
+            "skill_nosql": "NoSQL",
+            "skill_graphql": "GraphQL",
+            "skill_typescript": "TypeScript",
+            "skill_javascript": "JavaScript",
+            "skill_html": "HTML/CSS",
+            "skill_tailwind": "Tailwind CSS",
+            "skill_bootstrap": "Bootstrap",
+            "timeline": "Línea de Tiempo de Carrera",
+            "timeline_item1_title": "Comenzó como Desarrollador Junior",
+            "timeline_item1_desc": "Inició carrera en desarrollo web en Tech Startup Inc.",
+            "timeline_item1_date": "2018",
+            "timeline_item2_title": "Promovido a Desarrollador Senior",
+            "timeline_item2_desc": "Lideró múltiples proyectos y mentorizó a juniors.",
+            "timeline_item2_date": "2020",
+            "timeline_item3_title": "Ingeniero Full-Stack Freelance",
+            "timeline_item3_desc": "Trabajó en diversos proyectos de clientes a través de industrias.",
+            "timeline_item3_date": "2022",
+            "timeline_item4_title": "Fundó GistKjoon Studios",
+            "timeline_item4_date": "2024",
+            "timeline_item5_title": "Expandido a Integración de IA",
+            "timeline_item5_desc": "Incorporó IA y aprendizaje automático en proyectos.",
+            "timeline_item5_date": "2025",
+            "blog": "Registro Espacial (Blog)",
+            "blog_post1_title": "Explorando Hooks de React en Profundidad",
+            "blog_post1_desc": "Una guía completa para usar Hooks de React para gestión de estado y efectos secundarios.",
+            "blog_post1_date": "2025-07-15",
+            "blog_post2_title": "Construyendo APIs Escalables con Node.js",
+            "blog_post2_desc": "Mejores prácticas para crear servicios backend robustos y eficientes.",
+            "blog_post2_date": "2025-06-20",
+            "blog_post3_title": "El Futuro del Desarrollo Web: Integración de IA",
+            "blog_post3_desc": "Cómo la IA está revolucionando el paisaje del desarrollo web.",
+            "blog_post3_date": "2025-05-10",
+            "blog_post4_title": "Optimizando el Rendimiento en Aplicaciones Vue.js",
+            "blog_post4_desc": "Consejos y trucos para hacer tus apps Vue más rápidas y responsivas.",
+            "blog_post4_date": "2025-04-05",
+            "blog_post5_title": "Containerización con Docker: Guía para Principiantes",
+            "blog_post5_desc": "Introducción paso a paso al uso de Docker para desarrollo y despliegue.",
+            "blog_post5_date": "2025-03-01",
+            "testimonials": "Testimonios de la Tripulación",
+            "testimonial1": "GistKjoon entregó un proyecto sobresaliente a tiempo y superó nuestras expectativas. ¡Altamente recomendado!",
+            "testimonial1_author": "John Doe, CEO de SpaceTech",
+            "testimonial2": "Profesional, creativo y eficiente. El sitio web transformó nuestra presencia en línea.",
+            "testimonial2_author": "Jane Smith, Directora de Marketing en Galaxy Inc.",
+            "testimonial3": "Excelente comunicación y habilidades técnicas. Definitivamente trabajaremos juntos de nuevo.",
+            "testimonial3_author": "Mike Johnson, Fundador de Nebula Startups",
+            "testimonial4": "Soluciones innovadoras y atención al detalle. Un verdadero profesional en el campo.",
+            "testimonial4_author": "Sarah Lee, Gerente de Producto en Cosmic Solutions",
+            "testimonial5": "Rápido turnaround y código de alta calidad. Impresionado con los resultados.",
+            "testimonial5_author": "David Kim, CTO de Starlight Ventures",
+            "partners": "Socios de Misión",
+            "partner1": "SpaceTech",
+            "partner2": "Galaxy Inc.",
+            "partner3": "Nebula Startups",
+            "partner4": "Cosmic Solutions",
+            "partner5": "Starlight Ventures",
+            "partner6": "Quantum Labs",
+            "partner7": "Astro Dynamics",
+            "partner8": "Orbital Innovations",
+            "partner9": "Celestial Systems",
+            "partner10": "Interstellar Tech",
+            "cookie_message": "Usamos cookies para mejorar tu experiencia. Al continuar, aceptas nuestra política de cookies.",
+            "cookie_accept": "Aceptar",
+            "chat_welcome": "Bienvenido al Chat de Control de Misión. ¿Cómo puedo asistirte?",
+            "chat_send": "Enviar",
+            "explorations": "Exploraciones",
+            "pip_viewer": "Visor PIP",
+            "pip_desc": "Utilidad PIP para macOS para visualización de video sin problemas.",
+            "sns_platform": "Plataforma SNS",
+            "sns_desc": "Feed social en tiempo real con conectividad galáctica.",
+            "chat_app": "App de Chat",
+            "chat_desc": "Mensajería con Vue 3 & Firebase, comunicación interestelar.",
+            "view_mission": "Ver Misión →",
+            "contact_base": "Base de Contacto",
+            "contact_desc": "¿Tienes una idea de proyecto o quieres conectar a través del cosmos? Envía una señal.",
+            "your_name": "Tu Nombre",
+            "your_email": "Tu Email",
+            "your_message": "Tu Mensaje",
+            "send_signal": "Enviar Señal",
+            "newsletter": "Suscribirse a Actualizaciones de Galaxia",
+            "subscribe": "Suscribirse",
+            "search_projects": "Buscar Misiones...",
+            "about": "Control de Misión",
+            "projects": "Exploraciones",
+            "contact": "Base de Contacto",
+            "footer": "© {{year}} GistKjoon. Todos los derechos reservados. Explorando el Universo Digital.",
+            "theme_toggle": "Cambiar Tema",
+            "language": "Idioma: Español",
+            "category_all": "Todos",
+            "category_utility": "Utilidad",
+            "category_social": "Social",
+            "category_messaging": "Mensajería",
+            "loading": "Lanzando...",
+            "back_to_top": "Volver arriba",
+            "share": "Compartir Misión"
+          }
+        },
+        fr: {
+          translation: {
+            "title": "GistKjoon: Exploration du Vast Space",
+            "hello": "Bonjour, je suis",
+            "gistkjoon": "GistKjoon",
+            "description": "Je construis des expériences web performantes, belles et immersives inspirées par la vaste exploration spatiale.",
+            "explore": "Explorer Mes Missions",
+            "mission_control": "Contrôle de Mission",
+            "about_desc": "En tant que développeur full-stack dédié, je me spécialise dans la construction d'interfaces utilisateur intuitives et d'applications web robustes de haute performance, traçant de nouvelles frontières dans l'espace digital.",
+            "skills": "Compétences & Technologies",
+            "skill_react": "React",
+            "skill_vue": "Vue.js",
+            "skill_node": "Node.js",
+            "skill_python": "Python",
+            "skill_aws": "AWS",
+            "skill_docker": "Docker",
+            "skill_kubernetes": "Kubernetes",
+            "skill_sql": "SQL",
+            "skill_nosql": "NoSQL",
+            "skill_graphql": "GraphQL",
+            "skill_typescript": "TypeScript",
+            "skill_javascript": "JavaScript",
+            "skill_html": "HTML/CSS",
+            "skill_tailwind": "Tailwind CSS",
+            "skill_bootstrap": "Bootstrap",
+            "timeline": "Chronologie de Carrière",
+            "timeline_item1_title": "Commencé en tant que Développeur Junior",
+            "timeline_item1_desc": "A commencé carrière en développement web chez Tech Startup Inc.",
+            "timeline_item1_date": "2018",
+            "timeline_item2_title": "Promu Développeur Senior",
+            "timeline_item2_desc": "A mené plusieurs projets et mentoré des juniors.",
+            "timeline_item2_date": "2020",
+            "timeline_item3_title": "Ingénieur Full-Stack Freelance",
+            "timeline_item3_desc": "A travaillé sur divers projets clients à travers les industries.",
+            "timeline_item3_date": "2022",
+            "timeline_item4_title": "Fondé GistKjoon Studios",
+            "timeline_item4_desc": "A lancé marque personnelle pour solutions web innovantes.",
+            "timeline_item4_date": "2024",
+            "timeline_item5_title": "Élargi à l'Intégration IA",
+            "timeline_item5_desc": "A incorporé IA et apprentissage automatique dans les projets.",
+            "timeline_item5_date": "2025",
+            "blog": "Journal Spatial (Blog)",
+            "blog_post1_title": "Exploration en Profondeur des Hooks React",
+            "blog_post1_desc": "Un guide complet pour utiliser les Hooks React pour la gestion d'état et les effets secondaires.",
+            "blog_post1_date": "2025-07-15",
+            "blog_post2_title": "Construction d'APIs Évolutives avec Node.js",
+            "blog_post2_desc": "Meilleures pratiques pour créer des services backend robustes et efficaces.",
+            "blog_post2_date": "2025-06-20",
+            "blog_post3_title": "L'Avenir du Développement Web : Intégration IA",
+            "blog_post3_desc": "Comment l'IA révolutionne le paysage du développement web.",
+            "blog_post3_date": "2025-05-10",
+            "blog_post4_title": "Optimisation des Performances dans les Applications Vue.js",
+            "blog_post4_desc": "Astuces pour rendre vos apps Vue plus rapides et réactives.",
+            "blog_post4_date": "2025-04-05",
+            "blog_post5_title": "Conteneurisation avec Docker : Guide du Débutant",
+            "blog_post5_desc": "Introduction étape par étape à l'utilisation de Docker pour le développement et le déploiement.",
+            "blog_post5_date": "2025-03-01",
+            "testimonials": "Témoignages d'Équipage",
+            "testimonial1": "GistKjoon a livré un projet exceptionnel dans les délais et a dépassé nos attentes. Hautement recommandé !",
+            "testimonial1_author": "John Doe, PDG de SpaceTech",
+            "testimonial2": "Professionnel, créatif et efficace. Le site web a transformé notre présence en ligne.",
+            "testimonial2_author": "Jane Smith, Directrice Marketing chez Galaxy Inc.",
+            "testimonial3": "Excellente communication et compétences techniques. Nous travaillerons définitivement ensemble à nouveau.",
+            "testimonial3_author": "Mike Johnson, Fondateur de Nebula Startups",
+            "testimonial4": "Solutions innovantes et attention aux détails. Un vrai professionnel dans le domaine.",
+            "testimonial4_author": "Sarah Lee, Gestionnaire de Produit chez Cosmic Solutions",
+            "testimonial5": "Délai rapide et code de haute qualité. Impressionné par les résultats.",
+            "testimonial5_author": "David Kim, CTO de Starlight Ventures",
+            "partners": "Partenaires de Mission",
+            "partner1": "SpaceTech",
+            "partner2": "Galaxy Inc.",
+            "partner3": "Nebula Startups",
+            "partner4": "Cosmic Solutions",
+            "partner5": "Starlight Ventures",
+            "partner6": "Quantum Labs",
+            "partner7": "Astro Dynamics",
+            "partner8": "Orbital Innovations",
+            "partner9": "Celestial Systems",
+            "partner10": "Interstellar Tech",
+            "cookie_message": "Nous utilisons des cookies pour améliorer votre expérience. En continuant, vous acceptez notre politique de cookies.",
+            "cookie_accept": "Accepter",
+            "chat_welcome": "Bienvenue au Chat de Contrôle de Mission. Comment puis-je vous assister ?",
+            "chat_send": "Envoyer",
+            "explorations": "Explorations",
+            "pip_viewer": "Visualiseur PIP",
+            "pip_desc": "Utilitaire PIP pour macOS pour visualisation vidéo sans couture.",
+            "sns_platform": "Plateforme SNS",
+            "sns_desc": "Flux social en temps réel avec connectivité galactique.",
+            "chat_app": "App de Chat",
+            "chat_desc": "Messagerie avec Vue 3 & Firebase, communication interstellaire.",
+            "view_mission": "Voir Mission →",
+            "contact_base": "Base de Contact",
+            "contact_desc": "Avez-vous une idée de projet ou voulez-vous connecter à travers le cosmos ? Envoyez un signal.",
+            "your_name": "Votre Nom",
+            "your_email": "Votre Email",
+            "your_message": "Votre Message",
+            "send_signal": "Envoyer Signal",
+            "newsletter": "S'abonner aux Mises à Jour de Galaxie",
+            "subscribe": "S'abonner",
+            "search_projects": "Rechercher Missions...",
+            "about": "Contrôle de Mission",
+            "projects": "Explorations",
+            "contact": "Base de Contact",
+            "footer": "© {{year}} GistKjoon. Tous droits réservés. Explorant l'Univers Digital.",
+            "theme_toggle": "Changer Thème",
+            "language": "Langue: Français",
+            "category_all": "Tous",
+            "category_utility": "Utilitaire",
+            "category_social": "Social",
+            "category_messaging": "Messagerie",
+            "loading": "Lancement...",
+            "back_to_top": "Retour en Haut",
+            "share": "Partager Mission"
           }
         }
       },
       interpolation: { escapeValue: false }
     });
 
-    // GalaxyBackground with realistic stars
+    // GalaxyBackground with pitch-black space and enhanced flying through stars feel
     const GalaxyBackground = () => {
       const canvasRef = useRef(null);
       const mouse = useRef({ x: 0, y: 0 });
@@ -174,15 +768,15 @@
 
         const focal = 256;
         const maxZ = 1000;
-        const speed = 2;
+        const speed = 3; // Increased speed for flying feel
 
         const stars = [];
-        for (let i = 0; i < 800; i++) {
+        for (let i = 0; i < 1000; i++) { // More stars for immersion
           stars.push({
             x: Math.random() * 2000 - 1000,
             y: Math.random() * 2000 - 1000,
             z: Math.random() * maxZ + 1,
-            color: `hsl(${Math.random() * 60 + 180}, 50%, ${Math.random() * 40 + 60}%)`,
+            color: `hsl(${Math.random() * 30 + 210}, 30%, ${Math.random() * 50 + 50}%)`, // Subtle blueish tints for space feel
             twinklePhase: Math.random() * Math.PI * 2,
             prevSx: 0,
             prevSy: 0,
@@ -210,27 +804,27 @@
 
             let sx = currentCenterX + (focal * star.x) / star.z;
             let sy = currentCenterY + (focal * star.y) / star.z;
-            const radius = (1 - star.z / maxZ) * 3 + 0.5;
+            const radius = (1 - star.z / maxZ) * 4 + 0.5; // Larger stars for flying feel
 
-            let alpha = (1 - star.z / maxZ) * (Math.sin(star.twinklePhase) * 0.2 + 0.8);
-            star.twinklePhase += 0.05;
+            let alpha = (1 - star.z / maxZ) * (Math.sin(star.twinklePhase) * 0.3 + 0.7);
+            star.twinklePhase += 0.03;
 
             const dx = sx - mouse.current.x;
             const dy = sy - mouse.current.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
-            const maxDist = 600; // Further increased distortion range
+            const maxDist = 700; // Even larger distortion range
             if (dist < maxDist && dist > 0) {
-              const force = (1 - dist / maxDist) * 20; // Stronger force for noticeable stretch
+              const force = (1 - dist / maxDist) * 25; // Stronger stretch
               sx += (dx / dist) * force;
               sy += (dy / dist) * force;
             }
 
-            // Motion blur
+            // Motion blur for speed lines
             ctx.beginPath();
             ctx.moveTo(star.prevSx, star.prevSy);
             ctx.lineTo(sx, sy);
-            ctx.strokeStyle = `${star.color}80`;
-            ctx.lineWidth = radius / 2;
+            ctx.strokeStyle = `${star.color}60`; // Fainter blur
+            ctx.lineWidth = radius / 1.5;
             ctx.stroke();
 
             // Draw star
@@ -265,14 +859,14 @@
             top: 0,
             left: 0,
             zIndex: 0,
-            background: '#0f172a',
+            background: '#000000', /* Pitch-black background */
           }}
         />
       );
     };
 
-    // Reusable NeonButton
-    const NeonButton = ({children,onClick,className='',type='button'})=>(
+    // Reusable NeonButton with accessibility
+    const NeonButton = ({children,onClick,className='',type='button', ariaLabel=''})=>(
       <button
         type={type}
         onClick={onClick}
@@ -283,11 +877,13 @@
           `hover:scale-105 transition duration-300 shadow-lg hover:shadow-neon-indigo `+
           className
         }
+        aria-label={ariaLabel}
+        role="button"
       >{children}</button>
     );
 
-    // Reusable Card
-    const Card = ({children,onClick,className=''})=>(
+    // Reusable Card with share button and accessibility
+    const Card = ({children,onClick,className='', title, t})=>(
       <div
         onClick={onClick}
         className={
@@ -295,10 +891,24 @@
           `shadow-2xl transform hover:-translate-y-2 transition duration-300 `+
           `ease-in-out cursor-pointer group `+className
         }
-      >{children}</div>
+        role="article"
+        aria-labelledby={title}
+      >
+        {children}
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            navigator.share({ title, text: t('share'), url: window.location.href });
+          }}
+          className="mt-2 px-4 py-1 text-sm text-indigo-400 hover:text-indigo-300"
+          aria-label={t('share')}
+        >
+          {t('share')}
+        </button>
+      </div>
     );
 
-    // Header with theme toggle and language switch
+    // Header with theme toggle, language switch, and accessibility
     function Header({ t, toggleTheme, toggleLanguage }) {
       const [open,setOpen] = useState(false);
       const scrollTo = id => {
@@ -310,6 +920,7 @@
         <header
           className="fixed top-0 w-full bg-slate-900/60 backdrop-blur-lg z-50"
           data-aos="fade-down"
+          role="banner"
         >
           <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
             <h1
@@ -318,10 +929,12 @@
             >
               GistKjoon
             </h1>
-            <nav className="flex items-center space-x-4">
+            <nav className="flex items-center space-x-4" role="navigation">
               <button
                 className="md:hidden p-2 text-white"
                 onClick={()=>setOpen(!open)}
+                aria-expanded={open}
+                aria-controls="mobile-menu"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
@@ -329,12 +942,12 @@
                          : "M4 6h16M4 12h16M4 18h16" }/>
                 </svg>
               </button>
-              <ul className={
+              <ul id="mobile-menu" className={
                 `absolute md:relative top-16 left-0 w-full bg-slate-900/90 `+
                 `md:bg-transparent md:flex md:space-x-6 `+
                 (open?'block':'hidden md:block')
               }>
-                {['about','projects','contact'].map(sec=>(
+                {['about','projects','skills','timeline','blog','testimonials','partners','contact'].map(sec=>(
                   <li key={sec} className="border-b md:border-none">
                     <button
                       className="block w-full px-5 py-3 text-white hover:text-indigo-300"
@@ -350,9 +963,11 @@
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
               </button>
-              <select onChange={toggleLanguage} className="bg-transparent text-white border-none">
+              <select onChange={toggleLanguage} className="bg-transparent text-white border-none" aria-label="Select Language">
                 <option value="en">EN</option>
                 <option value="ko">KO</option>
+                <option value="es">ES</option>
+                <option value="fr">FR</option>
               </select>
             </nav>
           </div>
@@ -360,15 +975,23 @@
       )
     }
 
-    // Hero section
+    // Hero section with loading indicator
     function Hero({ t }) {
+      const [loading, setLoading] = useState(true);
+      useEffect(() => {
+        setTimeout(() => setLoading(false), 1500); // Simulate loading
+      }, []);
+      if (loading) {
+        return <div className="min-h-screen flex items-center justify-center text-white" role="status">{t('loading')}</div>;
+      }
       return (
         <section
           id="hero"
           className="min-h-screen flex flex-col items-center justify-center text-center px-4"
+          aria-labelledby="hero-title"
         >
           <div data-aos="fade-up" data-aos-duration="1000">
-            <h1 className="text-4xl md:text-7xl font-extrabold">
+            <h1 id="hero-title" className="text-4xl md:text-7xl font-extrabold">
               {t('hello')} <span className="text-indigo-400">{t('gistkjoon')}</span>
             </h1>
             <p className="mt-6 text-lg md:text-xl max-w-2xl text-slate-300">
@@ -380,6 +1003,7 @@
                   ?.scrollIntoView({behavior:'smooth'})
               }
               className="mt-10 px-8 py-4 text-lg"
+              ariaLabel={t('explore')}
             >
               {t('explore')}
             </NeonButton>
@@ -388,11 +1012,12 @@
       );
     }
 
-    // Section wrapper
+    // Section wrapper with accessibility
     const Section = ({id,title,children})=>(
-      <section id={id} className="py-24 px-4">
+      <section id={id} className="py-24 px-4" aria-labelledby={`${id}-title`}>
         <div className="max-w-7xl mx-auto">
           <h2
+            id={`${id}-title`}
             className="text-4xl md:text-5xl font-bold text-center mb-16 text-indigo-300"
             data-aos="fade-up"
           >
@@ -410,7 +1035,7 @@
       return (
         <Section id="about" title={t('mission_control')}>
           <div className="flex flex-col md:flex-row items-center gap-10">
-            <div className="w-48 h-48 rounded-full bg-slate-700 flex items-center justify-center text-slate-400">
+            <div className="w-48 h-48 rounded-full bg-slate-700 flex items-center justify-center text-slate-400" aria-hidden="true">
               Photo
             </div>
             <p className="max-w-2xl text-slate-200 text-lg leading-relaxed">
@@ -421,33 +1046,209 @@
       );
     }
 
-    // Projects section with search functionality
+    // New Skills section
+    function Skills({ t }) {
+      const skills = [
+        { name: t('skill_react'), level: 95 },
+        { name: t('skill_vue'), level: 90 },
+        { name: t('skill_node'), level: 85 },
+        { name: t('skill_python'), level: 80 },
+        { name: t('skill_aws'), level: 75 },
+        { name: t('skill_docker'), level: 70 },
+        { name: t('skill_kubernetes'), level: 65 },
+        { name: t('skill_sql'), level: 90 },
+        { name: t('skill_nosql'), level: 85 },
+        { name: t('skill_graphql'), level: 80 },
+        { name: t('skill_typescript'), level: 95 },
+        { name: t('skill_javascript'), level: 98 },
+        { name: t('skill_html'), level: 100 },
+        { name: t('skill_tailwind'), level: 90 },
+        { name: t('skill_bootstrap'), level: 85 },
+      ];
+      return (
+        <Section id="skills" title={t('skills')}>
+          <div className="skills-grid">
+            {skills.map((skill, i) => (
+              <div key={i}>
+                <div className="flex justify-between mb-1">
+                  <span>{skill.name}</span>
+                  <span>{skill.level}%</span>
+                </div>
+                <div className="progress-bar">
+                  <div className="progress" style={{width: `${skill.level}%`}}></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+      );
+    }
+
+    // New Timeline section
+    function Timeline({ t }) {
+      const timelineItems = [
+        { title: t('timeline_item1_title'), desc: t('timeline_item1_desc'), date: t('timeline_item1_date') },
+        { title: t('timeline_item2_title'), desc: t('timeline_item2_desc'), date: t('timeline_item2_date') },
+        { title: t('timeline_item3_title'), desc: t('timeline_item3_desc'), date: t('timeline_item3_date') },
+        { title: t('timeline_item4_title'), desc: t('timeline_item4_desc'), date: t('timeline_item4_date') },
+        { title: t('timeline_item5_title'), desc: t('timeline_item5_desc'), date: t('timeline_item5_date') },
+      ];
+      return (
+        <Section id="timeline" title={t('timeline')}>
+          <div className="timeline">
+            {timelineItems.map((item, i) => (
+              <div key={i} className="timeline-item mb-8">
+                <div className="bg-slate-800 p-4 rounded-lg">
+                  <h3 className="text-xl font-bold mb-1">{item.title}</h3>
+                  <p className="text-slate-300 mb-2">{item.desc}</p>
+                  <span className="text-indigo-400">{item.date}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+      );
+    }
+
+    // New Blog section
+    function Blog({ t }) {
+      const blogPosts = [
+        { title: t('blog_post1_title'), desc: t('blog_post1_desc'), date: t('blog_post1_date') },
+        { title: t('blog_post2_title'), desc: t('blog_post2_desc'), date: t('blog_post2_date') },
+        { title: t('blog_post3_title'), desc: t('blog_post3_desc'), date: t('blog_post3_date') },
+        { title: t('blog_post4_title'), desc: t('blog_post4_desc'), date: t('blog_post4_date') },
+        { title: t('blog_post5_title'), desc: t('blog_post5_desc'), date: t('blog_post5_date') },
+      ];
+      return (
+        <Section id="blog" title={t('blog')}>
+          <div className="blog-grid">
+            {blogPosts.map((post, i) => (
+              <div key={i} className="blog-card">
+                <div className="h-40 bg-slate-700 flex items-center justify-center text-slate-400">
+                  Image
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-2">{post.title}</h3>
+                  <p className="text-slate-300 mb-4">{post.desc}</p>
+                  <span className="text-indigo-400">{post.date}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+      );
+    }
+
+    // New Testimonials section with carousel
+    function Testimonials({ t }) {
+      const testimonials = [
+        { quote: t('testimonial1'), author: t('testimonial1_author') },
+        { quote: t('testimonial2'), author: t('testimonial2_author') },
+        { quote: t('testimonial3'), author: t('testimonial3_author') },
+        { quote: t('testimonial4'), author: t('testimonial4_author') },
+        { quote: t('testimonial5'), author: t('testimonial5_author') },
+      ];
+      const [current, setCurrent] = useState(0);
+      const next = () => setCurrent((current + 1) % testimonials.length);
+      const prev = () => setCurrent((current - 1 + testimonials.length) % testimonials.length);
+      return (
+        <Section id="testimonials" title={t('testimonials')}>
+          <div className="testimonials">
+            <div className="carousel">
+              <div className="carousel-inner" style={{transform: `translateX(-${current * 100}%)`}}>
+                {testimonials.map((test, i) => (
+                  <div key={i} className="testimonial flex-shrink-0 w-full">
+                    <p className="text-xl italic mb-4">"{test.quote}"</p>
+                    <span className="font-bold">{test.author}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="carousel-controls">
+              <button className="carousel-button" onClick={prev}>Prev</button>
+              <button className="carousel-button" onClick={next}>Next</button>
+            </div>
+          </div>
+        </Section>
+      );
+    }
+
+    // New Partners section
+    function Partners({ t }) {
+      const partners = [
+        t('partner1'), t('partner2'), t('partner3'), t('partner4'), t('partner5'),
+        t('partner6'), t('partner7'), t('partner8'), t('partner9'), t('partner10')
+      ];
+      return (
+        <Section id="partners" title={t('partners')}>
+          <div className="partners-grid">
+            {partners.map((partner, i) => (
+              <div key={i} className="partner-logo">
+                {partner}
+              </div>
+            ))}
+          </div>
+        </Section>
+      );
+    }
+
+    // Projects section with search, category filter, and share
     function Projects({ t }) {
       const [search, setSearch] = useState('');
+      const [category, setCategory] = useState('all');
       const items = [
-        { title: t('pip_viewer'), desc: t('pip_desc'), href:'projects/roll-pip.html' },
-        { title: t('sns_platform'), desc: t('sns_desc'), href:'projects/sns.html' },
-        { title: t('chat_app'), desc: t('chat_desc'), href:'projects/chat-app.html' },
+        { title: t('pip_viewer'), desc: t('pip_desc'), href:'projects/roll-pip.html', category: 'utility' },
+        { title: t('sns_platform'), desc: t('sns_desc'), href:'projects/sns.html', category: 'social' },
+        { title: t('chat_app'), desc: t('chat_desc'), href:'projects/chat-app.html', category: 'messaging' },
+        // Added more dummy projects to expand
+        { title: "Project 4", desc: "Description for project 4", href:'projects/project4.html', category: 'utility' },
+        { title: "Project 5", desc: "Description for project 5", href:'projects/project5.html', category: 'social' },
+        { title: "Project 6", desc: "Description for project 6", href:'projects/project6.html', category: 'messaging' },
+        { title: "Project 7", desc: "Description for project 7", href:'projects/project7.html', category: 'utility' },
+        { title: "Project 8", desc: "Description for project 8", href:'projects/project8.html', category: 'social' },
+        { title: "Project 9", desc: "Description for project 9", href:'projects/project9.html', category: 'messaging' },
+        { title: "Project 10", desc: "Description for project 10", href:'projects/project10.html', category: 'utility' },
+        { title: "Project 11", desc: "Description for project 11", href:'projects/project11.html', category: 'social' },
+        { title: "Project 12", desc: "Description for project 12", href:'projects/project12.html', category: 'messaging' },
+        { title: "Project 13", desc: "Description for project 13", href:'projects/project13.html', category: 'utility' },
+        { title: "Project 14", desc: "Description for project 14", href:'projects/project14.html', category: 'social' },
+        { title: "Project 15", desc: "Description for project 15", href:'projects/project15.html', category: 'messaging' },
       ];
-      const filteredItems = items.filter(item => item.title.toLowerCase().includes(search.toLowerCase()) || item.desc.toLowerCase().includes(search.toLowerCase()));
+      const filteredItems = items.filter(item => 
+        (category === 'all' || item.category === category) &&
+        (item.title.toLowerCase().includes(search.toLowerCase()) || item.desc.toLowerCase().includes(search.toLowerCase()))
+      );
       return (
-        <Section id="projects" title={t('explorations')}>
-          <input 
-            type="text" 
-            placeholder={t('search_projects')} 
-            className="w-full max-w-md mx-auto mb-8 p-3 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500 text-white"
-            onChange={e => setSearch(e.target.value)}
-          />
+        <Section id="projects" title={t('projects')}>
+          <div className="flex flex-col md:flex-row justify-center mb-8 space-y-4 md:space-y-0 md:space-x-4">
+            <input 
+              type="text" 
+              placeholder={t('search_projects')} 
+              className="w-full max-w-md p-3 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500 text-white"
+              onChange={e => setSearch(e.target.value)}
+              aria-label={t('search_projects')}
+            />
+            <select 
+              onChange={e => setCategory(e.target.value)} 
+              className="p-3 rounded-md bg-slate-800 border border-slate-700 text-white"
+              aria-label="Select Category"
+            >
+              <option value="all">{t('category_all')}</option>
+              <option value="utility">{t('category_utility')}</option>
+              <option value="social">{t('category_social')}</option>
+              <option value="messaging">{t('category_messaging')}</option>
+            </select>
+          </div>
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
             {filteredItems.map((p,i)=>(
-              <Card key={i} onClick={()=>window.location.href=p.href}>
+              <Card key={i} onClick={()=>window.location.href=p.href} title={p.title} t={t}>
                 <div className="h-56 bg-slate-700 flex items-center justify-center text-slate-400">
                   <span>Image</span>
                 </div>
                 <div className="p-6">
                   <h3 className="text-2xl font-bold text-white mb-2">{p.title}</h3>
                   <p className="text-slate-300 mb-6">{p.desc}</p>
-                  <a href={p.href} className="text-indigo-400 hover:text-indigo-300 font-semibold">
+                  <a href={p.href} className="text-indigo-400 hover:text-indigo-300 font-semibold" aria-label={t('view_mission')}>
                     {t('view_mission')}
                   </a>
                 </div>
@@ -463,7 +1264,7 @@
       const [email, setEmail] = useState('');
       const handleSubscribe = (e) => {
         e.preventDefault();
-        alert(`Subscribed with ${email}!`); // Placeholder for real subscription (e.g., integrate with Mailchimp API)
+        alert(`Subscribed with ${email}!`); // Placeholder for real subscription
         setEmail('');
       };
       return (
@@ -472,15 +1273,15 @@
             <p className="text-lg text-slate-300 mb-8">
               {t('contact_desc')}
             </p>
-            <form className="space-y-6">
-              <input type="text" placeholder={t('your_name')} required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"/>
-              <input type="email" placeholder={t('your_email')} required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"/>
-              <textarea rows="5" placeholder={t('your_message')} required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"></textarea>
-              <NeonButton type="submit">{t('send_signal')}</NeonButton>
+            <form className="space-y-6" aria-labelledby="contact-form">
+              <input type="text" placeholder={t('your_name')} required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500" aria-required="true"/>
+              <input type="email" placeholder={t('your_email')} required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500" aria-required="true"/>
+              <textarea rows="5" placeholder={t('your_message')} required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500" aria-required="true"></textarea>
+              <NeonButton type="submit" ariaLabel={t('send_signal')}>{t('send_signal')}</NeonButton>
             </form>
             <div className="mt-8">
               <h3 className="text-xl font-bold mb-4">{t('newsletter')}</h3>
-              <form onSubmit={handleSubscribe} className="flex space-x-2">
+              <form onSubmit={handleSubscribe} className="flex space-x-2" aria-labelledby="newsletter-form">
                 <input 
                   type="email" 
                   placeholder={t('your_email')} 
@@ -488,8 +1289,9 @@
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   className="flex-1 p-3 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"
+                  aria-required="true"
                 />
-                <NeonButton type="submit">{t('subscribe')}</NeonButton>
+                <NeonButton type="submit" ariaLabel={t('subscribe')}>{t('subscribe')}</NeonButton>
               </form>
             </div>
             <div className="mt-8 flex justify-center space-x-4">
@@ -502,13 +1304,114 @@
               <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                 <svg className="w-6 h-6 text-white hover:text-indigo-300" fill="currentColor" viewBox="0 0 24 24"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.2A1.4 1.4 0 115.1 6.8a1.4 1.4 0 011.4 1.4zM19 19h-3v-4a1 1 0 00-1-1s-1 0-1 1v4h-3v-9h3v1.5a3 3 0 015.8-.8V19z"/></svg>
               </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <svg className="w-6 h-6 text-white hover:text-indigo-300" fill="currentColor" viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 6.25 1.25 1.25 0 0 1 16 5a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+              </a>
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                <svg className="w-6 h-6 text-white hover:text-indigo-300" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.378 14.192 5 15.115 5H18V0h-3.808C10.596 0 9 1.583 9 4.615V8z"/></svg>
+              </a>
             </div>
           </div>
         </Section>
       );
     }
 
-    // Main App with theme and language state
+    // Back to Top Button
+    function BackToTop({ t }) {
+      const [visible, setVisible] = useState(false);
+      useEffect(() => {
+        const toggleVisible = () => {
+          setVisible(document.documentElement.scrollTop > 300);
+        };
+        window.addEventListener('scroll', toggleVisible);
+        return () => window.removeEventListener('scroll', toggleVisible);
+      }, []);
+      const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+      return (
+        <button 
+          id="back-to-top" 
+          className={visible ? 'visible' : ''} 
+          onClick={scrollToTop}
+          aria-label={t('back_to_top')}
+        >
+          ↑
+        </button>
+      );
+    }
+
+    // Cookie Banner
+    function CookieBanner({ t }) {
+      const [show, setShow] = useState(true);
+      const acceptCookies = () => {
+        // Placeholder for setting cookie consent
+        setShow(false);
+      };
+      if (!show) return null;
+      return (
+        <div id="cookie-banner">
+          <p className="inline-block mr-4">{t('cookie_message')}</p>
+          <NeonButton onClick={acceptCookies} className="text-sm" ariaLabel={t('cookie_accept')}>
+            {t('cookie_accept')}
+          </NeonButton>
+        </div>
+      );
+    }
+
+    // Chat Widget
+    function ChatWidget({ t }) {
+      const [open, setOpen] = useState(false);
+      const [messages, setMessages] = useState([{ text: t('chat_welcome'), from: 'bot' }]);
+      const [input, setInput] = useState('');
+      const messagesRef = useRef(null);
+
+      const sendMessage = (e) => {
+        e.preventDefault();
+        if (!input.trim()) return;
+        setMessages([...messages, { text: input, from: 'user' }]);
+        // Simulate bot response
+        setTimeout(() => {
+          setMessages(msgs => [...msgs, { text: 'Thank you for your message. I\'ll get back to you soon!', from: 'bot' }]);
+        }, 1000);
+        setInput('');
+      };
+
+      useEffect(() => {
+        if (messagesRef.current) {
+          messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+        }
+      }, [messages]);
+
+      return (
+        <>
+          <div id="chat-widget" onClick={() => setOpen(!open)} aria-label="Open Chat">
+            💬
+          </div>
+          <div id="chat-window" className={open ? 'open' : ''}>
+            <div id="chat-messages" ref={messagesRef}>
+              {messages.map((msg, i) => (
+                <div key={i} className={`p-2 ${msg.from === 'user' ? 'text-right' : 'text-left'}`}>
+                  <span className={`inline-block p-2 rounded ${msg.from === 'user' ? 'bg-indigo-600' : 'bg-slate-700'}`}>
+                    {msg.text}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <form id="chat-input" onSubmit={sendMessage}>
+              <input 
+                value={input} 
+                onChange={e => setInput(e.target.value)} 
+                placeholder="Type your message..."
+              />
+              <button type="submit">{t('chat_send')}</button>
+            </form>
+          </div>
+        </>
+      );
+    }
+
+    // Main App with all sections
     function App(){
       const [theme, setTheme] = useState('dark');
       const [lng, setLng] = useState('en');
@@ -536,13 +1439,35 @@
             <main>
               <Hero t={t} />
               <About t={t} />
+              <Skills t={t} />
+              <Timeline t={t} />
               <Projects t={t} />
+              <Blog t={t} />
+              <Testimonials t={t} />
+              <Partners t={t} />
               <Contact t={t} />
             </main>
-            <footer className="py-8 text-center text-slate-400">
+            <footer className="py-8 text-center text-slate-400" role="contentinfo">
               {t('footer')}
+              <div className="sitemap mt-4">
+                <h4>Sitemap</h4>
+                <ul>
+                  <li><a href="#hero">Home</a></li>
+                  <li><a href="#about">About</a></li>
+                  <li><a href="#skills">Skills</a></li>
+                  <li><a href="#timeline">Timeline</a></li>
+                  <li><a href="#projects">Projects</a></li>
+                  <li><a href="#blog">Blog</a></li>
+                  <li><a href="#testimonials">Testimonials</a></li>
+                  <li><a href="#partners">Partners</a></li>
+                  <li><a href="#contact">Contact</a></li>
+                </ul>
+              </div>
             </footer>
           </div>
+          <BackToTop t={t} />
+          <CookieBanner t={t} />
+          <ChatWidget t={t} />
         </>
       );
     }
