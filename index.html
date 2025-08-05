@@ -42,15 +42,15 @@
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
   <!-- Babel standalone -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <!-- Main app code with enhanced GalaxyBackground for stronger distortion -->
+  <!-- Main app code with more realistic stars (color variation, twinkling, motion blur) and increased distortion range -->
   <script type="text/babel" data-presets="env,react">
     const { useState, useEffect, useRef } = React;
     const { createRoot } = ReactDOM;
 
-    // Enhanced GalaxyBackground with stronger mouse-following distortion effect, inspired by reactbits.dev/galaxy
+    // GalaxyBackground with realistic stars: color variation, twinkling, motion blur, and larger fisheye distortion range
     const GalaxyBackground = () => {
       const canvasRef = useRef(null);
-      const mouse = useRef({ x: 0, y: 0, prevX: 0, prevY: 0 });
+      const mouse = useRef({ x: 0, y: 0 });
 
       useEffect(() => {
         const canvas = canvasRef.current;
@@ -65,63 +65,81 @@
 
         resizeCanvas();
 
+        const focal = 256; // Focal length for perspective
+        const maxZ = 1000; // Max depth
+        const speed = 2; // Travel speed
+
         const stars = [];
-        for (let i = 0; i < 500; i++) {  // More stars for denser galaxy effect
-          const x = Math.random() * canvas.width;
-          const y = Math.random() * canvas.height;
+        for (let i = 0; i < 800; i++) { // More stars for realism
           stars.push({
-            x,
-            y,
-            radius: Math.random() * 1.8 + 0.3,
-            speed: Math.random() * 0.8 + 0.2,
-            baseX: x,
-            baseY: y,
-            alpha: Math.random() * 0.5 + 0.5,  // Varying opacity for depth
+            x: Math.random() * 2000 - 1000,
+            y: Math.random() * 2000 - 1000,
+            z: Math.random() * maxZ + 1,
+            color: `hsl(${Math.random() * 60 + 180}, 50%, ${Math.random() * 40 + 60}%)`, // Subtle blue/white/yellow tints
+            twinklePhase: Math.random() * Math.PI * 2, // For twinkling
+            prevSx: 0, // For motion blur
+            prevSy: 0,
           });
         }
 
         // Mouse move listener
         const handleMouseMove = (e) => {
-          mouse.current.prevX = mouse.current.x;
-          mouse.current.prevY = mouse.current.y;
-          mouse.current.x = e.clientX;
-          mouse.current.y = e.clientY;
+          mouse.current = { x: e.clientX, y: e.clientY };
         };
         window.addEventListener('mousemove', handleMouseMove);
 
         const animate = () => {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+          const currentCenterX = canvas.width / 2;
+          const currentCenterY = canvas.height / 2;
+
           stars.forEach(star => {
-            // Stronger distortion: attract towards mouse with velocity consideration
-            const dx = mouse.current.x - star.x;
-            const dy = mouse.current.y - star.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            const maxDist = 300;  // Larger radius for noticeable effect
-            if (dist < maxDist) {
-              const force = (1 - dist / maxDist) * 15;  // Stronger force
-              star.x += dx / dist * force;
-              star.y += dy / dist * force;
-            } else {
-              // Smooth return to base with easing
-              star.x += (star.baseX - star.x) * 0.1;
-              star.y += (star.baseY - star.y) * 0.1;
+            // Update depth
+            star.z -= speed;
+            if (star.z < 1) {
+              star.z = maxZ;
+              star.x = Math.random() * 2000 - 1000;
+              star.y = Math.random() * 2000 - 1000;
             }
 
-            // Draw star with varying alpha
+            // Project to 2D
+            let sx = currentCenterX + (focal * star.x) / star.z;
+            let sy = currentCenterY + (focal * star.y) / star.z;
+            const radius = (1 - star.z / maxZ) * 3 + 0.5;
+
+            // Twinkling: vary alpha
+            let alpha = (1 - star.z / maxZ) * (Math.sin(star.twinklePhase) * 0.2 + 0.8);
+            star.twinklePhase += 0.05; // Twinkle speed
+
+            // Fisheye-like stretching with increased range
+            const dx = sx - mouse.current.x;
+            const dy = sy - mouse.current.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const maxDist = 500; // Increased distortion range
+            if (dist < maxDist && dist > 0) {
+              const force = (1 - dist / maxDist) * 15; // Adjusted force for smoother effect
+              sx += (dx / dist) * force; // Repel to stretch space
+              sy += (dy / dist) * force;
+            }
+
+            // Motion blur: draw line from previous to current position
             ctx.beginPath();
-            ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+            ctx.moveTo(star.prevSx, star.prevSy);
+            ctx.lineTo(sx, sy);
+            ctx.strokeStyle = `${star.color}80`; // Semi-transparent for blur
+            ctx.lineWidth = radius / 2;
+            ctx.stroke();
+
+            // Draw star
+            ctx.beginPath();
+            ctx.arc(sx, sy, radius, 0, Math.PI * 2);
+            ctx.fillStyle = `${star.color.replace('hsl', 'hsla').replace('%)', `%, ${alpha})`)}`;
             ctx.fill();
 
-            // Falling movement with wrap-around
-            star.y += star.speed;
-            if (star.y > canvas.height) {
-              star.y = 0 - star.radius;
-              star.x = Math.random() * canvas.width;
-              star.baseX = star.x;
-              star.baseY = star.y;
-            }
+            // Update previous position
+            star.prevSx = sx;
+            star.prevSy = sy;
           });
 
           animationFrameId = requestAnimationFrame(animate);
