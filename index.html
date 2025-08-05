@@ -8,14 +8,14 @@
   <!-- Tailwind CSS (dev CDN) -->
   <script>
     tailwind = window.tailwind || {};
-    tailwind.config = { darkMode: 'class' };
+    tailwind.config = { darkMode:'class' };
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Galaxy background CSS -->
   <link rel="stylesheet" href="./components/Galaxy.css" />
 
-  <!-- AOS (Animate On Scroll) -->
+  <!-- AOS CSS -->
   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"
@@ -44,7 +44,7 @@
   <div id="root"></div>
 
   <script type="module">
-    // 1️⃣ React & ReactDOM (ESM via esm.sh)
+    // 1️⃣ React & ReactDOM
     import React, {
       useEffect,
       useState,
@@ -53,19 +53,18 @@
     } from 'https://esm.sh/react@18.2.0';
     import { createRoot } from 'https://esm.sh/react-dom@18.2.0/client';
 
-    // 2️⃣ GalaxyBackground component (your OGL code)
-    import GalaxyBackground from './components/GalaxyBackground.jsx';
+    // 2️⃣ GalaxyBackground 컴포넌트
+    import GalaxyBackground from './components/GalaxyBackground.js';
 
-    // 3️⃣ Reusable UI bits
+    // 3️⃣ 재사용 UI 컴포넌트
     const NeonButton = ({ children, onClick, className = '', type = 'button' }) => (
       <button
         type={type}
         onClick={onClick}
         className={
           `px-6 py-2 rounded-md font-semibold text-white ` +
-          `bg-indigo-600 hover:bg-indigo-700 focus:outline-none ` +
-          `focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 ` +
-          `focus:ring-indigo-500 transform hover:scale-105 ` +
+          `bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-offset-2 ` +
+          `focus:ring-offset-slate-900 focus:ring-indigo-500 transform hover:scale-105 ` +
           `transition duration-300 shadow-lg hover:shadow-neon-indigo ` +
           className
         }
@@ -79,8 +78,8 @@
         onClick={onClick}
         className={
           `bg-slate-800/50 backdrop-blur-sm rounded-xl overflow-hidden ` +
-          `shadow-2xl transform hover:-translate-y-2 ` +
-          `transition duration-300 ease-in-out cursor-pointer group ` +
+          `shadow-2xl transform hover:-translate-y-2 transition duration-300 ease-in-out ` +
+          `cursor-pointer group ` +
           className
         }
       >
@@ -166,8 +165,7 @@
         >
           <div data-aos="fade-up" data-aos-duration="1000">
             <h1 className="text-4xl md:text-7xl font-extrabold">
-              Hello, I'm{' '}
-              <span className="text-indigo-400">GistKjoon</span>
+              Hello, I'm <span className="text-indigo-400">GistKjoon</span>
             </h1>
             <p className="mt-6 text-lg md:text-xl max-w-2xl text-slate-300">
               I build high-performance, beautiful, and immersive web
@@ -271,8 +269,8 @@
         <Section id="contact" title="Get In Touch">
           <div className="max-w-lg mx-auto text-center">
             <p className="text-lg text-slate-300 mb-8">
-              Have a project in mind or want to connect? Feel free to send
-              me a message.
+              Have a project in mind or want to connect? Feel free to send me
+              a message.
             </p>
             <form className="space-y-6">
               <input
