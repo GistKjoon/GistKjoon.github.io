@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
-  <!-- Tailwind Dev CDN -->
+  <!-- Tailwind Dev CDN (경고 무시하거나 아래 팁 따라 빌드) -->
   <script>
     tailwind = window.tailwind||{};
     tailwind.config = { darkMode:'class' };
@@ -35,9 +35,12 @@
 </head>
 <body class="dark">
   <div id="root"></div>
+  <!-- React와 ReactDOM 추가 (필수: Babel 전에 로드) -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <!-- AOS JS -->
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
-  <!-- Babel standalone (must come before any text/babel scripts) -->
+  <!-- Babel standalone (must come after React) -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Main app code, with GalaxyBackground defined inline -->
   <script type="text/babel" data-presets="env,react">
