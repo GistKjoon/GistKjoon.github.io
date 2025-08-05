@@ -5,20 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GistKjoon Portfolio</title>
 
-  <!-- 1) Tailwind 설정: config → CDN -->
+  <!-- Tailwind (dev용 CDN) -->
   <script>
     tailwind = window.tailwind || {};
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: { 'slate': { 850: '#172033' } },
-          boxShadow: {
-            'neon-indigo': '0 0 10px #6366f1, 0 0 20px #6366f1, 0 0 30px #a5b4fc'
-          }
-        }
-      }
-    };
+    tailwind.config = { darkMode: 'class' };
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -26,218 +16,48 @@
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
 
-  <!-- React + Babel -->
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin defer></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin defer></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js" defer></script>
+  <!-- React / ReactDOM ESM -->
+  <script type="module">
+    import * as React from 'https://esm.sh/react@18.2.0';
+    import { createRoot } from 'https://esm.sh/react-dom@18.2.0/client';
+    import GalaxyBackground from './components/GalaxyBackground.jsx';
+    import './components/Galaxy.css';
 
-  <!-- tsparticles (Galaxy용) -->
-  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.2/tsparticles.bundle.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/react-tsparticles@2.12.2/umd/react-tsparticles.min.js" defer></script>
-
-  <!-- GalaxyBackground 컴포넌트 불러오기 -->
-  <script
-    type="text/babel"
-    data-presets="env,react"
-    src="components/GalaxyBackground.jsx"
-    defer>
-  </script>
-
-  <style>
-    body {
-      background-color: #0f172a;
-      color: #f1f5f9;
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
-    }
-    .app-content {
-      position: relative; z-index: 10;
-    }
-  </style>
-</head>
-<body class="dark">
-  <div id="root"></div>
-
-  <script type="text/babel" data-presets="env,react">
-    const { useState, useEffect, useCallback, useMemo } = React;
-
-    /* --- Reusable Components --- */
-    const NeonButton = ({ children, onClick, className = '', type = 'button' }) => (
-      <button
-        onClick={onClick} type={type}
-        className={`px-6 py-2 rounded-md font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-indigo-500 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-neon-indigo ${className}`}
-      >
-        {children}
-      </button>
-    );
-    const Card = ({ children, onClick, className = '' }) => (
-      <div
-        onClick={onClick}
-        className={`bg-slate-800/50 backdrop-blur-sm rounded-xl overflow-hidden shadow-2xl transform hover:-translate-y-2 transition-transform duration-300 ease-in-out cursor-pointer group ${className}`}
-      >
-        {children}
-      </div>
-    );
-
-    /* --- Header --- */
-    function Header() {
-      const [menuOpen, setMenuOpen] = useState(false);
-      const scrollTo = (id) => {
-        const el = document.getElementById(id);
-        if (el) window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' });
-        setMenuOpen(false);
-      };
-      return (
-        <header className="fixed top-0 w-full bg-slate-900/60 backdrop-blur-lg z-50" data-aos="fade-down">
-          <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
-            <h1 className="text-3xl font-bold tracking-tighter cursor-pointer text-indigo-400" onClick={() => scrollTo('hero')}>
-              GistKjoon
-            </h1>
-            <nav>
-              <button className="md:hidden p-2 text-white" onClick={() => setMenuOpen(!menuOpen)}>
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                    d={menuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-7 6h7"} />
-                </svg>
-              </button>
-              <ul className={`absolute md:relative top-16 left-0 w-full bg-slate-900/90 md:bg-transparent md:flex md:space-x-6 transition-transform ${menuOpen ? 'block' : 'hidden'}`}>
-                {['about','projects','contact'].map(sec => (
-                  <li key={sec} className="border-b md:border-none">
-                    <button
-                      onClick={() => scrollTo(sec)}
-                      className="block w-full px-5 py-3 text-white hover:text-indigo-300 transition"
-                    >
-                      {sec.charAt(0).toUpperCase()+sec.slice(1)}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
-        </header>
-      );
-    }
-
-    /* --- Hero Section --- */
-    function Hero() {
-      return (
-        <section id="hero" className="min-h-screen flex flex-col items-center justify-center text-center px-4">
-          <div data-aos="fade-up" data-aos-duration="1000">
-            <h1 className="text-4xl md:text-7xl font-extrabold">
-              Hello, I'm <span className="text-indigo-400">GistKjoon</span>
-            </h1>
-            <p className="mt-6 text-lg md:text-xl max-w-2xl text-slate-300">
-              I build high-performance, beautiful, and immersive web experiences.
-            </p>
-            <NeonButton onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })} className="mt-10 px-8 py-4 text-lg">
-              Explore My Work
-            </NeonButton>
-          </div>
-        </section>
-      );
-    }
-
-    /* --- Section Wrapper --- */
-    const Section = ({ id, title, children }) => (
-      <section id={id} className="py-24 px-4">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-indigo-300" data-aos="fade-up">
-            {title}
-          </h2>
-          <div data-aos="fade-up" data-aos-delay="200">{children}</div>
-        </div>
-      </section>
-    );
-
-    /* --- Projects --- */
-    function Projects() {
-      const data = [
-        { title: 'PIP Viewer', desc: 'macOS PIP utility.', href: 'projects/roll-pip.html' },
-        { title: 'SNS Platform', desc: 'Real-time social feed.', href: 'projects/sns.html' },
-        { title: 'Chat App', desc: 'Messaging with Vue 3 & Firebase.', href: 'projects/chat-app.html' }
-      ];
-      return (
-        <Section id="projects" title="Featured Projects">
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-            {data.map((p,i) => (
-              <Card key={i} onClick={() => window.location.href = p.href}>
-                <div className="h-56 bg-slate-700 flex items-center justify-center text-slate-400">
-                  <span>Image</span>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold text-white mb-2">{p.title}</h3>
-                  <p className="text-slate-300 mb-6">{p.desc}</p>
-                  <a href={p.href} className="text-indigo-400 hover:text-indigo-300 font-semibold">
-                    View Project →
-                  </a>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </Section>
-      );
-    }
-
-    /* --- About --- */
-    function About() {
-      return (
-        <Section id="about" title="About Me">
-          <div className="flex flex-col md:flex-row items-center gap-10">
-            <div className="w-48 h-48 rounded-full bg-slate-700 flex items-center justify-center text-slate-400">
-              Photo
-            </div>
-            <p className="max-w-2xl text-slate-200 text-lg leading-relaxed">
-              Dedicated full-stack developer specializing in intuitive UIs and high-performance web apps.
-            </p>
-          </div>
-        </Section>
-      );
-    }
-
-    /* --- Contact --- */
-    function Contact() {
-      return (
-        <Section id="contact" title="Get In Touch">
-          <div className="max-w-lg mx-auto text-center">
-            <p className="text-lg text-slate-300 mb-8">
-              Have a project in mind? Send me a message!
-            </p>
-            <form className="space-y-6">
-              <input type="text" placeholder="Your Name" required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500" />
-              <input type="email" placeholder="Your Email" required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500" />
-              <textarea rows="5" placeholder="Your Message" required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"></textarea>
-              <NeonButton type="submit">Send Message</NeonButton>
-            </form>
-          </div>
-        </Section>
-      );
-    }
-
-    /* --- App & Render --- */
+    // 간단한 Header / Hero / ... 컴포넌트는 이전 index.html에서 그대로 재사용하세요.
+    // 여기서는 Galaxy 배경만 보여주는 최소 예시:
     function App() {
-      useEffect(() => {
-        AOS.init({ duration: 800, once: true, offset: 50 });
-      }, []);
+      React.useEffect(() => { AOS.init({ duration: 800, once: true, offset: 50 }); }, []);
       return (
         <>
           <GalaxyBackground />
           <div className="app-content">
-            <Header />
-            <main>
-              <Hero />
-              <About />
-              <Projects />
-              <Contact />
-            </main>
-            <footer className="py-8 text-center text-slate-400">
-              © {new Date().getFullYear()} GistKjoon. All Rights Reserved.
-            </footer>
+            <header className="p-8 text-white">GistKjoon Portfolio</header>
+            <main className="p-8 text-white">여기에 나머지 UI가 들어갑니다.</main>
           </div>
         </>
       );
     }
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    const root = createRoot(document.getElementById('root'));
+    root.render(<App />);
   </script>
+
+  <!-- CSS for body/app-content -->
+  <style>
+    body {
+      margin: 0;
+      background: #0f172a;
+      color: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+    .app-content {
+      position: relative;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body class="dark">
+  <div id="root"></div>
 </body>
 </html>
