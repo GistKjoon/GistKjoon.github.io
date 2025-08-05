@@ -4,23 +4,21 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>GistKjoon Portfolio</title>
-
+  <!-- Google Fonts for Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
   <!-- Tailwind Dev CDN -->
   <script>
     tailwind = window.tailwind||{};
     tailwind.config = { darkMode:'class' };
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
-
   <!-- AOS CSS -->
   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"
   />
-
-  <!-- Galaxy container CSS -->
-  <link rel="stylesheet" href="./components/Galaxy.css"/>
-
   <style>
     body {
       margin:0;
@@ -30,30 +28,89 @@
       overflow-x:hidden;
     }
     .app-content { position:relative; z-index:10 }
+    .shadow-neon-indigo {
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.8);
+    }
   </style>
 </head>
 <body class="dark">
   <div id="root"></div>
-
   <!-- AOS JS -->
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
-
   <!-- Babel standalone (must come before any text/babel scripts) -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-  <!-- 1) Load & expose your GalaxyBackground component -->
-  <script
-    type="text/babel"
-    data-presets="env,react"
-    src="./components/GalaxyBackground.js"
-    data-plugins="proposal-class-properties"
-    defer
-  ></script>
-
-  <!-- 2) Main app code, using global GalaxyBackground -->
+  <!-- Main app code, with GalaxyBackground defined inline -->
   <script type="text/babel" data-presets="env,react">
     const { useState, useEffect, useRef } = React;
     const { createRoot } = ReactDOM;
+
+    // Define GalaxyBackground component here since external file is missing
+    const GalaxyBackground = () => {
+      const canvasRef = useRef(null);
+
+      useEffect(() => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+
+        let animationFrameId;
+
+        const resizeCanvas = () => {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        };
+
+        resizeCanvas();
+
+        const stars = [];
+        for (let i = 0; i < 200; i++) {
+          stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 1.5 + 0.5,
+            speed: Math.random() * 0.5 + 0.1,
+          });
+        }
+
+        const animate = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          stars.forEach(star => {
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+            ctx.fillStyle = 'white';
+            ctx.fill();
+
+            star.y += star.speed;
+            if (star.y > canvas.height) {
+              star.y = 0;
+              star.x = Math.random() * canvas.width;
+            }
+          });
+          animationFrameId = requestAnimationFrame(animate);
+        };
+
+        animate();
+
+        window.addEventListener('resize', resizeCanvas);
+
+        return () => {
+          cancelAnimationFrame(animationFrameId);
+          window.removeEventListener('resize', resizeCanvas);
+        };
+      }, []);
+
+      return (
+        <canvas
+          ref={canvasRef}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            zIndex: 0,
+            background: '#0f172a',
+          }}
+        />
+      );
+    };
 
     // Reusable bits
     const NeonButton = ({children,onClick,className='',type='button'})=>(
@@ -79,7 +136,6 @@
         }
       >{children}</div>
     );
-
     function Header() {
       const [open,setOpen] = useState(false);
       const scrollTo = id => {
@@ -107,7 +163,7 @@
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                     d={ open ? "M6 18L18 6M6 6l12 12"
-                         : "M4 6h16M4 12h16m-7 6h7" }/>
+                         : "M4 6h16M4 12h16M4 18h16" }/>
                 </svg>
               </button>
               <ul className={
@@ -131,7 +187,6 @@
         </header>
       )
     }
-
     function Hero() {
       return (
         <section
@@ -158,7 +213,6 @@
         </section>
       );
     }
-
     const Section = ({id,title,children})=>(
       <section id={id} className="py-24 px-4">
         <div className="max-w-7xl mx-auto">
@@ -174,7 +228,6 @@
         </div>
       </section>
     );
-
     function Projects(){
       const items = [
         { title:'PIP Viewer', desc:'macOS PIP utility.', href:'projects/roll-pip.html' },
@@ -202,7 +255,6 @@
         </Section>
       );
     }
-
     function About(){
       return (
         <Section id="about" title="About Me">
@@ -217,7 +269,6 @@
         </Section>
       );
     }
-
     function Contact(){
       return (
         <Section id="contact" title="Get In Touch">
@@ -235,13 +286,11 @@
         </Section>
       );
     }
-
     function App(){
       useEffect(()=> AOS.init({duration:800,once:true,offset:50}), []);
       return (
         <>
-          {/* GalaxyBackground is now on window */}
-          <window.GalaxyBackground/>
+          <GalaxyBackground />
           <div className="app-content">
             <Header/>
             <main>
@@ -257,7 +306,6 @@
         </>
       );
     }
-
     createRoot(document.getElementById('root')).render(<App/>);
   </script>
 </body>
