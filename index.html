@@ -24,7 +24,7 @@
   <style>
     body {
       margin:0;
-      background:#000000; /* Completely pitch-black space for deep space feel */
+      background:#000000; /* Completely pitch-black space */
       color:#f1f5f9;
       font-family:'Inter',sans-serif;
       overflow-x:hidden;
@@ -33,7 +33,7 @@
     .shadow-neon-indigo {
       box-shadow: 0 0 20px rgba(99, 102, 241, 0.8);
     }
-    /* Light mode styles for theme toggle */
+    /* Light mode styles */
     body.light {
       background: #f0f4f8;
       color: #1e293b;
@@ -62,7 +62,7 @@
     body.light .border-slate-700 {
       border-color: #cbd5e1;
     }
-    /* Back to top button styles */
+    /* Back to top button */
     #back-to-top {
       position: fixed;
       bottom: 20px;
@@ -82,7 +82,7 @@
     #back-to-top.visible {
       opacity: 1;
     }
-    /* Skills progress bar styles */
+    /* Skills progress bar */
     .progress-bar {
       background-color: #475569;
       height: 8px;
@@ -94,7 +94,7 @@
       background-color: #6366f1;
       transition: width 1s ease-in-out;
     }
-    /* Timeline styles for career events */
+    /* Timeline styles */
     .timeline-item {
       position: relative;
       padding-left: 40px;
@@ -122,7 +122,7 @@
       border-radius: 50%;
       background: #6366f1;
     }
-    /* Cookie banner styles */
+    /* Cookie banner */
     #cookie-banner {
       position: fixed;
       bottom: 0;
@@ -133,7 +133,7 @@
       text-align: center;
       z-index: 50;
     }
-    /* Chat widget styles */
+    /* Chat widget */
     #chat-widget {
       position: fixed;
       bottom: 20px;
@@ -186,13 +186,13 @@
       color: white;
       border: none;
     }
-    /* Additional styles for skills grid */
+    /* Skills grid */
     .skills-grid {
       display: grid;
       gap: 20px;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
-    /* Timeline container styles */
+    /* Timeline container */
     .timeline {
       max-width: 800px;
       margin: 0 auto;
@@ -201,21 +201,20 @@
 </head>
 <body class="dark">
   <div id="root"></div>
-  <!-- React와 ReactDOM 라이브러리 로드 -->
+  <!-- React and ReactDOM -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <!-- AOS JS for animations -->
+  <!-- AOS JS -->
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
-  <!-- Babel standalone for JSX transpiling -->
+  <!-- Babel standalone -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <!-- Main app code with updates based on user input -->
+  <!-- Main app code -->
   <script type="text/babel" data-presets="env,react">
     const { useState, useEffect, useRef } = React;
     const { createRoot } = ReactDOM;
-
-    // Initialize i18next for multilingual support (English, Korean, Japanese)
+    // Initialize i18next for multilingual support (en, ko, ja)
     i18next.init({
-      lng: 'en', // Default language is English
+      lng: 'en',
       resources: {
         en: {
           translation: {
@@ -370,129 +369,95 @@
             "loading": "読み込み中...",
             "back_to_top": "トップに戻る",
             "share": "プロジェクトを共有",
-            "cookie_message": "体験を向上させるためにクッキーを使用します。継続することでクッキーポリシーに同意します。",
+            "cookie_message": "体験を向上させるためにクッキーを使用します. 継続することでクッキーポリシーに同意します.",
             "cookie_accept": "受け入れる",
-            "chat_welcome": "チャットへようこそ。どうお手伝いできますか？",
+            "chat_welcome": "チャットへようこそ. どうお手伝いできますか？",
             "chat_send": "送信"
           }
         }
       },
       interpolation: { escapeValue: false }
     });
-
-    // GalaxyBackground with pitch-black space and flying through stars feel
-    // This component creates a canvas with stars moving towards the viewer, simulating space travel
-    // Adjusted for more stars and distortion for immersive effect
+    // GalaxyBackground with fixed loop
     const GalaxyBackground = () => {
       const canvasRef = useRef(null);
       const mouse = useRef({ x: 0, y: 0 });
-
       useEffect(() => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
-
         let animationFrameId;
-
-        // Function to resize the canvas to fit the window
         const resizeCanvas = () => {
           canvas.width = window.innerWidth;
           canvas.height = window.innerHeight;
         };
-
         resizeCanvas();
-
-        const focal = 256; // Focal length for 3D perspective projection
-        const maxZ = 1000; // Maximum depth for stars
-        const speed = 3; // Speed at which stars approach the viewer
-
-        // Create array of stars with random positions and properties
+        const focal = 256;
+        const maxZ = 1000;
+        const speed = 3;
         const stars = [];
-        for (let i = 0; i = 1000; i++) { // 1000 stars for dense field
+        for (let i = 0; i < 1000; i++) { // Fixed loop condition
           stars.push({
-            x: Math.random() * 2000 - 1000, // Random x position
-            y: Math.random() * 2000 - 1000, // Random y position
-            z: Math.random() * maxZ + 1, // Random z depth
-            color: `hsl(${Math.random() * 30 + 210}, 30%, ${Math.random() * 50 + 50}%)`, // Subtle colors
-            twinklePhase: Math.random() * Math.PI * 2, // Phase for twinkling effect
-            prevSx: 0, // Previous screen x for motion blur
-            prevSy: 0, // Previous screen y for motion blur
+            x: Math.random() * 2000 - 1000,
+            y: Math.random() * 2000 - 1000,
+            z: Math.random() * maxZ + 1,
+            color: `hsl(${Math.random() * 30 + 210}, 30%, ${Math.random() * 50 + 50}%)`,
+            twinklePhase: Math.random() * Math.PI * 2,
+            prevSx: 0,
+            prevSy: 0,
           });
         }
-
-        // Event listener for mouse movement to update distortion position
         const handleMouseMove = (e) => {
           mouse.current = { x: e.clientX, y: e.clientY };
         };
         window.addEventListener('mousemove', handleMouseMove);
-
-        // Animation loop to update and draw stars
         const animate = () => {
-          ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas each frame
-
-          const currentCenterX = canvas.width / 2; // Center x of canvas
-          const currentCenterY = canvas.height / 2; // Center y of canvas
-
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          const currentCenterX = canvas.width / 2;
+          const currentCenterY = canvas.height / 2;
           stars.forEach(star => {
-            star.z -= speed; // Move star closer to viewer
-            if (star.z < 1) { // If star passes viewer, reset to far depth
+            star.z -= speed;
+            if (star.z < 1) {
               star.z = maxZ;
               star.x = Math.random() * 2000 - 1000;
               star.y = Math.random() * 2000 - 1000;
             }
-
-            // Project 3D position to 2D screen coordinates
             let sx = currentCenterX + (focal * star.x) / star.z;
             let sy = currentCenterY + (focal * star.y) / star.z;
-            const radius = (1 - star.z / maxZ) * 4 + 0.5; // Size based on depth
-
-            // Twinkling effect by varying alpha
+            const radius = (1 - star.z / maxZ) * 4 + 0.5;
             let alpha = (1 - star.z / maxZ) * (Math.sin(star.twinklePhase) * 0.3 + 0.7);
-            star.twinklePhase += 0.03; // Update twinkle phase
-
-            // Apply fisheye distortion near mouse
+            star.twinklePhase += 0.03;
             const dx = sx - mouse.current.x;
             const dy = sy - mouse.current.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
-            const maxDist = 700; // Distortion radius
+            const maxDist = 700;
             if (dist < maxDist && dist > 0) {
-              const force = (1 - dist / maxDist) * 25; // Distortion strength
+              const force = (1 - dist / maxDist) * 25;
               sx += (dx / dist) * force;
               sy += (dy / dist) * force;
             }
-
-            // Draw motion blur line from previous to current position
             ctx.beginPath();
             ctx.moveTo(star.prevSx, star.prevSy);
             ctx.lineTo(sx, sy);
-            ctx.strokeStyle = `${star.color}60`; // Semi-transparent color for blur
+            ctx.strokeStyle = `${star.color}60`;
             ctx.lineWidth = radius / 1.5;
             ctx.stroke();
-
-            // Draw the star circle
             ctx.beginPath();
             ctx.arc(sx, sy, radius, 0, Math.PI * 2);
             ctx.fillStyle = `${star.color.replace('hsl', 'hsla').replace('%)', `%, ${alpha})`)}`;
             ctx.fill();
-
-            // Update previous position for next frame
             star.prevSx = sx;
             star.prevSy = sy;
           });
-
-          animationFrameId = requestAnimationFrame(animate); // Request next frame
+          animationFrameId = requestAnimationFrame(animate);
         };
-
-        animate(); // Start the animation loop
-
-        window.addEventListener('resize', resizeCanvas); // Resize on window resize
-
+        animate();
+        window.addEventListener('resize', resizeCanvas);
         return () => {
-          cancelAnimationFrame(animationFrameId); // Clean up animation
+          cancelAnimationFrame(animationFrameId);
           window.removeEventListener('resize', resizeCanvas);
           window.removeEventListener('mousemove', handleMouseMove);
         };
       }, []);
-
       return (
         <canvas
           ref={canvasRef}
@@ -501,14 +466,13 @@
             top: 0,
             left: 0,
             zIndex: 0,
-            background: '#000000', // Pitch-black background
+            background: '#000000',
           }}
         />
       );
     };
-
-    // Reusable NeonButton component
-    const NeonButton = ({children,onClick,className='',type='button', ariaLabel=''})=>(
+    // Reusable NeonButton
+    const NeonButton = ({children,onClick,className='',type='button'})=>(
       <button
         type={type}
         onClick={onClick}
@@ -519,12 +483,10 @@
           `hover:scale-105 transition duration-300 shadow-lg hover:shadow-neon-indigo `+
           className
         }
-        aria-label={ariaLabel}
       >{children}</button>
     );
-
-    // Reusable Card component for projects
-    const Card = ({children,onClick,className='', title, t})=>(
+    // Reusable Card
+    const Card = ({children,onClick,className=''})=>(
       <div
         onClick={onClick}
         className={
@@ -532,28 +494,18 @@
           `shadow-2xl transform hover:-translate-y-2 transition duration-300 `+
           `ease-in-out cursor-pointer group `+className
         }
-      >
-        {children}
-        <button 
-          onClick={(e) => {
-            e.stopPropagation();
-            navigator.share({ title, text: t('share'), url: window.location.href });
-          }}
-          className="mt-2 px-4 py-1 text-sm text-indigo-400 hover:text-indigo-300"
-          aria-label={t('share')}
-        >
-          {t('share')}
-        </button>
-      </div>
+      >{children}</div>
     );
-
-    // Header component with navigation
-    function Header({ t, toggleTheme, toggleLanguage }) {
+    // Header
+    function Header({ t, toggleLanguage }) {
       const [open,setOpen] = useState(false);
       const scrollTo = id => {
         const el = document.getElementById(id);
         if(el) window.scrollTo({top:el.offsetTop-70,behavior:'smooth'});
         setOpen(false);
+      };
+      const toggleTheme = () => {
+        document.body.classList.toggle('light');
       };
       return (
         <header
@@ -589,18 +541,25 @@
                       className="block w-full px-5 py-3 text-white hover:text-indigo-300"
                       onClick={()=>scrollTo(sec)}
                     >
-                      {t(sec)}
+                      {t(sec.charAt(0).toUpperCase() + sec.slice(1))}
                     </button>
                   </li>
                 ))}
+                <li className="border-b md:border-none">
+                  <button
+                    className="block w-full px-5 py-3 text-white hover:text-indigo-300"
+                    onClick={toggleTheme}
+                  >
+                    {t('theme_toggle')}
+                  </button>
+                </li>
               </ul>
             </nav>
           </div>
         </header>
       )
     }
-
-    // Hero section
+    // Hero
     function Hero({ t }) {
       return (
         <section
@@ -609,7 +568,7 @@
         >
           <div data-aos="fade-up" data-aos-duration="1000">
             <h1 className="text-4xl md:text-7xl font-extrabold">
-              {t('hello')} <span className="text-indigo-400">{t('gistkjoon')}</span>
+              {t('hello')} <span className="text-indigo-400">JAEJOON KIM</span>
             </h1>
             <p className="mt-6 text-lg md:text-xl max-w-2xl text-slate-300">
               {t('description')}
@@ -621,14 +580,13 @@
               }
               className="mt-10 px-8 py-4 text-lg"
             >
-              {t('explore')}
+              Explore My Work
             </NeonButton>
           </div>
         </section>
       );
     }
-
-    // Section wrapper
+    // Section
     const Section = ({id,title,children})=>(
       <section id={id} className="py-24 px-4">
         <div className="max-w-7xl mx-auto">
@@ -644,11 +602,10 @@
         </div>
       </section>
     );
-
-    // About section
+    // About
     function About({ t }) {
       return (
-        <Section id="about" title={t('mission_control')}>
+        <Section id="about" title="Mission Control">
           <div className="flex flex-col md:flex-row items-center gap-10">
             <div className="w-48 h-48 rounded-full bg-slate-700 flex items-center justify-center text-slate-400">
               Photo
@@ -660,8 +617,7 @@
         </Section>
       );
     }
-
-    // Skills section
+    // Skills
     function Skills({ t }) {
       const items = [
         { name: "matlab", level: 80 },
@@ -674,48 +630,44 @@
       ];
       return (
         <Section id="skills" title={t('skills')}>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="skills-grid">
             {items.map((s,i)=>(
               <div key={i}>
-                <h3 className="text-xl font-bold mb-2">{s.name}</h3>
-                <div className="bg-slate-700 rounded-full h-2.5">
-                  <div className="bg-indigo-600 h-2.5 rounded-full" style={{width: `${s.level}%`}}></div>
+                <div className="flex justify-between mb-1">
+                  <span>{s.name}</span>
+                  <span>{s.level}%</span>
                 </div>
-                <p className="text-right mt-1">{s.level}%</p>
+                <div className="progress-bar">
+                  <div className="progress" style={{width: `${s.level}%`}}></div>
+                </div>
               </div>
             ))}
           </div>
         </Section>
       );
     }
-
-    // Timeline section
+    // Timeline
     function Timeline({ t }) {
       const items = [
-        { title: t('timeline_item1_title'), desc: t('timeline_item1_desc'), date: t('timeline_item1_date') },
-        { title: t('timeline_item2_title'), desc: t('timeline_item2_desc'), date: t('timeline_item2_date') },
-        { title: t('timeline_item3_title'), desc: t('timeline_item3_desc'), date: t('timeline_item3_date') },
+        { title: "Bachelor's degree in 2024", desc: "", date: "2024" },
+        { title: "Entered graduate school in 2024", desc: "", date: "2024" },
+        { title: "Page creation in 2025", desc: "", date: "2025" },
       ];
       return (
         <Section id="timeline" title={t('timeline')}>
-          <div className="space-y-8">
+          <div className="timeline">
             {items.map((item,i)=>(
-              <div key={i} className="flex">
-                <div className="flex-shrink-0 w-24 text-right pr-4">
-                  <span className="font-bold">{item.date}</span>
-                </div>
-                <div className="flex-grow">
-                  <h3 className="text-xl font-bold mb-1">{item.title}</h3>
-                  <p className="text-slate-300">{item.desc}</p>
-                </div>
+              <div key={i} className="timeline-item">
+                <h3 className="font-bold">{item.title}</h3>
+                <p>{item.desc}</p>
+                <span>{item.date}</span>
               </div>
             ))}
           </div>
         </Section>
       );
     }
-
-    // Projects section
+    // Projects
     function Projects({ t }) {
       const [search,setSearch] = useState('');
       const [category,setCategory] = useState('all');
@@ -725,6 +677,10 @@
         { title: t('chat_app'), desc: t('chat_desc'), href:'projects/chat-app.html', category:'messaging' },
       ];
       const filtered = items.filter(p => (category === 'all' || p.category === category) && (p.title.toLowerCase().includes(search.toLowerCase()) || p.desc.toLowerCase().includes(search.toLowerCase())));
+      const shareProject = (href) => {
+        navigator.clipboard.writeText(window.location.origin + '/' + href);
+        alert('Project link copied to clipboard!');
+      };
       return (
         <Section id="projects" title={t('projects')}>
           <div className="mb-8 flex flex-col md:flex-row gap-4">
@@ -746,6 +702,7 @@
                   <h3 className="font-bold mb-2">{p.title}</h3>
                   <p className="text-slate-300 mb-4">{p.desc}</p>
                   <a href={p.href} className="text-indigo-400">{t('view_mission')}</a>
+                  <button onClick={(e) => { e.stopPropagation(); shareProject(p.href); }} className="ml-4 text-indigo-400">{t('share')}</button>
                 </div>
               </Card>
             ))}
@@ -753,21 +710,37 @@
         </Section>
       );
     }
-
-    // Contact section
+    // Contact
     function Contact({ t }) {
+      const [email, setEmail] = useState('');
+      const handleSubscribe = (e) => {
+        e.preventDefault();
+        alert(`Subscribed with ${email}!`);
+        setEmail('');
+      };
       return (
         <Section id="contact" title={t('contact_base')}>
-          <div className="max-w-md mx-auto">
-            <p className="mb-8">{t('contact_desc')}</p>
-            <form className="space-y-4">
-              <input type="text" placeholder={t('your_name')} className="w-full p-2 bg-slate-800 border border-slate-700 rounded" />
-              <input type="email" placeholder={t('your_email')} className="w-full p-2 bg-slate-800 border border-slate-700 rounded" />
-              <textarea placeholder={t('your_message')} className="w-full p-2 bg-slate-800 border border-slate-700 rounded h-32"></textarea>
-              <NeonButton type="submit" className="w-full">{t('send_signal')}</NeonButton>
+          <div className="max-w-lg mx-auto text-center">
+            <p className="text-lg text-slate-300 mb-8">
+              {t('contact_desc')}
+            </p>
+            <form className="space-y-6">
+              <input type="text" placeholder={t('your_name')} required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"/>
+              <input type="email" placeholder={t('your_email')} required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"/>
+              <textarea rows="5" placeholder={t('your_message')} required className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"></textarea>
+              <NeonButton type="submit">{t('send_signal')}</NeonButton>
             </form>
+            <div className="mt-8">
+              <p className="text-lg text-slate-300 mb-8">
+                {t('newsletter')}
+              </p>
+              <form onSubmit={handleSubscribe} className="space-y-6">
+                <input type="email" placeholder={t('your_email')} required value={email} onChange={e => setEmail(e.target.value)} className="w-full p-4 rounded-md bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500"/>
+                <NeonButton type="submit">{t('subscribe')}</NeonButton>
+              </form>
+            </div>
             <div className="mt-8 flex justify-center space-x-4">
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:text-indigo-300">
                 GitHub
               </a>
             </div>
@@ -775,35 +748,128 @@
         </Section>
       );
     }
-
-    // App component
+    // CookieBanner
+    function CookieBanner({ t }) {
+      const [show, setShow] = useState(true);
+      const acceptCookies = () => {
+        setShow(false);
+        // Simulate setting cookie
+        localStorage.setItem('cookiesAccepted', 'true');
+      };
+      useEffect(() => {
+        if (localStorage.getItem('cookiesAccepted')) {
+          setShow(false);
+        }
+      }, []);
+      if (!show) return null;
+      return (
+        <div id="cookie-banner">
+          <p>{t('cookie_message')}</p>
+          <NeonButton onClick={acceptCookies}>{t('cookie_accept')}</NeonButton>
+        </div>
+      );
+    }
+    // ChatWidget
+    function ChatWidget({ t }) {
+      const [open, setOpen] = useState(false);
+      const [messages, setMessages] = useState([{ text: t('chat_welcome'), from: 'bot' }]);
+      const [input, setInput] = useState('');
+      const messagesRef = useRef(null);
+      const toggleChat = () => setOpen(!open);
+      const sendMessage = (e) => {
+        e.preventDefault();
+        if (!input.trim()) return;
+        setMessages([...messages, { text: input, from: 'user' }]);
+        // Simulate bot response
+        setTimeout(() => {
+          setMessages(msgs => [...msgs, { text: 'Thanks for your message!', from: 'bot' }]);
+        }, 1000);
+        setInput('');
+      };
+      useEffect(() => {
+        if (messagesRef.current) {
+          messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+        }
+      }, [messages]);
+      return (
+        <>
+          <div id="chat-widget" onClick={toggleChat}>
+            💬
+          </div>
+          <div id="chat-window" className={open ? 'open' : ''}>
+            <div id="chat-messages" ref={messagesRef}>
+              {messages.map((msg, i) => (
+                <div key={i} className={msg.from === 'user' ? 'text-right' : ''}>
+                  <p className={`inline-block p-2 rounded ${msg.from === 'user' ? 'bg-indigo-600' : 'bg-slate-700'}`}>
+                    {msg.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <form id="chat-input" onSubmit={sendMessage}>
+              <input
+                type="text"
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                placeholder="Type a message..."
+              />
+              <button type="submit">{t('chat_send')}</button>
+            </form>
+          </div>
+        </>
+      );
+    }
+    // BackToTop
+    function BackToTop({ t }) {
+      const [visible, setVisible] = useState(false);
+      useEffect(() => {
+        const toggleVisibility = () => {
+          setVisible(window.pageYOffset > 300);
+        };
+        window.addEventListener('scroll', toggleVisibility);
+        return () => window.removeEventListener('scroll', toggleVisibility);
+      }, []);
+      const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+      if (!visible) return null;
+      return (
+        <div id="back-to-top" className="visible" onClick={scrollToTop}>
+          ↑
+        </div>
+      );
+    }
+    // App
     function App(){
       const [lng, setLng] = useState('en');
       const t = i18next.t.bind(i18next);
       useEffect(() => i18next.changeLanguage(lng), [lng]);
       const toggleLanguage = e => setLng(e.target.value);
-      useEffect(() => AOS.init({duration: 800}), []);
-
+      useEffect(() => AOS.init({duration:800,once:true,offset:50}), []);
       return (
         <>
           <GalaxyBackground />
           <div className="app-content">
             <Header t={t} toggleLanguage={toggleLanguage} />
-            <Hero t={t} />
-            <About t={t} />
-            <Skills t={t} />
-            <Timeline t={t} />
-            <Projects t={t} />
-            <Contact t={t} />
+            <main>
+              <Hero t={t} />
+              <About t={t} />
+              <Skills t={t} />
+              <Timeline t={t} />
+              <Projects t={t} />
+              <Contact t={t} />
+            </main>
             <footer className="py-8 text-center text-slate-400">
               {t('footer', { year: new Date().getFullYear() })}
             </footer>
           </div>
+          <CookieBanner t={t} />
+          <ChatWidget t={t} />
+          <BackToTop t={t} />
         </>
       );
     }
-
-    createRoot(document.getElementById('root')).render(<App />);
+    createRoot(document.getElementById('root')).render(<App/>);
   </script>
 </body>
 </html>
