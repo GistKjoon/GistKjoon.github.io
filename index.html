@@ -418,8 +418,8 @@
             star.z -= speed;
             if (star.z < 1) {
               star.z = maxZ;
-              star.x = Math.random() * 2000 - 1000;
-              star.y = Math.random() * 2000 - 1000;
+              star.x = Math.random() * 2000 - 100;
+              star.y = Math.random() * 2000 - 100;
             }
             let sx = currentCenterX + (focal * star.x) / star.z;
             let sy = currentCenterY + (focal * star.y) / star.z;
